@@ -117,62 +117,122 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		
 		var AAA float64
 
-		if AA, err := strconv.ParseFloat(tops[random*5][2], 64); err == nil {
-		    AAA = AA
-		}
-		
-		if AAA < wpm {
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5][2] = s
-			tops[random*5][1] = m.Author.Username
-			tops[random*5][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
-			tops[random*5][0] = "1"
-
-		/* CHECKING IF EMPTY */
-		} else if tops[random*5][2] == "" { 
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5][2] = s
-			tops[random*5][1] = m.Author.Username
-			tops[random*5][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
-			tops[random*5][0] = "1"
-		} else if tops[random*5+1][2] == "" { 
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5+1][2] = s
-			tops[random*5+1][1] = m.Author.Username
-			tops[random*5+1][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
-			tops[random*5+1][0] = "2"
-		} else if tops[random*5+2][2] == "" { 
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5+2][2] = s
-			tops[random*5+2][1] = m.Author.Username
-			tops[random*5+2][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
-			tops[random*5+2][0] = "3"
-		} else if tops[random*5+3][2] == "" { 
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5+3][2] = s
-			tops[random*5+3][1] = m.Author.Username
-			tops[random*5+3][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
-			tops[random*5+3][0] = "4"
-		} else if tops[random*5+4][2] == "" { 
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5+4][2] = s
-			tops[random*5+4][1] = m.Author.Username
-			tops[random*5+3][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
+		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5][2], 64); err == nil {AAA = AA}
+		if wpm > AAA {
+			tops[random*5+4][2] = tops[random*5+3][2]
+			tops[random*5+4][1] = tops[random*5+3][1]
+			tops[random*5+4][5] = tops[random*5+3][5]
+			tops[random*5+4][3] = tops[random*5+3][3]
 			tops[random*5+4][0] = "5"
-		} else { 
 
+			tops[random*5+3][2] = tops[random*5+2][2]
+			tops[random*5+3][1] = tops[random*5+2][1]
+			tops[random*5+3][5] = tops[random*5+2][5]
+			tops[random*5+3][3] = tops[random*5+2][3]
+			tops[random*5+3][0] = "4"
+
+			tops[random*5+2][2] = tops[random*5+1][2]
+			tops[random*5+2][1] = tops[random*5+1][1]
+			tops[random*5+2][5] = tops[random*5+1][5]
+			tops[random*5+2][3] = tops[random*5+1][3]
+			tops[random*5+2][0] = "3"
+
+			tops[random*5+1][2] = tops[random*5][2]
+			tops[random*5+1][1] = tops[random*5][1]
+			tops[random*5+1][5] = tops[random*5][5]
+			tops[random*5+1][3] = tops[random*5][3]
+			tops[random*5+1][0] = "2"
+
+			s := fmt.Sprintf("%f", wpm)  
+			tops[random*5][2] = s
+			tops[random*5][1] = m.Author.Username
+			tops[random*5][5] = m.Author.ID
+			dt := time.Now()
+			tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+			tops[random*5][0] = "1"
+
+		} else {
+			/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+1][2], 64); err == nil {AAA = AA}
+			if wpm > AAA {
+				tops[random*5+4][2] = tops[random*5+3][2]
+				tops[random*5+4][1] = tops[random*5+3][1]
+				tops[random*5+4][5] = tops[random*5+3][5]
+				tops[random*5+4][3] = tops[random*5+3][3]
+				tops[random*5+4][0] = "5"
+
+				tops[random*5+3][2] = tops[random*5+2][2]
+				tops[random*5+3][1] = tops[random*5+2][1]
+				tops[random*5+3][5] = tops[random*5+2][5]
+				tops[random*5+3][3] = tops[random*5+2][3]
+				tops[random*5+3][0] = "4"
+
+				tops[random*5+2][2] = tops[random*5+1][2]
+				tops[random*5+2][1] = tops[random*5+1][1]
+				tops[random*5+2][5] = tops[random*5+1][5]
+				tops[random*5+2][3] = tops[random*5+1][3]
+				tops[random*5+2][0] = "3"
+
+				s := fmt.Sprintf("%f", wpm)  
+				tops[random*5+1][2] = s
+				tops[random*5+1][1] = m.Author.Username
+				tops[random*5+1][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+				tops[random*5+1][0] = "2"
+			} else {
+				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+2][2], 64); err == nil {AAA = AA}
+				if wpm > AAA {
+					tops[random*5+4][2] = tops[random*5+3][2]
+					tops[random*5+4][1] = tops[random*5+3][1]
+					tops[random*5+4][5] = tops[random*5+3][5]
+					tops[random*5+4][3] = tops[random*5+3][3]
+					tops[random*5+4][0] = "5"
+
+					tops[random*5+3][2] = tops[random*5+2][2]
+					tops[random*5+3][1] = tops[random*5+2][1]
+					tops[random*5+3][5] = tops[random*5+2][5]
+					tops[random*5+3][3] = tops[random*5+2][3]
+					tops[random*5+3][0] = "4"
+
+					s := fmt.Sprintf("%f", wpm)  
+					tops[random*5+2][2] = s
+					tops[random*5+2][1] = m.Author.Username
+					tops[random*5+2][5] = m.Author.ID
+					dt := time.Now()
+					tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
+					tops[random*5+2][0] = "3"
+				} else {
+				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+3][2], 64); err == nil {AAA = AA}
+				if wpm > AAA {
+					tops[random*5+4][2] = tops[random*5+3][2]
+					tops[random*5+4][1] = tops[random*5+3][1]
+					tops[random*5+4][5] = tops[random*5+3][5]
+					tops[random*5+4][3] = tops[random*5+3][3]
+					tops[random*5+4][0] = "5"
+
+					s := fmt.Sprintf("%f", wpm)  
+					tops[random*5+3][2] = s
+					tops[random*5+3][1] = m.Author.Username
+					tops[random*5+3][5] = m.Author.ID
+					dt := time.Now()
+					tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+					tops[random*5+3][0] = "4"
+				} else {
+				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+4][2], 64); err == nil {AAA = AA}
+					if wpm > AAA {
+
+						s := fmt.Sprintf("%f", wpm)  
+						tops[random*5+4][2] = s
+						tops[random*5+4][1] = m.Author.Username
+						tops[random*5+4][5] = m.Author.ID
+						dt := time.Now()
+						tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+4][0] = "5"
+					}
+					}
+				}
+
+			}  
 		}
 
 		s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has terminado la carrera!\nWPM: " + wpm_stringed + 
