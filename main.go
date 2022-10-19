@@ -16,8 +16,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var mensaje_extra string
-var mensaje_extra_bool bool = false
 
 
 																	func check(e error) {
@@ -100,9 +98,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Content == ".tt" {
 		rand.Seed(time.Now().UnixNano())
 
-
+		
 		random = rand.Intn(how_many_texts())
-		random = 2
+		random = 0
 
 		start_author = m.Author.ID
 		s.ChannelMessageSend(m.ChannelID, "Preparados...") 
@@ -132,198 +130,146 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		
 		var AAA float64
 
-		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5][2], 64); err == nil {AAA = AA}
+		/* IF TOP 5 */
+		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+4][2], 64); err == nil {AAA = AA}
 		if wpm > AAA {
+			if tops[random*5+3][5] == m.Author.ID {
+				var temp string
+				var temp2 string
 
-			if !(tops[random*5][5] == m.Author.ID) {
+				temp = tops[random*5+4][2]
+				temp2 = tops[random*5+4][3]
+
+				wpm_string_temp := fmt.Sprintf("%f", wpm)  
+				tops[random*5+4][2] = wpm_string_temp
+				tops[random*5+4][1] = m.Author.Username
+				tops[random*5+4][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
+				tops[random*5+4][0] = "5"
+
+				s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+			}
+		}
+
+		/* IF TOP 4 */
+		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+3][2], 64); err == nil {AAA = AA}
+		if wpm > AAA {
+			if tops[random*5+3][5] == m.Author.ID {
+				var temp string
+				var temp2 string
+
+				temp = tops[random*5+3][2]
+				temp2 = tops[random*5+3][3]
+
+				wpm_string_temp := fmt.Sprintf("%f", wpm)  
+				tops[random*5+3][2] = wpm_string_temp
+				tops[random*5+3][1] = m.Author.Username
+				tops[random*5+3][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+				tops[random*5+3][0] = "4"
+
+				s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+			} else if tops[random*5+4][5] == m.Author.ID {
+				var temp string
+				var temp2 string
+
+				temp = tops[random*5+4][2]
+				temp2 = tops[random*5+4][3]
+
 				tops[random*5+4][2] = tops[random*5+3][2]
 				tops[random*5+4][1] = tops[random*5+3][1]
 				tops[random*5+4][5] = tops[random*5+3][5]
 				tops[random*5+4][3] = tops[random*5+3][3]
 				tops[random*5+4][0] = "5"
 
-				tops[random*5+3][2] = tops[random*5+2][2]
-				tops[random*5+3][1] = tops[random*5+2][1]
-				tops[random*5+3][5] = tops[random*5+2][5]
-				tops[random*5+3][3] = tops[random*5+2][3]
+				wpm_string_temp := fmt.Sprintf("%f", wpm)  
+				tops[random*5+3][2] = wpm_string_temp
+				tops[random*5+3][1] = m.Author.Username
+				tops[random*5+3][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
 				tops[random*5+3][0] = "4"
 
-				tops[random*5+2][2] = tops[random*5+1][2]
-				tops[random*5+2][1] = tops[random*5+1][1]
-				tops[random*5+2][5] = tops[random*5+1][5]
-				tops[random*5+2][3] = tops[random*5+1][3]
+				s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+			}
+		}
+
+		/* IF TOP 3 */
+		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+2][2], 64); err == nil {AAA = AA}
+		if wpm > AAA {
+			if tops[random*5+2][5] == m.Author.ID {
+				var temp string
+				var temp2 string
+
+				temp = tops[random*5+2][2]
+				temp2 = tops[random*5+2][3]
+
+				wpm_string_temp := fmt.Sprintf("%f", wpm)  
+				tops[random*5+2][2] = wpm_string_temp
+				tops[random*5+2][1] = m.Author.Username
+				tops[random*5+2][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
 				tops[random*5+2][0] = "3"
 
-				tops[random*5+1][2] = tops[random*5][2]
-				tops[random*5+1][1] = tops[random*5][1]
-				tops[random*5+1][5] = tops[random*5][5]
-				tops[random*5+1][3] = tops[random*5][3]
-				tops[random*5+1][0] = "2"
-			} else { 
-				mensaje_extra = "¡Muy bien, " + m.Author.Username + ", has superado tu anterior marca de " + tops[random*5][2] + " WPM del " + tops[random*5][3]
-				mensaje_extra_bool = true
+				s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
 			}
-
-			s := fmt.Sprintf("%f", wpm)  
-			tops[random*5][2] = s
-			tops[random*5][1] = m.Author.Username
-			tops[random*5][5] = m.Author.ID
-			dt := time.Now()
-			tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
-			tops[random*5][0] = "1"
-
-		} else {
-			/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+1][2], 64); err == nil {AAA = AA}
-			if wpm > AAA {
-
-				if (tops[random*5][5] == m.Author.ID) {
-					s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", no has logrado superar tu anterior marca de " + tops[random*5][2] + " WPM del " + tops[random*5][3])
-				} else {
-
-
-					if !(tops[random*5+1][5] == m.Author.ID) {
-						tops[random*5+4][2] = tops[random*5+3][2]
-						tops[random*5+4][1] = tops[random*5+3][1]
-						tops[random*5+4][5] = tops[random*5+3][5]
-						tops[random*5+4][3] = tops[random*5+3][3]
-						tops[random*5+4][0] = "5"
-
-						tops[random*5+3][2] = tops[random*5+2][2]
-						tops[random*5+3][1] = tops[random*5+2][1]
-						tops[random*5+3][5] = tops[random*5+2][5]
-						tops[random*5+3][3] = tops[random*5+2][3]
-						tops[random*5+3][0] = "4"
-
-						tops[random*5+2][2] = tops[random*5+1][2]
-						tops[random*5+2][1] = tops[random*5+1][1]
-						tops[random*5+2][5] = tops[random*5+1][5]
-						tops[random*5+2][3] = tops[random*5+1][3]
-						tops[random*5+2][0] = "3"
-					} else { 
-						mensaje_extra = "¡Muy bien, " + m.Author.Username + ", has superado tu anterior marca de " + tops[random*5+1][2] + " WPM del " + tops[random*5+1][3]
-						mensaje_extra_bool = true
-					}
-
-					s := fmt.Sprintf("%f", wpm)  
-					tops[random*5+1][2] = s
-					tops[random*5+1][1] = m.Author.Username
-					tops[random*5+1][5] = m.Author.ID
-					dt := time.Now()
-					tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
-					tops[random*5+1][0] = "2"
-
-				}
-			} else {
-				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+2][2], 64); err == nil {AAA = AA}
-				if wpm > AAA {
-
-					if (tops[random*5+1][5] == m.Author.ID) {
-					s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", no has logrado superar tu anterior marca de " + tops[random*5+1][2] + " WPM del " + tops[random*5+1][3])
-				} else {
-
-					if !(tops[random*5+2][5] == m.Author.ID) {
-							tops[random*5+4][2] = tops[random*5+3][2]
-							tops[random*5+4][1] = tops[random*5+3][1]
-							tops[random*5+4][5] = tops[random*5+3][5]
-							tops[random*5+4][3] = tops[random*5+3][3]
-							tops[random*5+4][0] = "5"
-
-							tops[random*5+3][2] = tops[random*5+2][2]
-							tops[random*5+3][1] = tops[random*5+2][1]
-							tops[random*5+3][5] = tops[random*5+2][5]
-							tops[random*5+3][3] = tops[random*5+2][3]
-							tops[random*5+3][0] = "4"
-						} else { 
-							mensaje_extra = "¡Muy bien, " + m.Author.Username + ", has superado tu anterior marca de " + tops[random*5+2][2] + " WPM del " + tops[random*5+2][3]
-							mensaje_extra_bool = true
-						}
-
-						s := fmt.Sprintf("%f", wpm)  
-						tops[random*5+2][2] = s
-						tops[random*5+2][1] = m.Author.Username
-						tops[random*5+2][5] = m.Author.ID
-						dt := time.Now()
-						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
-					tops[random*5+2][0] = "3"
-
-					}
-				} else {
-				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+3][2], 64); err == nil {AAA = AA}
-				if wpm > AAA {
-
-
-
-				if (tops[random*5+2][5] == m.Author.ID) {
-					s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", no has logrado superar tu anterior marca de " + tops[random*5+2][2] + " WPM del " + tops[random*5+2][3])
-				} else {
-						if !(tops[random*5+3][5] == m.Author.ID) {
-							tops[random*5+4][2] = tops[random*5+3][2]
-							tops[random*5+4][1] = tops[random*5+3][1]
-							tops[random*5+4][5] = tops[random*5+3][5]
-							tops[random*5+4][3] = tops[random*5+3][3]
-							tops[random*5+4][0] = "5"
-						} else { 
-							mensaje_extra = "¡Muy bien, " + m.Author.Username + ", has superado tu anterior marca de " + tops[random*5+3][2] + " WPM del " + tops[random*5+3][3]
-							mensaje_extra_bool = true
-						} 
-
-						s := fmt.Sprintf("%f", wpm)  
-						tops[random*5+3][2] = s
-						tops[random*5+3][1] = m.Author.Username
-						tops[random*5+3][5] = m.Author.ID
-						dt := time.Now()
-						tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
-						tops[random*5+3][0] = "4"
-					}
-				} else {
-				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+4][2], 64); err == nil {AAA = AA}
-					if wpm > AAA {
-
-						if (tops[random*5+3][5] == m.Author.ID) {
-							s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", no has logrado superar tu anterior marca de " + tops[random*5+3][2] + " WPM del " + tops[random*5+3][3])
-						} else {
-							if (tops[random*5+4][5] == m.Author.ID) {
-								mensaje_extra = "¡Muy bien, " + m.Author.Username + ", has superado tu anterior marca de " + tops[random*5+4][2] + " WPM del " + tops[random*5+4][3]
-								mensaje_extra_bool = true
-							}
-							s := fmt.Sprintf("%f", wpm)  
-							tops[random*5+4][2] = s
-							tops[random*5+4][1] = m.Author.Username
-							tops[random*5+4][5] = m.Author.ID
-							dt := time.Now()
-							tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
-							tops[random*5+4][0] = "5"
-						}
-					} 
-				}
-				}
-
-			}  
 		}
 
-		if mensaje_extra_bool == false {
-			s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has terminado la carrera!\nWPM: " + wpm_stringed + 
-			"\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
-			"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
-			"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
-			"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
-			"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] +
+		/* IF TOP 2 */
+		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+1][2], 64); err == nil {AAA = AA}
+		if wpm > AAA {
+			if tops[random*5+1][5] == m.Author.ID {
+				var temp string
+				var temp2 string
 
-			"\n--------------------------------------------------------------------")
+				temp = tops[random*5+1][2]
+				temp2 = tops[random*5+1][3]
+
+				wpm_string_temp := fmt.Sprintf("%f", wpm)  
+				tops[random*5+1][2] = wpm_string_temp
+				tops[random*5+1][1] = m.Author.Username
+				tops[random*5+1][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+				tops[random*5+1][0] = "2"
+
+				s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+			}
 		}
 
-		if mensaje_extra_bool == true {
-			s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n" + mensaje_extra + "\nWPM: " + wpm_stringed + 
-			"\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
-			"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
-			"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
-			"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
-			"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] +
+		/* IF TOP 1 */
+		/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5][2], 64); err == nil {AAA = AA}
+		if wpm > AAA {
+			if tops[random*5][5] == m.Author.ID {
+				var temp string
+				var temp2 string
 
-			"\n--------------------------------------------------------------------")
+				temp = tops[random*5][2]
+				temp2 = tops[random*5][3]
+
+				wpm_string_temp := fmt.Sprintf("%f", wpm)  
+				tops[random*5][2] = wpm_string_temp
+				tops[random*5][1] = m.Author.Username
+				tops[random*5][5] = m.Author.ID
+				dt := time.Now()
+				tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+				tops[random*5][0] = "1"
+
+				s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+			}
 		}
 
-		mensaje_extra_bool = false
+		s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has terminado la carrera!\nWPM: " + wpm_stringed + 
+		"\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+		"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
+		"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
+		"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
+		"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] +
+
+		"\n--------------------------------------------------------------------")
 
 		var random_s = strconv.FormatInt(int64(random)+1, 10)
 
@@ -452,6 +398,18 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://camo.githubusercontent.com/833cfd306ac2bef74ddf0560ee3b4112321c5b6939e52a1629f0aed8aec46922/687474703a2f2f692e696d6775722e636f6d2f485379686177742e6a7067")
 	/**/	}
 	/**/
+	/**/	if m.Content == ".ch" {
+	/**/		s.ChannelMessageSend(m.ChannelID, "https://thumbs.gfycat.com/AdmirableLikableFlea-mobile.mp4")
+	/**/	}
+	/**/
+	/**/
+	/**/
+	/**/
+	/**/
+	/**/
+	/**/
+	/**/
+			
 
 }
 
