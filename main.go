@@ -29,6 +29,8 @@ var (
 	Token string
 )
 
+var último_mensaje_del_bot_ID string
+
 func init() {
 
 	flag.StringVar(&Token, "t", "", "Bot Token")
@@ -89,6 +91,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	/* Ignore all messages created by the bot itself */
 	/* This isn't required in this specific example but it's a good practice. */
 	if m.Author.ID == s.State.User.ID {
+		último_mensaje_del_bot_ID = m.Message.ID
 		return
 	}
 
@@ -96,15 +99,36 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend("1031077892748234762", "<@" + m.Author.ID + "> ha hecho trampas\t" + time.Now().Format("01-02-2006 15:04:05") + "\t" + split_curr())
 	}
 	if m.Content == ".tt" {
+		if is_started == true {
+			if time_soon == true {
+				s.ChannelMessageSend(m.ChannelID, "⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ") 
+				time.Sleep(3 * time.Second)
+			}
+
+			is_started = false
+
+			
+			s.ChannelMessageSend(m.ChannelID, "(espera anti-bug...)") 
+			time.Sleep(time.Second)
+
+		}
+
 		rand.Seed(time.Now().UnixNano())
 
-		
-		random = rand.Intn(how_many_texts())
 		random = 0
+		random = rand.Intn(how_many_texts())
+		
 
 		start_author = m.Author.ID
-		s.ChannelMessageSend(m.ChannelID, "Preparados...") 
-		time.Sleep(2 * time.Second)
+
+		if is_started == false {
+			s.ChannelMessageSend(m.ChannelID, "🔴 Preparados... ") 
+			time.Sleep(time.Second)
+		}
+
+		s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "🟡 Listos... ")
+		time.Sleep(time.Second)
+
 /*
 		chanl, err := s.Channel(m.ChannelID)
 		if err != nil {
@@ -113,11 +137,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		s.ChannelMessageEdit(m.ChannelID, m.Message.ID, display_textos [random])
 		fmt.Println(m.Message.ID)
-*/
-		s.ChannelMessageSend(m.ChannelID, display_textos [random])
+*/	
+	if is_started == false {
+		s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, display_textos [random])
 		current_text = textos[random]
 		start()
-		
+	 }
 	}
 
 	if m.Content == current_text && is_started {
@@ -376,8 +401,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		
 		fmt.Println(f, err, reflect.TypeOf(f))
-
-
 	}
 
 	if m.Content == ".help" {
@@ -409,7 +432,19 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	/**/
 	/**/
 	/**/
-			
+	if m.Content == ".m" {
+			s.ChannelMessageSend(m.ChannelID, "pues...")
+			time.Sleep(100 * time.Millisecond)
+			if is_started {
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "está empezado")
+			} else {
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "no está empezado")
+			}
+			println(m.Message.ID)
+			println("ajsd: " + último_mensaje_del_bot_ID)
+	}	
+
+
 
 }
 
