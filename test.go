@@ -71,6 +71,11 @@ var tops [5000][6]string = [5000][6]string{
 	{"5", "0", "0", "0", "0", "0"},
 }
 
+var levels [500][2]string = [500][2]string{
+	{"12345678910...", "0"},
+	{"87652345654...", "0"},
+
+}
 const INVISIBLE string = "​"
 
 func how_many_texts() int {
@@ -127,6 +132,8 @@ var current_text = textos[0]
 var is_started bool = false
 var time_elapsed float64 = 0
 
+var time_soon bool = true
+
 var wpm float64 = 0
 
 var start_author string
@@ -135,11 +142,18 @@ var result_splited[]string
 
 func start() {
 	time_elapsed = 0
+	time_soon = true
 	if is_started == false {
 		is_started = true
 		for is_started {
 			time.Sleep(1 * time.Millisecond)
 			time_elapsed = time_elapsed + 1
+			if time_elapsed == 6000 {
+				time_soon = false
+			}
+			if time_elapsed == 180000 {
+				is_started = false
+			}
 		}
 	}
 
