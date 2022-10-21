@@ -99,16 +99,19 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend("1031077892748234762", "<@" + m.Author.ID + "> ha hecho trampas\t" + time.Now().Format("01-02-2006 15:04:05") + "\t" + split_curr())
 	}
 	if m.Content == ".tt" {
+
+		var editbool bool = false
+
 		if is_started == true {
 			if time_soon == true {
 				s.ChannelMessageSend(m.ChannelID, "⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ") 
 				time.Sleep(3 * time.Second)
+				editbool = true
 			}
 
 			is_started = false
 
-			
-			s.ChannelMessageSend(m.ChannelID, "(espera anti-bug...)") 
+			/* espera anti-bug */
 			time.Sleep(time.Second)
 
 		}
@@ -121,10 +124,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		start_author = m.Author.ID
 
-		if is_started == false {
+		if editbool == true && is_started == false {
+			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "🔴 Preparados... ") 
+			time.Sleep(time.Second)
+		} else if is_started == false {
 			s.ChannelMessageSend(m.ChannelID, "🔴 Preparados... ") 
 			time.Sleep(time.Second)
-		}
+		} 
 
 		s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "🟡 Listos... ")
 		time.Sleep(time.Second)
