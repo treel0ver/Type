@@ -118,9 +118,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		rand.Seed(time.Now().UnixNano())
 
-		
-		random = rand.Intn(how_many_texts())
 		random = 0
+		random = rand.Intn(how_many_texts())
 
 		start_author = m.Author.ID
 
@@ -304,6 +303,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 						tops[random*5][0] = "1"
 
 						s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+					} else {
+						wpm_string_temp := fmt.Sprintf("%f", wpm)  
+						tops[random*5][2] = wpm_string_temp
+						tops[random*5][1] = m.Author.Username
+						tops[random*5][5] = m.Author.ID
+						dt := time.Now()
+						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5][0] = "1"
+						
 					}
 		} else {
 			/* IF TOP 2 */
@@ -410,7 +418,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 						tops[random*5+1][0] = "2"
 
 						s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
-					} 
+					} else {
+						wpm_string_temp := fmt.Sprintf("%f", wpm)  
+						tops[random*5+1][2] = wpm_string_temp
+						tops[random*5+1][1] = m.Author.Username
+						tops[random*5+1][5] = m.Author.ID
+						dt := time.Now()
+						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+1][0] = "2"
+						
+					}
 			} else {
 				/* IF TOP 3 */
 				/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+2][2], 64); err == nil {AAA = AA}
@@ -481,7 +498,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 						tops[random*5+2][0] = "3"
 
 						s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
-					} 
+					} else {
+						wpm_string_temp := fmt.Sprintf("%f", wpm)  
+						tops[random*5+2][2] = wpm_string_temp
+						tops[random*5+2][1] = m.Author.Username
+						tops[random*5+2][5] = m.Author.ID
+						dt := time.Now()
+						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+2][0] = "3"
+						
+					}
 				} else {
 					/* IF TOP 4 */
 					/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+3][2], 64); err == nil {AAA = AA}
@@ -524,7 +550,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 							tops[random*5+3][0] = "4"
 
 							s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
-						}
+						} else {
+						wpm_string_temp := fmt.Sprintf("%f", wpm)  
+						tops[random*5+3][2] = wpm_string_temp
+						tops[random*5+3][1] = m.Author.Username
+						tops[random*5+3][5] = m.Author.ID
+						dt := time.Now()
+						tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+3][0] = "4"
+						
+					}
 					} else {
 						/* IF TOP 5 */
 						/*Set to float*/ if AA, err := strconv.ParseFloat(tops[random*5+4][2], 64); err == nil {AAA = AA}
@@ -545,8 +580,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 								tops[random*5+4][0] = "5"
 
 								s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has superado tu anterior marca de " + temp + " wpm del " + temp2)
+							} else {
+								wpm_string_temp := fmt.Sprintf("%f", wpm)  
+								tops[random*5+4][2] = wpm_string_temp
+								tops[random*5+4][1] = m.Author.Username
+								tops[random*5+4][5] = m.Author.ID
+								dt := time.Now()
+								tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
+								tops[random*5+4][0] = "5"
 							}
-						}
+						} 
 					}
 				}
 
@@ -554,48 +597,46 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 
+	s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has terminado la carrera!\nWPM: " + wpm_stringed + 
+	"\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+	"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
+	"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
+	"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
+	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] +
+
+	"\n--------------------------------------------------------------------")
+
+	var random_s = strconv.FormatInt(int64(random)+1, 10)
+
+	f, err := os.OpenFile("database/test", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	dt := time.Now()
+	if _, err := f.Write([]byte(m.Author.ID + "\t" + dt.Format("01-02-2006 15:04:05") + "\t" + wpm_stringed + "\ttexto: (" + random_s + ") " + split_curr() + "\n")); err != nil {
+		f.Close() 
+		log.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
+
+	/* WRITE TO FILE */
+    if err != nil {
+        log.Fatalf("readLines: %s", err)
+    }
+
+    escribir_tops_a_base_de_datos()
 
 
-
-		s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\n¡Has terminado la carrera!\nWPM: " + wpm_stringed + 
-		"\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
-		"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
-		"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
-		"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
-		"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] +
-
-		"\n--------------------------------------------------------------------")
-
-		var random_s = strconv.FormatInt(int64(random)+1, 10)
-
-		f, err := os.OpenFile("database/test", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-		dt := time.Now()
-		if _, err := f.Write([]byte(m.Author.ID + "\t" + dt.Format("01-02-2006 15:04:05") + "\t" + wpm_stringed + "\ttexto: (" + random_s + ") " + split_curr() + "\n")); err != nil {
-			f.Close() 
-			log.Fatal(err)
-		}
-		if err := f.Close(); err != nil {
-			log.Fatal(err)
-		}
-
-		/* WRITE TO FILE */
-	    if err != nil {
-	        log.Fatalf("readLines: %s", err)
-	    }
-
-	    escribir_tops_a_base_de_datos()
+	if err := writeLines(); err != nil {
+   		 log.Fatalf("writeLines: %s", err)
+  	}
 
 
-		if err := writeLines(); err != nil {
-       		 log.Fatalf("writeLines: %s", err)
-	  	}
+	   /* WRITE TO FILE */
 
-
- 	   /* WRITE TO FILE */
-
+	 
 
 	} else if CountWords(m.Content) > CountWords(current_text)-3 {
 		if is_illegal(m.Content) {
