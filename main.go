@@ -7,10 +7,10 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-    "log"
-    "time"
-    "math/rand"
-    "strings"
+	"log"
+	"time"
+	"math/rand"
+	"strings"
 	"strconv"
 	"reflect"
 	"github.com/bwmarrin/discordgo"
@@ -147,8 +147,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			rand.Seed(time.Now().UnixNano())
 
-			random = 0
 			random = rand.Intn(how_many_texts())
+			random = 0
+			
 
 			start_author = m.Author.ID
 
@@ -179,12 +180,30 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		 }
 		}
 	}
+
+	var is_lower_than_top bool = false
+
 	if m.Content == current_text && is_started {
 		calculate_wpm()
 		/*is_started = false*/
 
 		wpm_stringed := fmt.Sprint(wpm)
 
+
+
+		if tops[random*5][5] == m.Author.ID || tops[random*5+1][5] == m.Author.ID || tops[random*5+2][5] == m.Author.ID || tops[random*5+3][5] == m.Author.ID || tops[random*5+4][5] == m.Author.ID {
+			if wpm_floated_from_top, err := strconv.ParseFloat(tops[random*5][2], 32); err == nil {
+    			fmt.Println(wpm_floated_from_top) // 3.1415927410125732
+    			fmt.Println(is_lower_than_top)
+			
+				if wpm_floated_from_top > wpm {
+					is_lower_than_top = true
+					fmt.Println(is_lower_than_top)
+				}
+			}
+		}
+
+if !is_lower_than_top {
 		// CALCULATE IF GREATER OR SMALER
 		
 		var AAA float64
@@ -661,7 +680,20 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
    		 log.Fatalf("writeLines: %s", err)
   	}
 	/* WRITE TO FILE */
+}
 
+if is_lower_than_top {
+	s.ChannelMessageSend(m.ChannelID, "--------------------------------------------------------------------\nLo siento, no has podido superar tu anterior marca.\nWPM: " + wpm_stringed + 
+	"\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+	"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
+	"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
+	"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
+	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] +
+
+	"\n--------------------------------------------------------------------")
+
+	is_lower_than_top = false
+}
 	} else if CountWords(m.Content) > CountWords(current_text)-3 {
 		if is_illegal(m.Content) {
 			for i := 0; i < 4; i++ {
