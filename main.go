@@ -40,7 +40,7 @@ func init() {
 
 func main() {
 
-	 var fileName = "database/TOPS"
+	var fileName = "database/TOPS"
  	fileBytes, err := ioutil.ReadFile(fileName)
 
  	if err != nil {
@@ -50,7 +50,7 @@ func main() {
 
  	sliceData := strings.Split(string(fileBytes), "\n")
 
- 	fmt.Println(sliceData[21])
+ 	fmt.Println("number of texts: ")
  	fmt.Println(how_many_texts())
 
    var i, j int
@@ -147,10 +147,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			rand.Seed(time.Now().UnixNano())
 
-			random = rand.Intn(how_many_texts())
 			random = 0
+			random = rand.Intn(how_many_texts())
 			
-
 			start_author = m.Author.ID
 
 			if editbool == true && is_started == false {
@@ -182,6 +181,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	var is_lower_than_top bool = false
+	var wpm_seems_illegal bool = false
 
 	if m.Content == current_text && is_started {
 		calculate_wpm()
@@ -203,7 +203,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 
-if !is_lower_than_top {
+		if wpm > 285 {
+			wpm_seems_illegal = true
+		}
+
+if !is_lower_than_top && !wpm_seems_illegal {
 		// CALCULATE IF GREATER OR SMALER
 		
 		var AAA float64
@@ -694,6 +698,11 @@ if is_lower_than_top {
 
 	is_lower_than_top = false
 }
+
+if wpm_seems_illegal {
+	s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", tu resultado de " + wpm_stringed + " WPM parece ilegal ya que excede los 285 WPM. Contacta con <@910067180706627594> para resolver este conflicto.")
+}
+
 	} else if CountWords(m.Content) > CountWords(current_text)-3 {
 		if is_illegal(m.Content) {
 			for i := 0; i < 4; i++ {
@@ -759,6 +768,12 @@ if is_lower_than_top {
 			log.Fatal(err)
 		}
 	}
+
+	if m.Content == ".textos" {
+		var how_many_texts_stringed = strconv.FormatInt(int64(how_many_texts()), 10)
+		s.ChannelMessageSend(m.ChannelID, "Número de textos en idioma español: " + how_many_texts_stringed)
+	}
+
 
 	if m.Content == ".A" {
 		ff := string(tops[random*5][2])
