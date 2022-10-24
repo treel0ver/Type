@@ -773,7 +773,7 @@ if wpm_seems_illegal {
 		s.ChannelMessageSend(m.ChannelID, "Número de textos en idioma español: " + how_many_texts_stringed)
 	}
 
-	if strings.HasPrefix(content_to_lowercase, ".top") {
+	if strings.HasPrefix(content_to_lowercase, ".tops") {
 		var content_arrayed []string 
 		content_arrayed = strings.Split(m.Content, " ") 
 
@@ -781,7 +781,7 @@ if wpm_seems_illegal {
 		var found bool = false
 
 		if len(content_arrayed) > 2 {
-			for i := range textos {
+			for i := 0; i < len(textos); i++ {
 				if strings.HasPrefix(textos[i], content_arrayed[1] + " " + content_arrayed[2]) {
 
 					found = true
@@ -793,6 +793,8 @@ if wpm_seems_illegal {
 	"\n" + tops[what_top*5+2][0] + ". " + tops[what_top*5+2][1] + " (" + tops[what_top*5+2][2] + " wpm) " + tops[what_top*5+2][3] +
 	"\n" + tops[what_top*5+3][0] + ". " + tops[what_top*5+3][1] + " (" + tops[what_top*5+3][2] + " wpm) " + tops[what_top*5+4][3] +
 	"\n" + tops[what_top*5+4][0] + ". " + tops[what_top*5+4][1] + " (" + tops[what_top*5+4][2] + " wpm) " + tops[what_top*5+4][3])
+					println(what_top)
+					println(i)
 				}
 			}
 		}
@@ -809,6 +811,19 @@ if wpm_seems_illegal {
 
 		fmt.Println(content_arrayed)
 	}
+
+	if strings.HasPrefix(content_to_lowercase, ".stats") { 
+		var n int
+		for i := 0; i < len(tops)/5; i++ {
+				if tops[i*5][5] == m.Author.ID {
+					/* println(i) */
+					n++
+				}
+			}
+			var n_string string = strconv.FormatInt(int64(n), 10)
+			s.ChannelMessageSend(m.ChannelID, "Tienes " + n_string + " tops 1.")
+		}
+	
 
 	if m.Content == ".A" {
 		ff := string(tops[random*5][2])
@@ -860,10 +875,6 @@ if wpm_seems_illegal {
 			println(m.Message.ID)
 			println("ajsd: " + último_mensaje_del_bot_ID)
 			s.ChannelMessageSendEmbed(m.ChannelID, embed.NewGenericEmbedAdvanced("¡Has terminado!", "Tu resultado es: ", 888))
-
 	}	
-
-
-
 }
 
