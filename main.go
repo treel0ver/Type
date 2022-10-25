@@ -147,7 +147,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			rand.Seed(time.Now().UnixNano())
 
 			random = 107
-			//random = rand.Intn(how_many_texts())
+			random = rand.Intn(how_many_texts())
 			
 
 			start_author = m.Author.ID
