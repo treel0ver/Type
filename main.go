@@ -53,7 +53,7 @@ func main() {
  	fmt.Println(how_many_texts())
 
     var i, j int
-    var n int = 5000 /*        TOPS_lines/6         */
+    var n int = 10000 /*        TOPS_lines/6         */
     var cuenta int = 0
     for  i = 0; i < n; i++ {
        for j = 0; j < 6; j++ {
@@ -885,4 +885,3 @@ if wpm_seems_illegal {
 
 
 }
-
