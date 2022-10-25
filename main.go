@@ -13,7 +13,6 @@ import (
 	"math"
 	"strings"
 	"strconv"
-	"reflect"
 	"github.com/bwmarrin/discordgo"
 	"github.com/Clinet/discordgo-embed"
 )
@@ -29,9 +28,8 @@ import (
 /* Variables used for command line parameters */
 var (
 	Token string
+	último_mensaje_del_bot_ID string
 )
-
-var último_mensaje_del_bot_ID string
 
 func init() {
 
@@ -51,18 +49,18 @@ func main() {
 
  	sliceData := strings.Split(string(fileBytes), "\n")
 
- 	fmt.Println("number of texts: ")
+ 	fmt.Print("Texts loaded: ")
  	fmt.Println(how_many_texts())
 
-   var i, j int
-   var n int = 300
-   var cuenta int = 0
-   for  i = 0; i < n; i++ {
-      for j = 0; j < 6; j++ {
-         tops[i][j] = sliceData[cuenta]
-         cuenta++
-      }
-   }	
+    var i, j int
+    var n int = 5000 /*        TOPS_lines/6         */
+    var cuenta int = 0
+    for  i = 0; i < n; i++ {
+       for j = 0; j < 6; j++ {
+          tops[i][j] = sliceData[cuenta]
+          cuenta++
+       }
+    }	
 
 	/* Create a new Discord session using the provided bot token. */
 	dg, err := discordgo.New("Bot " + Token)
@@ -121,7 +119,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	if strings.HasPrefix(content_to_lowercase, ".tt") {
+	if (strings.HasPrefix(content_to_lowercase, ".tt")) {
 
 		if !(len(abb) < 2) {
 			if !(strings.HasPrefix(abb[1], "long")) {
@@ -148,9 +146,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			rand.Seed(time.Now().UnixNano())
 
-			random = 0
-			random = rand.Intn(how_many_texts())
+			random = 107
+			//random = rand.Intn(how_many_texts())
 			
+
 			start_author = m.Author.ID
 
 			if editbool == true && is_started == false {
@@ -174,7 +173,20 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Println(m.Message.ID)
 	*/	
 		if is_started == false {
-			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, display_textos [random])
+			/* s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, display_textos [random]) */
+
+			var textos_arr = strings.Split(textos[random], " ")
+			var textos_arr_x string
+
+			for i := 0; i < len(textos_arr); i++ {
+				if i != len(textos_arr)-1 {
+					textos_arr_x = textos_arr_x + textos_arr[i] + "​ "
+				} else {
+					textos_arr_x = textos_arr_x + textos_arr[i]
+				}
+			}
+
+			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "**" + textos_arr_x + "**")
 			current_text = textos[random]
 			start()
 		 }
@@ -194,12 +206,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if tops[random*5][5] == m.Author.ID || tops[random*5+1][5] == m.Author.ID || tops[random*5+2][5] == m.Author.ID || tops[random*5+3][5] == m.Author.ID || tops[random*5+4][5] == m.Author.ID {
 			if wpm_floated_from_top, err := strconv.ParseFloat(tops[random*5][2], 32); err == nil {
-    			fmt.Println(wpm_floated_from_top) // 3.1415927410125732
-    			fmt.Println(is_lower_than_top)
+    			/* fmt.Println(wpm_floated_from_top) // 3.1415927410125732 */
+    			/* fmt.Println(is_lower_than_top) */
 			
 				if wpm_floated_from_top > wpm {
 					is_lower_than_top = true
-					fmt.Println(is_lower_than_top)
+					/* fmt.Println(is_lower_than_top) */
 				}
 			}
 		}
@@ -702,10 +714,8 @@ if wpm_seems_illegal {
 
 	} else if CountWords(m.Content) > CountWords(current_text)-3 {
 		if is_illegal(m.Content) {
-			for i := 0; i < 4; i++ {
-				fmt.Println("¡¡<@" + m.Author.ID + "> HA COPY PASTE!!")
-			}
-			
+			fmt.Print(m.Author.ID + " " + m.Author.Username + " ha hecho copy paste!! ")
+			fmt.Println(time.Now().Format("01-02-2006 15:04:05"))
 
 			A := m.Content
 			sent_arrayed := strings.Split(A, " ")
@@ -719,12 +729,11 @@ if wpm_seems_illegal {
 				/*is_started = false*/
 				var wpm_1_digit = (math.Round(wpm*10)/10)
 				wpm_stringed := fmt.Sprint(wpm_1_digit)
-				s.ChannelMessageSend(m.ChannelID, "**HAS INTENTADO COPY PASTE.** (TU WPM HUBIERA SIDO: " + wpm_stringed)
+				s.ChannelMessageSend(m.ChannelID, "**HAS INTENTADO COPY PASTE.** (TU WPM HUBIERA SIDO: " + wpm_stringed + ")")
 
 				s.ChannelMessageSend("1031077892748234762", errores_s + ": " + lista_errores)
 			}
 		} else {
-
 			A := m.Content
 			sent_arrayed := strings.Split(A, " ")
 
@@ -744,28 +753,8 @@ if wpm_seems_illegal {
 
 	if m.Content == ".info" {
 		sec := fmt.Sprint(time_elapsed)
-		sec2 := fmt.Sprint(time_elapsed/1000)
-
 		var average_word_length_of_current_text_stringed string = fmt.Sprintf("%f", (average_word_length(current_text)))
-	
-	    dat, err := os.ReadFile("database/test")
-    	check(err)
-    	s.ChannelMessageSend(m.ChannelID, string(dat) + "\n[" + m.Author.ID + "]\nmilliseconds: " + sec + "\nseconds: " + sec2 + "\nstart_author: " + start_author + "\naverage_word_length_of_current_text_stringed: " + average_word_length_of_current_text_stringed)
-	}
-
-	if m.Content == ".test" {
-		f, err := os.OpenFile("database/test", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-		dt := time.Now()
-		if _, err := f.Write([]byte(m.Author.ID + "\t" + dt.Format("02-21-2006 15:04:05") + "\tappended some data\n")); err != nil {
-			f.Close() 
-			log.Fatal(err)
-		}
-		if err := f.Close(); err != nil {
-			log.Fatal(err)
-		}
+    	s.ChannelMessageSend(m.ChannelID, "\n[" + "you are " + m.Author.ID + "]\nmilliseconds: " + sec + "\nstart_author: " + start_author + "\naverage_word_length_of_current_text_stringed: " + average_word_length_of_current_text_stringed)
 	}
 
 	if m.Content == ".textos" {
@@ -785,16 +774,28 @@ if wpm_seems_illegal {
 				if strings.HasPrefix(textos[i], content_arrayed[1] + " " + content_arrayed[2]) {
 
 					found = true
-					println(i)
+					/* println(i) */
 					what_top = i
 
-					s.ChannelMessageSend(m.ChannelID, "\n«" + display_textos[what_top] + "»\n\n" + tops[what_top*5][0] + ". " + tops[what_top*5][1] + " (" + tops[what_top*5][2] + " wpm) " + tops[what_top*5][3] +
+					var textos_arr = strings.Split(textos[what_top], " ")
+
+					var textos_arr_x string
+
+					for i := 0; i < len(textos_arr); i++ {
+						if i != len(textos_arr)-1 {
+							textos_arr_x = textos_arr_x + textos_arr[i] + "​ "
+						} else {
+							textos_arr_x = textos_arr_x + textos_arr[i]
+						}
+					}
+
+					s.ChannelMessageSend(m.ChannelID, "\n«" + textos_arr_x + "»\n\n" + tops[what_top*5][0] + ". " + tops[what_top*5][1] + " (" + tops[what_top*5][2] + " wpm) " + tops[what_top*5][3] +
 	"\n" + tops[what_top*5+1][0] + ". " + tops[what_top*5+1][1] + " (" + tops[what_top*5+1][2] + " wpm) " + tops[what_top*5+1][3] +
 	"\n" + tops[what_top*5+2][0] + ". " + tops[what_top*5+2][1] + " (" + tops[what_top*5+2][2] + " wpm) " + tops[what_top*5+2][3] +
 	"\n" + tops[what_top*5+3][0] + ". " + tops[what_top*5+3][1] + " (" + tops[what_top*5+3][2] + " wpm) " + tops[what_top*5+4][3] +
 	"\n" + tops[what_top*5+4][0] + ". " + tops[what_top*5+4][1] + " (" + tops[what_top*5+4][2] + " wpm) " + tops[what_top*5+4][3])
-					println(what_top)
-					println(i)
+					/* println(what_top) */
+					/* println(i) */
 				}
 			}
 		}
@@ -809,7 +810,7 @@ if wpm_seems_illegal {
 
 		found = false
 
-		fmt.Println(content_arrayed)
+		/* fmt.Println(content_arrayed) */
 	}
 
 	if strings.HasPrefix(content_to_lowercase, ".stats") { 
@@ -826,17 +827,20 @@ if wpm_seems_illegal {
 	
 
 	if m.Content == ".A" {
+		/* 
 		ff := string(tops[random*5][2])
-		fmt.Println(ff)
-		fmt.Println(tops[random*5][2])
-		f, err := strconv.ParseFloat(ff, 8)
-
 		
-		fmt.Println(f, err, reflect.TypeOf(f))
+		fmt.Println(ff) 
+		fmt.Println(tops[random*5][2])
+		
+		f, err := strconv.ParseFloat(ff, 8)
+		*/
+		
+		/* fmt.Println(f, err, reflect.TypeOf(f)) */
 	}
 
 	if m.Content == ".help" {
-		s.ChannelMessageSend(m.ChannelID, "```.tt       empieza un test de velocidad en idioma español\n.info     enseña información aleatoria para desarrolladores\n.mapache  pone el gif de un mapache```")
+		s.ChannelMessageSend(m.ChannelID, "```.tt       empieza un test de velocidad en idioma español\n.tops     enseña el leaderboard de un texto\n.stats    enseña tu número de tops 1, 2, 3, 4 y 5\n.mapache  pone el gif de un mapache\n.go       pone una imagen de Gopher\n.ch       pone un gif de Chae-young```")
 	}
 
 	/* FUN COMMANDS */
@@ -872,9 +876,13 @@ if wpm_seems_illegal {
 			} else {
 				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "no está empezado")
 			}
-			println(m.Message.ID)
-			println("ajsd: " + último_mensaje_del_bot_ID)
+			/* println(m.Message.ID) */
+			/* println("ajsd: " + último_mensaje_del_bot_ID) */
 			s.ChannelMessageSendEmbed(m.ChannelID, embed.NewGenericEmbedAdvanced("¡Has terminado!", "Tu resultado es: ", 888))
+
 	}	
+
+
+
 }
 
