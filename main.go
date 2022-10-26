@@ -14,7 +14,7 @@ import (
 	"strings"
 	"strconv"
 	"github.com/bwmarrin/discordgo"
-	"github.com/Clinet/discordgo-embed"
+	/* "github.com/Clinet/discordgo-embed" */
 )
 
 
@@ -104,14 +104,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	} else {
 		if m.ChannelID == "1031313220230709278" {
-			s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("01-02-2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
-			s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("01-02-2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
+			s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
+			s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
 		}
 	}
 
 	if is_illegal(m.Content) {
 		s.ChannelMessageSend("1031077892748234762", "<@" + m.Author.ID + "> ha hecho trampas\t" + time.Now().Format("01-02-2006 15:04:05") + "\t" + split_curr())
-		s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("01-02-2006 15:04:05") + "] " + "system> " + m.Author.Username + " ha hecho trampas en el texto: " + split_curr())
+		s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("02/01/2006 15:04:05") + "] " + "system> " + m.Author.Username + " ha hecho trampas en el texto: " + split_curr())
 	}
 
 	var content_to_lowercase = strings.ToLower(m.Content)
@@ -252,7 +252,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 				tops[random*5][1] = m.Author.Username
 				tops[random*5][5] = m.Author.ID
 				dt := time.Now()
-				tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+				tops[random*5][3] = dt.Format("02/01/2006 15:04:05")
 				tops[random*5][0] = "1"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -292,7 +292,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][1] = m.Author.Username
 						tops[random*5][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5][0] = "1"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -326,7 +326,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][1] = m.Author.Username
 						tops[random*5][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5][0] = "1"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -354,7 +354,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][1] = m.Author.Username
 						tops[random*5][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5][0] = "1"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -376,7 +376,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][1] = m.Author.Username
 						tops[random*5][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5][0] = "1"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -386,7 +386,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][1] = m.Author.Username
 						tops[random*5][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5][0] = "1"
 						
 					}
@@ -406,7 +406,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 					tops[random*5+1][1] = m.Author.Username
 					tops[random*5+1][5] = m.Author.ID
 					dt := time.Now()
-					tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+					tops[random*5+1][3] = dt.Format("02/01/2006 15:04:05")
 					tops[random*5+1][0] = "2"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -441,7 +441,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][1] = m.Author.Username
 						tops[random*5+1][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+1][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+1][0] = "2"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -469,7 +469,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][1] = m.Author.Username
 						tops[random*5+1][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+1][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+1][0] = "2"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -491,7 +491,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][1] = m.Author.Username
 						tops[random*5+1][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+1][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+1][0] = "2"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -501,7 +501,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][1] = m.Author.Username
 						tops[random*5+1][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+1][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+1][0] = "2"
 						
 					}
@@ -521,7 +521,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+2][1] = m.Author.Username
 						tops[random*5+2][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+2][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+2][0] = "3"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -549,7 +549,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+3][1] = m.Author.Username
 						tops[random*5+3][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+3][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+3][0] = "4"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -571,7 +571,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+2][1] = m.Author.Username
 						tops[random*5+2][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+2][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+2][0] = "3"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -581,7 +581,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+2][1] = m.Author.Username
 						tops[random*5+2][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+2][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+2][0] = "3"
 						
 					}
@@ -601,7 +601,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 							tops[random*5+3][1] = m.Author.Username
 							tops[random*5+3][5] = m.Author.ID
 							dt := time.Now()
-							tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+							tops[random*5+3][3] = dt.Format("02/01/2006 15:04:05")
 							tops[random*5+3][0] = "4"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -623,7 +623,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 							tops[random*5+3][1] = m.Author.Username
 							tops[random*5+3][5] = m.Author.ID
 							dt := time.Now()
-							tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+							tops[random*5+3][3] = dt.Format("02/01/2006 15:04:05")
 							tops[random*5+3][0] = "4"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -633,7 +633,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+3][1] = m.Author.Username
 						tops[random*5+3][5] = m.Author.ID
 						dt := time.Now()
-						tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
+						tops[random*5+3][3] = dt.Format("02/01/2006 15:04:05")
 						tops[random*5+3][0] = "4"
 						
 					}
@@ -653,7 +653,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 								tops[random*5+4][1] = m.Author.Username
 								tops[random*5+4][5] = m.Author.ID
 								dt := time.Now()
-								tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
+								tops[random*5+4][3] = dt.Format("02/01/2006 15:04:05")
 								tops[random*5+4][0] = "5"
 
 						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
@@ -663,7 +663,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 								tops[random*5+4][1] = m.Author.Username
 								tops[random*5+4][5] = m.Author.ID
 								dt := time.Now()
-								tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
+								tops[random*5+4][3] = dt.Format("02/01/2006 15:04:05")
 								tops[random*5+4][0] = "5"
 							}
 						} 
@@ -687,7 +687,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 		log.Fatal(err)
 	}
 	dt := time.Now()
-	if _, err := f.Write([]byte(m.Author.ID + "\t" + dt.Format("01-02-2006 15:04:05") + "\t" + wpm_stringed + "\ttexto: (" + random_s + ") " + split_curr() + "\n")); err != nil {
+	if _, err := f.Write([]byte(m.Author.ID + "\t" + dt.Format("02/01/2006 15:04:05") + "\t" + wpm_stringed + "\ttexto: (" + random_s + ") " + split_curr() + "\n")); err != nil {
 		f.Close() 
 		log.Fatal(err)
 	}
@@ -728,7 +728,7 @@ if wpm_seems_illegal {
 		is_good = true
 		if is_illegal(m.Content) {
 			fmt.Print(m.Author.ID + " " + m.Author.Username + " ha hecho copy paste!! ")
-			fmt.Println(time.Now().Format("01-02-2006 15:04:05"))
+			fmt.Println(time.Now().Format("02/01/2006 15:04:05"))
 
 			A := m.Content
 			sent_arrayed := strings.Split(A, " ")
@@ -773,6 +773,14 @@ if wpm_seems_illegal {
 		sec := fmt.Sprint(time_elapsed)
 		var average_word_length_of_current_text_stringed string = fmt.Sprintf("%f", (average_word_length(current_text)))
     	s.ChannelMessageSend(m.ChannelID, "\n[" + "you are " + m.Author.ID + "]\nmilliseconds: " + sec + "\nstart_author: " + start_author + "\naverage_word_length_of_current_text_stringed: " + average_word_length_of_current_text_stringed)
+		time.Sleep(500 * time.Millisecond)
+		if is_started {
+			s.ChannelMessageSend(m.ChannelID, "```diff\n+ El test está empezado```")
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "```diff\n- El test está parado```")
+		}
+		/* EMBED s.ChannelMessageSendEmbed(m.ChannelID, embed.NewGenericEmbedAdvanced("¡Has terminado!", "Tu resultado es: ", 888)) */
+
 	}
 
 	if m.Content == ".textos" {
@@ -820,9 +828,9 @@ if wpm_seems_illegal {
 
 		if found != true {
 			if len(content_arrayed) == 1 || len(content_arrayed) == 2 {
-				s.ChannelMessageSend(m.ChannelID, "Sé más específico.")
+				s.ChannelMessageSend(m.ChannelID, "```diff\n- Sé más específico.```")
 			} else {
-				s.ChannelMessageSend(m.ChannelID, "No se encontró ningún texto.")
+				s.ChannelMessageSend(m.ChannelID, "```diff\n- No se encontró ningún texto.```")
 			}
 		}
 
@@ -842,19 +850,18 @@ if wpm_seems_illegal {
 			var n_string string = strconv.FormatInt(int64(n), 10)
 			s.ChannelMessageSend(m.ChannelID, "Tienes " + n_string + " tops 1.")
 		}
-	
 
-	if m.Content == ".A" {
-		/* 
-		ff := string(tops[random*5][2])
-		
-		fmt.Println(ff) 
-		fmt.Println(tops[random*5][2])
-		
-		f, err := strconv.ParseFloat(ff, 8)
-		*/
-		
-		/* fmt.Println(f, err, reflect.TypeOf(f)) */
+	if m.Content == ".dup" {
+
+		var duplicate = []string{
+			"Escucha, las reglas propias... se tratan de decidir conseguir algo usando medios y maneras propias para conseguirlo. Por eso decimos que son nuestras reglas. Precisamente por eso podemos afrontar sinceramente los desafíos y darlo todo. Y si fracasamos, hay que retomar la práctica y soportar duros entrenamientos para lograrlo. Y así, dedicándote a ello, creas tus propias reglas.",
+		}
+
+		dup_map := dup_count(duplicate)
+
+		for k, v := range dup_map {
+ 			fmt.Printf("Item : %s , Count : %d\n", k, v)
+ 		}
 	}
 
 	if m.Content == ".help" {
@@ -890,28 +897,72 @@ if wpm_seems_illegal {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://thumbs.gfycat.com/AdmirableLikableFlea-mobile.mp4")
 	/**/	}
 	/**/
+	/**/	if strings.HasPrefix(m.Content, ".firmar") {
+				var abc string
+	/**/		var acc = strings.Split(m.Content, " ")
+					for i := 1; i < len(acc); i++ {
+						if i == 1 {
+							abc = abc + acc[i]
+						} else {
+							abc = abc + " " + acc[i]
+						}
+					}
+	/**/		s.ChannelMessageSend(m.ChannelID, "```diff\n" + abc + "\n        " + "- " + m.Author.Username + ", " + m.Author.ID + "```")
+				s.ChannelMessageDelete(m.ChannelID, m.Message.ID)
+	/**/	}
 	/**/
 	/**/
 	/**/
 	/**/
-	/**/
-	/**/
-	/**/
-	if m.Content == ".m" {
-			s.ChannelMessageSend(m.ChannelID, "pues...")
-			time.Sleep(100 * time.Millisecond)
-			if is_started {
-				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "está empezado")
-			} else {
-				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "no está empezado")
+
+	if m.Content == ".textstats" {
+		var temp1 int
+		var temp2 string
+		var _0 int
+		var _100 int
+		var _200 int
+		var _300 int
+		var _400 int 
+		var _500 int
+		var _600 int
+
+		for i := 0; i < how_many_texts(); i++ {
+			temp1 = temp1 + len(textos[i])
+			if len(textos[i]) < 100 {
+				_0++
+			} 
+			if len(textos[i]) < 200 && len(textos[i]) >= 100 {
+				_100++
 			}
-			/* println(m.Message.ID) */
-			/* println("ajsd: " + último_mensaje_del_bot_ID) */
-			s.ChannelMessageSendEmbed(m.ChannelID, embed.NewGenericEmbedAdvanced("¡Has terminado!", "Tu resultado es: ", 888))
+			if len(textos[i]) < 300 && len(textos[i]) >= 200 {
+				_200++
+			}
+			if len(textos[i]) < 400 && len(textos[i]) >= 300 {
+				_300++
+			}
+			if len(textos[i]) < 500 && len(textos[i]) >= 400 {
+				_400++
+			}
+			if len(textos[i]) < 600 && len(textos[i]) >= 500 {
+				_500++
+			}
+			if len(textos[i]) < 700 && len(textos[i]) >= 600 {
+				_600++
+			}
 
-	}	
+		}
+		temp2 = strconv.FormatInt(int64((temp1/how_many_texts())), 10) 
 
+		var _0s = strconv.FormatInt(int64(_0), 10) 
+		var _100s = strconv.FormatInt(int64(_100), 10) 
+		var _200s = strconv.FormatInt(int64(_200), 10) 
+		var _300s = strconv.FormatInt(int64(_300), 10) 
+		var _400s = strconv.FormatInt(int64(_400), 10) 
+		var _500s = strconv.FormatInt(int64(_500), 10) 
+		var _600s = strconv.FormatInt(int64(_600), 10) 
 
+		s.ChannelMessageSend(m.ChannelID, "```diff\nLongitud promedio de textos: " + temp2 + "\n\n" + "000-100: " + _0s + "\n100-200: " + _100s	+ "\n200-300: " + _200s + "\n300-400: " + _300s	+ "\n400-500: " + _400s	+ "\n500-600: " + _500s + "\n600-700: " + _600s + "```")	
 
+	}
 }
 
