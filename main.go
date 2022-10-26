@@ -29,6 +29,7 @@ import (
 var (
 	Token string
 	último_mensaje_del_bot_ID string
+	is_good bool
 )
 
 func init() {
@@ -107,7 +108,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend("1031077892748234762", "<@" + m.Author.ID + "> ha hecho trampas\t" + time.Now().Format("01-02-2006 15:04:05") + "\t" + split_curr())
 	}
 
-
 	var content_to_lowercase = strings.ToLower(m.Content)
 	var abb = strings.Split(content_to_lowercase, " ")
 
@@ -120,7 +120,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if (strings.HasPrefix(content_to_lowercase, ".tt")) {
-
+		is_good = false
 		if !(len(abb) < 2) {
 			if !(strings.HasPrefix(abb[1], "long")) {
 				positivo = false
@@ -197,6 +197,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var wpm_seems_illegal bool = false
 
 	if m.Content == current_text && is_started {
+		is_good = true
 		calculate_wpm()
 		/*is_started = false*/
 
@@ -709,10 +710,11 @@ if is_lower_than_top {
 }
 
 if wpm_seems_illegal {
-	s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", tu resultado de " + wpm_stringed + " WPM parece ilegal ya que excede los 285 WPM. Contacta con <@910067180706627594> para resolver este conflicto.")
+	s.ChannelMessageSend(m.ChannelID, m.Author.Username + ", tu resultado de " + wpm_stringed + " WPM parece ilegal ya que excede los 285 WPM. :face_with_raised_eyebrow:. Contacta con <@910067180706627594> para resolver este conflicto.")
 }
 
 	} else if CountWords(m.Content) > CountWords(current_text)-3 {
+		is_good = true
 		if is_illegal(m.Content) {
 			fmt.Print(m.Author.ID + " " + m.Author.Username + " ha hecho copy paste!! ")
 			fmt.Println(time.Now().Format("01-02-2006 15:04:05"))
@@ -729,7 +731,7 @@ if wpm_seems_illegal {
 				/*is_started = false*/
 				var wpm_1_digit = (math.Round(wpm*10)/10)
 				wpm_stringed := fmt.Sprint(wpm_1_digit)
-				s.ChannelMessageSend(m.ChannelID, "**HAS INTENTADO COPY PASTE.** (TU WPM HUBIERA SIDO: " + wpm_stringed + ")")
+				s.ChannelMessageSend(m.ChannelID, "**:warning: @<910067180706627594> HAS INTENTADO COPY PASTE.** (TU WPM HUBIERA SIDO: " + wpm_stringed + ")")
 
 				s.ChannelMessageSend("1031077892748234762", errores_s + ": " + lista_errores)
 			}
@@ -746,7 +748,12 @@ if wpm_seems_illegal {
 				/*is_started = false*/
 				var wpm_1_digit = (math.Round(wpm*10)/10)
 				wpm_stringed := fmt.Sprint(wpm_1_digit)
-				s.ChannelMessageSend(m.ChannelID, "**Nos has terminado la carrera correctamente.**\nHas cometido " + errores_s + " errores: " + lista_errores + "\nWPM raw: " + wpm_stringed)
+
+				if len(sent_arrayed) > len(text_arrayed) {
+					s.ChannelMessageSend(m.ChannelID, "**Escribiste una palabra de más, no se calcularon errores. 😟. **\nWPM raw: " + wpm_stringed)
+				} else {
+					s.ChannelMessageSend(m.ChannelID, "**Nos has terminado la carrera correctamente.**\nHas cometido " + errores_s + " errores: " + lista_errores + "\nWPM raw: " + wpm_stringed)
+				}
 			}
 		}
 	}
@@ -843,6 +850,13 @@ if wpm_seems_illegal {
 		s.ChannelMessageSend(m.ChannelID, "```.tt       empieza un test de velocidad en idioma español\n.tops     enseña el leaderboard de un texto\n.stats    enseña tu número de tops 1, 2, 3, 4 y 5\n.mapache  pone el gif de un mapache\n.go       pone una imagen de Gopher\n.ch       pone un gif de Chae-young```")
 	}
 
+	if !(m.Author.ID == s.State.User.ID) {
+		if is_started == true && !is_good { /* else if len(m.Content) > 200 { */
+			s.ChannelMessageDelete(m.ChannelID, m.Message.ID)
+			is_good = false
+		}
+	}
+
 	/* FUN COMMANDS */
 	/**/	
 	/**/	if m.Content == ".mapache" {
@@ -885,3 +899,4 @@ if wpm_seems_illegal {
 
 
 }
+
