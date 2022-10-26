@@ -866,7 +866,7 @@ if wpm_seems_illegal {
 		var acc = strings.Split(content_to_lowercase, " ")
 		if (strings.HasPrefix(acc[0], "-")) {
 
-		} else if is_started == true && !is_good { /* else if len(m.Content) > 200 { */
+		} else if (strings.Contains(m.Content, "\n"))  {
 			s.ChannelMessageDelete(m.ChannelID, m.Message.ID)
 			is_good = false
 		}
