@@ -102,10 +102,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		último_mensaje_del_bot_ID = m.Message.ID
 		return
+	} else {
+		if m.ChannelID == "1031313220230709278" {
+			s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("01-02-2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
+			s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("01-02-2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
+		}
 	}
 
 	if is_illegal(m.Content) {
 		s.ChannelMessageSend("1031077892748234762", "<@" + m.Author.ID + "> ha hecho trampas\t" + time.Now().Format("01-02-2006 15:04:05") + "\t" + split_curr())
+		s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("01-02-2006 15:04:05") + "] " + "system> " + m.Author.Username + " ha hecho trampas en el texto: " + split_curr())
 	}
 
 	var content_to_lowercase = strings.ToLower(m.Content)
@@ -117,6 +123,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if (strings.HasPrefix(abb[1], "long")) { 
 			s.ChannelMessageSend(m.ChannelID, "Textos largos aún no disponibles.")
 		}
+	}
+
+	if (strings.HasPrefix(content_to_lowercase, ".tp")) {
+		is_started = false
+		s.ChannelMessageSend(m.ChannelID, "Se ha parado la carrera. Ten cuidado con no parar a los demás.")
 	}
 
 	if (strings.HasPrefix(content_to_lowercase, ".tt")) {
@@ -851,7 +862,11 @@ if wpm_seems_illegal {
 	}
 
 	if !(m.Author.ID == s.State.User.ID) {
-		if is_started == true && !is_good { /* else if len(m.Content) > 200 { */
+		var content_to_lowercase = strings.ToLower(m.Content)
+		var acc = strings.Split(content_to_lowercase, " ")
+		if (strings.HasPrefix(acc[0], "-")) {
+
+		} else if is_started == true && !is_good { /* else if len(m.Content) > 200 { */
 			s.ChannelMessageDelete(m.ChannelID, m.Message.ID)
 			is_good = false
 		}
