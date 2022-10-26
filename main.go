@@ -121,13 +121,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if !(len(abb) < 2) {
 		if (strings.HasPrefix(abb[1], "long")) { 
-			s.ChannelMessageSend(m.ChannelID, "Textos largos aún no disponibles.")
+			s.ChannelMessageSend(m.ChannelID, "```Textos largos aún no disponibles.```")
 		}
 	}
 
 	if (strings.HasPrefix(content_to_lowercase, ".tp")) {
 		is_started = false
-		s.ChannelMessageSend(m.ChannelID, "Se ha parado la carrera. Ten cuidado con no parar a los demás.")
+		s.ChannelMessageSend(m.ChannelID, "```Se ha parado la carrera. Ten cuidado con no parar a los demás.```")
 	}
 
 	if (strings.HasPrefix(content_to_lowercase, ".tt")) {
@@ -143,7 +143,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			if is_started == true {
 				if time_soon == true {
-					s.ChannelMessageSend(m.ChannelID, "⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ") 
+					s.ChannelMessageSend(m.ChannelID, "```⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ```") 
 					time.Sleep(3 * time.Second)
 					editbool = true
 				}
@@ -164,14 +164,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			start_author = m.Author.ID
 
 			if editbool == true && is_started == false {
-				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "🔴 Preparados... ") 
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```🔴 Preparados... ```") 
 				time.Sleep(time.Second)
 			} else if is_started == false {
-				s.ChannelMessageSend(m.ChannelID, "🔴 Preparados... ") 
+				s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados... ```") 
 				time.Sleep(time.Second)
 			} 
 
-			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "🟡 Listos... ")
+			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```🟡 Listos... ```")
 			time.Sleep(time.Second)
 
 	/*
@@ -255,7 +255,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 				tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
 				tops[random*5][0] = "1"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 			} else if tops[random*5+4][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -295,7 +295,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5][0] = "1"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+3][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -329,7 +329,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5][0] = "1"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+2][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -357,7 +357,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5][0] = "1"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+1][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -379,7 +379,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5][0] = "1"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else {
 						wpm_string_temp := fmt.Sprintf("%.1f", wpm_1_digit)   
 						tops[random*5][2] = wpm_string_temp
@@ -409,7 +409,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 					tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
 					tops[random*5+1][0] = "2"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 				} else if tops[random*5+4][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -444,7 +444,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5+1][0] = "2"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+3][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -472,7 +472,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5+1][0] = "2"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+2][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -494,7 +494,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+1][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5+1][0] = "2"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else {
 						wpm_string_temp := fmt.Sprintf("%.1f", wpm_1_digit)  
 						tops[random*5+1][2] = wpm_string_temp
@@ -524,7 +524,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5+2][0] = "3"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+4][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -552,7 +552,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5+3][0] = "4"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else if tops[random*5+3][5] == m.Author.ID {
 						var temp string
 						var temp2 string
@@ -574,7 +574,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						tops[random*5+2][3] = dt.Format("01-02-2006 15:04:05")
 						tops[random*5+2][0] = "3"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 					} else {
 						wpm_string_temp := fmt.Sprintf("%.1f", wpm_1_digit)  
 						tops[random*5+2][2] = wpm_string_temp
@@ -604,7 +604,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 							tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
 							tops[random*5+3][0] = "4"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 						} else if tops[random*5+4][5] == m.Author.ID {
 							var temp string
 							var temp2 string
@@ -626,7 +626,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 							tops[random*5+3][3] = dt.Format("01-02-2006 15:04:05")
 							tops[random*5+3][0] = "4"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 						} else {
 						wpm_string_temp := fmt.Sprintf("%.1f", wpm_1_digit)  
 						tops[random*5+3][2] = wpm_string_temp
@@ -656,7 +656,7 @@ if !is_lower_than_top && !wpm_seems_illegal {
 								tops[random*5+4][3] = dt.Format("01-02-2006 15:04:05")
 								tops[random*5+4][0] = "5"
 
-						s.ChannelMessageSend(m.ChannelID, "**🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "**")
+						s.ChannelMessageSend(m.ChannelID, "```diff\n + 🎉 ¡Has superado tu anterior marca de " + temp + " wpm del " + temp2 + "```")
 							} else {
 								wpm_string_temp := fmt.Sprintf("%.1f", wpm_1_digit)  
 								tops[random*5+4][2] = wpm_string_temp
@@ -673,12 +673,12 @@ if !is_lower_than_top && !wpm_seems_illegal {
 			}
 		}
 
-	s.ChannelMessageSend(m.ChannelID, "**¡Has terminado la carrera!**\nWPM: " + wpm_stringed + 
-	"\n**Tops:**\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+	s.ChannelMessageSend(m.ChannelID, "```diff\n+ ¡Has terminado la carrera!\nWPM: " + wpm_stringed + 
+	"\n\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
 	"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
 	"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
 	"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
-	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3])
+	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] + "```")
 
 	var random_s = strconv.FormatInt(int64(random)+1, 10)
 
@@ -710,12 +710,12 @@ if !is_lower_than_top && !wpm_seems_illegal {
 }
 
 if is_lower_than_top {
-	s.ChannelMessageSend(m.ChannelID, "**Lo siento, no superaste tu anterior marca, así que no se registró.**\nWPM: " + wpm_stringed + 
-	"\n**Tops:**\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+	s.ChannelMessageSend(m.ChannelID, "```diff\n- Lo siento, no superaste tu anterior marca, así que no se registró.\nWPM: " + wpm_stringed + 
+	"\n\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
 	"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
 	"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
 	"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
-	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3])
+	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] + "```")
 
 	is_lower_than_top = false
 }
@@ -761,9 +761,9 @@ if wpm_seems_illegal {
 				wpm_stringed := fmt.Sprint(wpm_1_digit)
 
 				if len(sent_arrayed) > len(text_arrayed) {
-					s.ChannelMessageSend(m.ChannelID, "**Escribiste una palabra de más, no se calcularon errores. 😟. **\nWPM raw: " + wpm_stringed)
+					s.ChannelMessageSend(m.ChannelID, "```diff\n- Escribiste una palabra de más, no se calcularon errores. 😟. \nWPM raw: " + wpm_stringed + "```")
 				} else {
-					s.ChannelMessageSend(m.ChannelID, "**Nos has terminado la carrera correctamente.**\nHas cometido " + errores_s + " errores: " + lista_errores + "\nWPM raw: " + wpm_stringed)
+					s.ChannelMessageSend(m.ChannelID, "```diff\n- No has terminado la carrera correctamente.\nHas cometido " + errores_s + " errores: " + lista_errores + "\nWPM raw: " + wpm_stringed + "```")
 				}
 			}
 		}
@@ -807,11 +807,11 @@ if wpm_seems_illegal {
 						}
 					}
 
-					s.ChannelMessageSend(m.ChannelID, "\n«" + textos_arr_x + "»\n\n" + tops[what_top*5][0] + ". " + tops[what_top*5][1] + " (" + tops[what_top*5][2] + " wpm) " + tops[what_top*5][3] +
+					s.ChannelMessageSend(m.ChannelID, "```\n«" + textos_arr_x + "»\n\n" + tops[what_top*5][0] + ". " + tops[what_top*5][1] + " (" + tops[what_top*5][2] + " wpm) " + tops[what_top*5][3] +
 	"\n" + tops[what_top*5+1][0] + ". " + tops[what_top*5+1][1] + " (" + tops[what_top*5+1][2] + " wpm) " + tops[what_top*5+1][3] +
 	"\n" + tops[what_top*5+2][0] + ". " + tops[what_top*5+2][1] + " (" + tops[what_top*5+2][2] + " wpm) " + tops[what_top*5+2][3] +
 	"\n" + tops[what_top*5+3][0] + ". " + tops[what_top*5+3][1] + " (" + tops[what_top*5+3][2] + " wpm) " + tops[what_top*5+4][3] +
-	"\n" + tops[what_top*5+4][0] + ". " + tops[what_top*5+4][1] + " (" + tops[what_top*5+4][2] + " wpm) " + tops[what_top*5+4][3])
+	"\n" + tops[what_top*5+4][0] + ". " + tops[what_top*5+4][1] + " (" + tops[what_top*5+4][2] + " wpm) " + tops[what_top*5+4][3] + "```")
 					/* println(what_top) */
 					/* println(i) */
 				}
@@ -861,7 +861,7 @@ if wpm_seems_illegal {
 		s.ChannelMessageSend(m.ChannelID, "```.tt       empieza un test de velocidad en idioma español\n.tops     enseña el leaderboard de un texto\n.stats    enseña tu número de tops 1, 2, 3, 4 y 5\n.mapache  pone el gif de un mapache\n.go       pone una imagen de Gopher\n.ch       pone un gif de Chae-young```")
 	}
 
-	if !(m.Author.ID == s.State.User.ID) {
+	if !(m.Author.ID == s.State.User.ID) && is_started == true {
 		var content_to_lowercase = strings.ToLower(m.Content)
 		var acc = strings.Split(content_to_lowercase, " ")
 		if (strings.HasPrefix(acc[0], "-")) {
