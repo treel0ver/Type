@@ -1,15 +1,12 @@
 package main
 
 import (
-	"time"
-    "strings"
-    "strconv"
-    "bufio"
-    "os"
-    "fmt"
-
-	//"strconv"
-	//"reflect"
+		"time"
+	    "strings"
+	    "strconv"
+	    "bufio"
+	    "os"
+	    "fmt"
 )
 
 var almacenar_tops_en_archivo [60000]string /*        TOPS_lines          */
@@ -174,7 +171,10 @@ func calculate_errors(sent string, current string) {
 					if lista_errores != "" {
 						lista_errores = lista_errores + ", " + sent_arrayed[i]
 						errores++
-					} else {lista_errores = sent_arrayed[i]}
+					} else {
+						lista_errores = sent_arrayed[i]
+						errores++
+					}
 				}
 			}
 	}
@@ -186,9 +186,6 @@ func calculate_errors(sent string, current string) {
 
 	errores_s = strconv.FormatInt(int64(errores), 10)
 }
-
-
-
 
 
 
