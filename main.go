@@ -867,7 +867,7 @@ if wpm_seems_illegal {
 
 	if m.Content == ".textos" {
 		var how_many_texts_stringed = strconv.FormatInt(int64(how_many_texts()), 10)
-		s.ChannelMessageSend(m.ChannelID, "Número de textos en idioma español: " + how_many_texts_stringed)
+		s.ChannelMessageSend(m.ChannelID, "```css\nHay [" + how_many_texts_stringed + "] textos. Usa .textstats para ver más información```")
 	}
 
 	if strings.HasPrefix(content_to_lowercase, ".tops") {
@@ -1073,9 +1073,8 @@ if wpm_seems_illegal {
 	}
 
 	if m.Content == ".help" {
-		s.ChannelMessageSend(m.ChannelID, "```.tt       empieza un test de velocidad en idioma español\n.tops     enseña el leaderboard de un texto\n.stats    enseña tu número de tops 1, 2, 3, 4 y 5\n.mapache  pone el gif de un mapache\n.go       pone una imagen de Gopher\n.ch       pone un gif de Chae-young```")
+		s.ChannelMessageSend(m.ChannelID, "```css\n.tt         empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores\n.mapache    pone el gif de un mapache\n.go         pone una imagen de Gopher\n.ch         pone un gif de Chae-young\n```")
 	}
-
 	if !(m.Author.ID == s.State.User.ID) && is_started == true {
 		var content_to_lowercase = strings.ToLower(m.Content)
 		var acc = strings.Split(content_to_lowercase, " ")
@@ -1093,9 +1092,6 @@ if wpm_seems_illegal {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/froze-stop-moving-not-moving-still-standing-gif-16669739")
 	/**/	}
 	/**/
-	/**/	if m.Content == ".logo" {
-	/**/		s.ChannelMessageSend(m.ChannelID, "𝗧𝗬𝗣𝗘 𝗕𝗢𝗧")
-	/**/	}	
 	/**/
 	/**/	if m.Content == ".go" {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://camo.githubusercontent.com/833cfd306ac2bef74ddf0560ee3b4112321c5b6939e52a1629f0aed8aec46922/687474703a2f2f692e696d6775722e636f6d2f485379686177742e6a7067")
@@ -1106,21 +1102,18 @@ if wpm_seems_illegal {
 	/**/	}
 	/**/
 	/**/	if strings.HasPrefix(m.Content, ".firmar") {
-				var abc string
+	/**/		var abc string
 	/**/		var acc = strings.Split(m.Content, " ")
-					for i := 1; i < len(acc); i++ {
-						if i == 1 {
-							abc = abc + acc[i]
-						} else {
-							abc = abc + " " + acc[i]
-						}
-					}
+	/**/			for i := 1; i < len(acc); i++ {
+	/**/				if i == 1 {
+	/**/					abc = abc + acc[i]
+	/**/				} else {
+	/**/					abc = abc + " " + acc[i]
+	/**/				}
+	/**/			}
 	/**/		s.ChannelMessageSend(m.ChannelID, "```diff\n" + abc + "\n        " + "- " + m.Author.Username + ", " + m.Author.ID + "```")
-				s.ChannelMessageDelete(m.ChannelID, m.Message.ID)
+	/**/		s.ChannelMessageDelete(m.ChannelID, m.Message.ID)
 	/**/	}
-	/**/
-	/**/
-	/**/
 	/**/
 
 	if m.Content == ".textstats" {
@@ -1189,3 +1182,4 @@ if wpm_seems_illegal {
 		fmt.Printf("%T", AHORA.UnixMilli())
 	}
 }
+
