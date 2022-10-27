@@ -30,6 +30,7 @@ var (
 	Token string
 	último_mensaje_del_bot_ID string
 	is_good bool
+	test_started_when int64
 )
 
 func init() {
@@ -92,6 +93,24 @@ func main() {
 	/* Cleanly close down the Discord session. */
 	dg.Close()
 }
+
+func binary(s string) string {
+    res := ""
+    for _, c := range s {
+        res = fmt.Sprintf("%s%.8b", res, c)
+    }
+    return res
+}
+func SnowflakeTimestamp(ID string) (t time.Time, err error) {
+	i, err := strconv.ParseInt(ID, 10, 64)
+	if err != nil {
+		return
+	}
+	timestamp := (i >> 22) + 1420070400000
+	t = time.Unix(0, timestamp*1000000)
+	return
+}
+
 
 /* This function will be called (due to AddHandler above) every time a new  */
 /* message is created on any channel that the authenticated bot has access to. */
@@ -199,6 +218,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "**" + textos_arr_x + "**")
 			current_text = textos[random]
+			var time_now = time.Now()
+			test_started_when = time_now.UnixMilli()
 			start()
 		 }
 		}
@@ -209,8 +230,24 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content == current_text && is_started {
 		is_good = true
-		calculate_wpm()
 		/*is_started = false*/
+
+		/*                     CALCULATE WPM                     */
+		var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
+		var sent_when_unixmilli = sent_when.UnixMilli()
+
+		//var noww = time.Now()
+		//var now_unixmilli = noww.UnixMilli()
+
+		var sent_when_unixmilli_float64 float64 = float64(sent_when_unixmilli)
+		//var now_unixmilli_float64 float64 = float64(now_unixmilli)
+
+		var length = len([]rune(current_text))
+		var length_as_a_float float64 = float64(length)
+
+		var test_started_when_float float64 = float64(test_started_when)
+		wpm = length_as_a_float / 5 / ((sent_when_unixmilli_float64-test_started_when_float)-1000) * 60000
+		/*                     CALCULATE WPM                     */
 
 		var wpm_1_digit = (math.Round(wpm*10)/10)
 
@@ -737,7 +774,25 @@ if wpm_seems_illegal {
 			text_arrayed := strings.Split(B, " ")
 
 			if (sent_arrayed[0] == text_arrayed[0]) /*&& (sent_arrayed[1] == text_arrayed[1] && (sent_arrayed[len(sent_arrayed)-1] == text_arrayed[len(text_arrayed)-1])*/ {
-				calculate_wpm()
+				
+
+				/*                     CALCULATE WPM                     */
+				var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
+				var sent_when_unixmilli = sent_when.UnixMilli()
+
+				//var noww = time.Now()
+				//var now_unixmilli = noww.UnixMilli()
+
+				var sent_when_unixmilli_float64 float64 = float64(sent_when_unixmilli)
+				//var now_unixmilli_float64 float64 = float64(now_unixmilli)
+
+				var length = len([]rune(current_text))
+				var length_as_a_float float64 = float64(length)
+
+				var test_started_when_float float64 = float64(test_started_when)
+				wpm = length_as_a_float / 5 / ((sent_when_unixmilli_float64-test_started_when_float)-1000) * 60000
+				/*                     CALCULATE WPM                     */
+
 				calculate_errors(m.Content, current_text)
 				/*is_started = false*/
 				var wpm_1_digit = (math.Round(wpm*10)/10)
@@ -754,16 +809,43 @@ if wpm_seems_illegal {
 			text_arrayed := strings.Split(B, " ")
 
 			if (sent_arrayed[0] == text_arrayed[0]) /*&& (sent_arrayed[1] == text_arrayed[1] && (sent_arrayed[len(sent_arrayed)-1] == text_arrayed[len(text_arrayed)-1])*/ {
-				calculate_wpm()
+				
+				/*                     CALCULATE WPM                     */
+				var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
+				var sent_when_unixmilli = sent_when.UnixMilli()
+
+				//var noww = time.Now()
+				//var now_unixmilli = noww.UnixMilli()
+
+				var sent_when_unixmilli_float64 float64 = float64(sent_when_unixmilli)
+				//var now_unixmilli_float64 float64 = float64(now_unixmilli)
+
+				var length = len([]rune(current_text))
+				var length_as_a_float float64 = float64(length)
+
+				var test_started_when_float float64 = float64(test_started_when)
+				wpm = length_as_a_float / 5 / ((sent_when_unixmilli_float64-test_started_when_float)-1000) * 60000
+				/*                     CALCULATE WPM                     */
+
 				calculate_errors(m.Content, current_text)
 				/*is_started = false*/
 				var wpm_1_digit = (math.Round(wpm*10)/10)
 				wpm_stringed := fmt.Sprint(wpm_1_digit)
 
 				if len(sent_arrayed) > len(text_arrayed) {
-					s.ChannelMessageSend(m.ChannelID, "```diff\n- Escribiste una palabra de más, no se calcularon errores. 😟. \nWPM raw: " + wpm_stringed + "```")
+					s.ChannelMessageSend(m.ChannelID, "```diff\n- Escribiste una palabra de más, no se calcularon errores. 😟. \nWPM raw: " + wpm_stringed + 
+	"\n\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+	"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
+	"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
+	"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
+	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] + "```")
 				} else {
-					s.ChannelMessageSend(m.ChannelID, "```diff\n- No has terminado la carrera correctamente.\nHas cometido " + errores_s + " errores: " + lista_errores + "\nWPM raw: " + wpm_stringed + "```")
+					s.ChannelMessageSend(m.ChannelID, "```diff\n- No has terminado la carrera correctamente.\nHas cometido " + errores_s + " errores: " + lista_errores + "\nWPM raw: " + wpm_stringed + 
+	"\n\nTops:\n" + tops[random*5][0] + ". " + tops[random*5][1] + " (" + tops[random*5][2] + " wpm) " + tops[random*5][3] +
+	"\n" + tops[random*5+1][0] + ". " + tops[random*5+1][1] + " (" + tops[random*5+1][2] + " wpm) " + tops[random*5+1][3] +
+	"\n" + tops[random*5+2][0] + ". " + tops[random*5+2][1] + " (" + tops[random*5+2][2] + " wpm) " + tops[random*5+2][3] +
+	"\n" + tops[random*5+3][0] + ". " + tops[random*5+3][1] + " (" + tops[random*5+3][2] + " wpm) " + tops[random*5+4][3] +
+	"\n" + tops[random*5+4][0] + ". " + tops[random*5+4][1] + " (" + tops[random*5+4][2] + " wpm) " + tops[random*5+4][3] + "```")
 				}
 			}
 		}
@@ -963,6 +1045,22 @@ if wpm_seems_illegal {
 
 		s.ChannelMessageSend(m.ChannelID, "```diff\nLongitud promedio de textos: " + temp2 + "\n\n" + "000-100: " + _0s + "\n100-200: " + _100s	+ "\n200-300: " + _200s + "\n300-400: " + _300s	+ "\n400-500: " + _400s	+ "\n500-600: " + _500s + "\n600-700: " + _600s + "```")	
 
+	}
+
+	if m.Content == ".test" {
+		var pepino, _ = SnowflakeTimestamp(m.Message.ID)
+
+		//fmt.Println(SnowflakeTimestamp(m.Message.ID))
+		s.ChannelMessageSend(m.ChannelID, (pepino.Format("02/01/2006 15:04:05")))
+
+				var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
+		var JJJ = sent_when.UnixMilli()
+		fmt.Println(JJJ)
+
+		fmt.Println("asldka:")
+		var AHORA = time.Now()
+
+		fmt.Printf("%T", AHORA.UnixMilli())
 	}
 }
 
