@@ -877,12 +877,13 @@ if wpm_seems_illegal {
 		var what_top int
 		var found bool = false
 
-		if len(content_arrayed) > 2 {
+		if len(content_arrayed) > 1 {
+			var what = strings.Replace(strings.ToLower(m.Content), ".tops ", "", -1)
 			for i := 0; i < len(textos); i++ {
-				if strings.HasPrefix(textos[i], content_arrayed[1] + " " + content_arrayed[2]) {
+				if strings.HasPrefix(strings.ToLower(textos[i]), what) && !found{
 
 					found = true
-					/* println(i) */
+
 					what_top = i
 
 					var textos_arr = strings.Split(textos[what_top], " ")
@@ -922,15 +923,30 @@ if wpm_seems_illegal {
 	}
 
 	if strings.HasPrefix(content_to_lowercase, ".stats") { 
-		var n int
-		for i := 0; i < len(tops)/5; i++ {
-				if tops[i*5][5] == m.Author.ID {
+		var content_arrayed []string 
+		content_arrayed = strings.Split(m.Content, " ") 
+
+		if len(content_arrayed) > 1 {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+				if tops[i*5][1] == content_arrayed[1] {
 					/* println(i) */
 					n++
 				}
 			}
 			var n_string string = strconv.FormatInt(int64(n), 10)
-			s.ChannelMessageSend(m.ChannelID, "Tienes " + n_string + " tops 1.")
+			s.ChannelMessageSend(m.ChannelID, "```css\nSe encontraron [" + n_string + "] tops 1 de " + content_arrayed[1] + "```")
+		} else {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+					if tops[i*5][5] == m.Author.ID {
+						/* println(i) */
+						n++
+					}
+				}
+				var n_string string = strconv.FormatInt(int64(n), 10)
+				s.ChannelMessageSend(m.ChannelID, "```css\nTienes [" + n_string + "] tops 1.```")
+		}
 		}
 
 	if m.Content == ".dup" {
@@ -1063,4 +1079,3 @@ if wpm_seems_illegal {
 		fmt.Printf("%T", AHORA.UnixMilli())
 	}
 }
-
