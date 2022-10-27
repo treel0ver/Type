@@ -946,8 +946,118 @@ if wpm_seems_illegal {
 				}
 				var n_string string = strconv.FormatInt(int64(n), 10)
 				s.ChannelMessageSend(m.ChannelID, "```css\nTienes [" + n_string + "] tops 1.```")
+			}
 		}
+
+	if strings.HasPrefix(content_to_lowercase, ".2stats") { 
+		var content_arrayed []string 
+		content_arrayed = strings.Split(m.Content, " ") 
+
+		if len(content_arrayed) > 1 {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+				if tops[i*5+1][1] == content_arrayed[1] {
+					/* println(i) */
+					n++
+				}
+			}
+			var n_string string = strconv.FormatInt(int64(n), 10)
+			s.ChannelMessageSend(m.ChannelID, "```css\nSe encontraron [" + n_string + "] tops 2 de " + content_arrayed[1] + "```")
+		} else {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+					if tops[i*5+1][5] == m.Author.ID {
+						/* println(i) */
+						n++
+					}
+				}
+				var n_string string = strconv.FormatInt(int64(n), 10)
+				s.ChannelMessageSend(m.ChannelID, "```css\nTienes [" + n_string + "] tops 2.```")
+			}
 		}
+
+	if strings.HasPrefix(content_to_lowercase, ".3stats") { 
+		var content_arrayed []string 
+		content_arrayed = strings.Split(m.Content, " ") 
+
+		if len(content_arrayed) > 1 {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+				if tops[i*5+2][1] == content_arrayed[1] {
+					/* println(i) */
+					n++
+				}
+			}
+			var n_string string = strconv.FormatInt(int64(n), 10)
+			s.ChannelMessageSend(m.ChannelID, "```css\nSe encontraron [" + n_string + "] tops 3 de " + content_arrayed[1] + "```")
+		} else {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+					if tops[i*5+2][5] == m.Author.ID {
+						/* println(i) */
+						n++
+					}
+				}
+				var n_string string = strconv.FormatInt(int64(n), 10)
+				s.ChannelMessageSend(m.ChannelID, "```css\nTienes [" + n_string + "] tops 3.```")
+			}
+		}
+
+	if strings.HasPrefix(content_to_lowercase, ".4stats") { 
+		var content_arrayed []string 
+		content_arrayed = strings.Split(m.Content, " ") 
+
+		if len(content_arrayed) > 1 {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+				if tops[i*5+3][1] == content_arrayed[1] {
+					/* println(i) */
+					n++
+				}
+			}
+			var n_string string = strconv.FormatInt(int64(n), 10)
+			s.ChannelMessageSend(m.ChannelID, "```css\nSe encontraron [" + n_string + "] tops 4 de " + content_arrayed[1] + "```")
+		} else {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+					if tops[i*5+3][5] == m.Author.ID {
+						/* println(i) */
+						n++
+					}
+				}
+				var n_string string = strconv.FormatInt(int64(n), 10)
+				s.ChannelMessageSend(m.ChannelID, "```css\nTienes [" + n_string + "] tops 4.```")
+			}
+		}
+
+	if strings.HasPrefix(content_to_lowercase, ".5stats") { 
+		var content_arrayed []string 
+		content_arrayed = strings.Split(m.Content, " ") 
+
+		if len(content_arrayed) > 1 {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+				if tops[i*5+4][1] == content_arrayed[1] {
+					/* println(i) */
+					n++
+				}
+			}
+			var n_string string = strconv.FormatInt(int64(n), 10)
+			s.ChannelMessageSend(m.ChannelID, "```css\nSe encontraron [" + n_string + "] tops 5 de " + content_arrayed[1] + "```")
+		} else {
+			var n int
+			for i := 0; i < len(tops)/5; i++ {
+					if tops[i*5+4][5] == m.Author.ID {
+						/* println(i) */
+						n++
+					}
+				}
+				var n_string string = strconv.FormatInt(int64(n), 10)
+				s.ChannelMessageSend(m.ChannelID, "```css\nTienes [" + n_string + "] tops 5.```")
+			}
+		}
+
+
 
 	if m.Content == ".dup" {
 
