@@ -32,6 +32,7 @@ var (
 	último_canal_del_bot_ID string
 	is_good bool
 	test_started_when int64
+	primera_palabra string
 )
 
 func init() {
@@ -122,6 +123,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		último_canal_del_bot_ID = m.ChannelID
 	}
 
+	var message_arrayed = strings.Split(m.Content, " ")
+
 	/*
 	if m.Author.ID == s.State.User.ID {
 		//último_mensaje_del_bot_ID = m.Message.ID
@@ -158,22 +161,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	var positivo bool = true
 
-	if !(len(abb) < 2) {
-		if (strings.HasPrefix(abb[1], "long")) { 
-			s.ChannelMessageSend(m.ChannelID, "```Textos largos aún no disponibles.```")
-		}
-	}
-
 	if (strings.HasPrefix(content_to_lowercase, ".tp")) {
 		is_started = false
 		s.ChannelMessageSend(m.ChannelID, "```Se ha parado la carrera. Ten cuidado con no parar a los demás.```")
 	}
 
-	if (strings.HasPrefix(content_to_lowercase, ".tt")) {
+	if (strings.HasPrefix(content_to_lowercase, ".t")) {
 
 		is_good = false
 		if !(len(abb) < 2) {
-			if !(strings.HasPrefix(abb[1], "long")) {
+			if (strings.HasPrefix(abb[1], "long")) || (strings.HasPrefix(abb[1], "10ff")) {
 				positivo = false
 			}
 		}
@@ -223,26 +220,181 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageEdit(m.ChannelID, m.Message.ID, display_textos [random])
 			fmt.Println(m.Message.ID)
 	*/	
-		if is_started == false {
-			/* s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, display_textos [random]) */
+			if is_started == false {
+				/* s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, display_textos [random]) */
 
-			var textos_arr = strings.Split(textos[random], " ")
-			var textos_arr_x string
+				var textos_arr = strings.Split(textos[random], " ")
+				var textos_arr_x string
 
-			for i := 0; i < len(textos_arr); i++ {
-				if i != len(textos_arr)-1 {
-					textos_arr_x = textos_arr_x + textos_arr[i] + "​ "
-				} else {
-					textos_arr_x = textos_arr_x + textos_arr[i]
+				for i := 0; i < len(textos_arr); i++ {
+					if i != len(textos_arr)-1 {
+						textos_arr_x = textos_arr_x + textos_arr[i] + "​ "
+					} else {
+						textos_arr_x = textos_arr_x + textos_arr[i]
+					}
 				}
+
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "**" + textos_arr_x + "**")
+				current_text = textos[random]
+				var time_now = time.Now()
+				test_started_when = time_now.UnixMilli()
+				start()
+			 }
+		} else if (strings.HasPrefix(abb[1], "10ff")) {
+			var editbool bool = false
+
+			if is_started == true {
+				if time_soon == true {
+					s.ChannelMessageSend(m.ChannelID, "```diff\nEscribe el texto lo más rápido que puedas. \n\n-⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ```") 
+					time.Sleep(1 * time.Second)
+					editbool = true
+				}
+
+				is_started = false
+
+				/* espera anti-bug */
+				time.Sleep(time.Second)
+
 			}
 
-			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "**" + textos_arr_x + "**")
-			current_text = textos[random]
-			var time_now = time.Now()
-			test_started_when = time_now.UnixMilli()
-			start()
-		 }
+			rand.Seed(time.Now().UnixNano())
+
+			random = 107
+			random = rand.Intn(how_many_texts())
+			
+
+			start_author = m.Author.ID
+
+			if editbool == true && is_started == false {
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```Escribe el texto lo más rápido que puedas. \n\n🔴 Preparados...  ```") 
+				time.Sleep(time.Second)
+			} else if is_started == false {
+				s.ChannelMessageSend(m.ChannelID, "```Escribe el texto lo más rápido que puedas. \n\n🔴 Preparados... ```") 
+				time.Sleep(time.Second)
+			} 
+
+			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```Escribe el texto lo más rápido que puedas. \n\n🟡 Listos... ```")
+			time.Sleep(time.Second)
+
+	/*
+			chanl, err := s.Channel(m.ChannelID)
+			if err != nil {
+				return
+			}
+
+			s.ChannelMessageEdit(m.ChannelID, m.Message.ID, display_textos [random])
+			fmt.Println(m.Message.ID)
+	*/	
+			if is_started == false {
+				/* s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, display_textos [random]) */
+
+				var textos_arr = strings.Split(textos[random], " ")
+				var textos_arr_x string
+
+				for i := 0; i < len(textos_arr); i++ {
+					if i != len(textos_arr)-1 {
+						textos_arr_x = textos_arr_x + textos_arr[i] + "​ "
+					} else {
+						textos_arr_x = textos_arr_x + textos_arr[i]
+					}
+				}
+
+				rand.Seed(time.Now().UnixNano())
+				randa := rand.Intn(700)
+				var doble_asignación = palabras[randa]
+				current_text_10ff, primera_palabra = doble_asignación, doble_asignación
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+				randa = rand.Intn(700)
+				current_text_10ff = current_text_10ff + " " + palabras[randa]
+				rand.Seed(time.Now().UnixNano())
+
+
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "**" + current_text_10ff + "**")
+				current_text = textos[random]
+				var time_now = time.Now()
+				test_started_when = time_now.UnixMilli()
+				start()
+			 }
+		} else if (strings.HasPrefix(abb[1], "long")) {
+			s.ChannelMessageSend(m.ChannelID, "```diff\n- Textos largos aún no disponibles.```")
 		}
 	}
 
@@ -870,6 +1022,45 @@ if wpm_seems_illegal {
 		}
 	}
 
+	if m.Content == ".aax" {
+		println("ma: " + message_arrayed[0])
+		println("pp: " + primera_palabra)
+	}
+	if m.Content == current_text_10ff || ((len(m.Content) > len(current_text_10ff)-10 && message_arrayed[0] == primera_palabra)) {
+		/*                     CALCULATE WPM                     */
+		var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
+		var sent_when_unixmilli = sent_when.UnixMilli()
+
+		//var noww = time.Now()
+		//var now_unixmilli = noww.UnixMilli()
+
+		var sent_when_unixmilli_float64 float64 = float64(sent_when_unixmilli)
+		//var now_unixmilli_float64 float64 = float64(now_unixmilli)
+
+		var length = len([]rune(current_text_10ff))
+		var length_as_a_float float64 = float64(length)
+
+		var test_started_when_float float64 = float64(test_started_when)
+		wpm = length_as_a_float / 5 / ((sent_when_unixmilli_float64-test_started_when_float)-1000) * 60000
+		/*                     CALCULATE WPM                     */
+
+		calculate_errors(m.Content, current_text_10ff)
+		/*is_started = false*/
+		var wpm_1_digit = (math.Round(wpm*10)/10)
+		var wpm_stringed = fmt.Sprint(wpm_1_digit)
+
+		if errores > 0 {
+			var errores_float = float64(errores)
+			var wpm_real = wpm - errores_float*1.5
+			var wpm_real_1_digit = (math.Round(wpm_real*10)/10)
+			var wpm_real_stringed = fmt.Sprint(wpm_real_1_digit)
+
+			s.ChannelMessageSend(m.ChannelID, "```diff\n- Cometiste " + errores_s + " errores ❗\n" + lista_errores + "\n" + wpm_real_stringed + " WPM real\n" + wpm_stringed + "WPM raw```")
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "```diff\n+ Terminaste exitosamente.\n" + wpm_stringed + " WPM```")
+		}
+	}
+
 	if m.Content == ".info" {
 		sec := fmt.Sprint(time_elapsed)
 		var average_word_length_of_current_text_stringed string = fmt.Sprintf("%f", (average_word_length(current_text)))
@@ -1090,7 +1281,7 @@ if wpm_seems_illegal {
 	}
 
 	if strings.ToLower(m.Content) == ".help" {
-		s.ChannelMessageSend(m.ChannelID, "```css\n.tt         empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores\n.mapache    pone el gif de un mapache\n.go         pone una imagen de Gopher\n.ch         pone un gif de Chae-young\n```")
+		s.ChannelMessageSend(m.ChannelID, "```css\n.t         empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores\n.mapache    pone el gif de un mapache\n.go         pone una imagen de Gopher\n.ch         pone un gif de Chae-young\n```")
 	}
 	if !(m.Author.ID == s.State.User.ID) && is_started == true {
 		var content_to_lowercase = strings.ToLower(m.Content)
