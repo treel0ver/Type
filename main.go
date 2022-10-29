@@ -86,6 +86,13 @@ func main() {
 		return
 	}
 
+	err = dg.UpdateGameStatus(0, ".help")
+	if err != nil {
+		fmt.Println("Unable to set activity: ", err)
+	} else {
+		
+	}
+
 	/* Wait here until CTRL-C or other term signal is received. */
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
@@ -1281,8 +1288,13 @@ if wpm_seems_illegal {
 	}
 
 	if strings.ToLower(m.Content) == ".help" {
-		s.ChannelMessageSend(m.ChannelID, "```css\n.t         empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores\n.mapache    pone el gif de un mapache\n.go         pone una imagen de Gopher\n.ch         pone un gif de Chae-young\n```")
+		s.ChannelMessageSend(m.ChannelID, "```css\n.t [10ff]   empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores```")
 	}
+
+	if strings.ToLower(m.Content) == ".help2" {
+		s.ChannelMessageSend(m.ChannelID, "```css\n.mapache    pone el gif de un mapache\n.go         pone una imagen de Gopher\n.ch         pone un gif de Chae-young```")
+	}
+
 	if !(m.Author.ID == s.State.User.ID) && is_started == true {
 		var content_to_lowercase = strings.ToLower(m.Content)
 		var acc = strings.Split(content_to_lowercase, " ")
