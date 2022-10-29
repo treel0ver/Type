@@ -29,6 +29,7 @@ import (
 var (
 	Token string
 	último_mensaje_del_bot_ID string
+	último_canal_del_bot_ID string
 	is_good bool
 	test_started_when int64
 )
@@ -116,21 +117,40 @@ func SnowflakeTimestamp(ID string) (t time.Time, err error) {
 /* message is created on any channel that the authenticated bot has access to. */
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	/* Ignore all messages created by the bot itself */
-	/* This isn't required in this specific example but it's a good practice. */
-	if m.Author.ID == s.State.User.ID {
+	if m.Author.ID == "998331047827742741" {
 		último_mensaje_del_bot_ID = m.Message.ID
-		return
-	} else {
-		if m.ChannelID == "1031313220230709278" {
-			s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
-			s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)
-		}
+		último_canal_del_bot_ID = m.ChannelID
 	}
+
+	/*
+	if m.Author.ID == s.State.User.ID {
+		//último_mensaje_del_bot_ID = m.Message.ID
+		return
+	}
+	*/
+
+	if m.ChannelID == "1031313220230709278" || m.ChannelID == "1034950243227291678" {
+		f, err := os.OpenFile("database/log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if _, err := f.Write([]byte("[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)); err != nil {
+			f.Close() 
+			log.Fatal(err)
+		}
+		if err := f.Close(); err != nil {
+			log.Fatal(err)
+		}
+
+	}
+
+	
+
 
 	if is_illegal(m.Content) {
 		s.ChannelMessageSend("1031077892748234762", "<@" + m.Author.ID + "> ha hecho trampas\t" + time.Now().Format("01-02-2006 15:04:05") + "\t" + split_curr())
-		s.ChannelMessageSend("1034792497668427806", "[" + time.Now().Format("02/01/2006 15:04:05") + "] " + "system> " + m.Author.Username + " ha hecho trampas en el texto: " + split_curr())
+		s.ChannelMessageSend("1034792497668427806", "``[" + time.Now().Format("02/01/2006 15:04:05") + "] " + "system> " + m.Author.Username + " ha hecho trampas en el texto: " + split_curr() + "``")
 	}
 
 	var content_to_lowercase = strings.ToLower(m.Content)
@@ -150,6 +170,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if (strings.HasPrefix(content_to_lowercase, ".tt")) {
+
 		is_good = false
 		if !(len(abb) < 2) {
 			if !(strings.HasPrefix(abb[1], "long")) {
@@ -162,8 +183,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			if is_started == true {
 				if time_soon == true {
-					s.ChannelMessageSend(m.ChannelID, "```⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ```") 
-					time.Sleep(3 * time.Second)
+					s.ChannelMessageSend(m.ChannelID, "```diff\nEscribe el texto lo más rápido que puedas. \n\n-⌛ Esperando más tiempo, ya que la carrera terminó antes de lo debido... ```") 
+					time.Sleep(1 * time.Second)
 					editbool = true
 				}
 
@@ -183,14 +204,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			start_author = m.Author.ID
 
 			if editbool == true && is_started == false {
-				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```🔴 Preparados... ```") 
+				s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```Escribe el texto lo más rápido que puedas. \n\n🔴 Preparados...  ```") 
 				time.Sleep(time.Second)
 			} else if is_started == false {
-				s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados... ```") 
+				s.ChannelMessageSend(m.ChannelID, "```Escribe el texto lo más rápido que puedas. \n\n🔴 Preparados... ```") 
 				time.Sleep(time.Second)
 			} 
 
-			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```🟡 Listos... ```")
+			s.ChannelMessageEdit(m.ChannelID, último_mensaje_del_bot_ID, "```Escribe el texto lo más rápido que puedas. \n\n🟡 Listos... ```")
 			time.Sleep(time.Second)
 
 	/*
@@ -706,7 +727,6 @@ if !is_lower_than_top && !wpm_seems_illegal {
 						} 
 					}
 				}
-
 			}
 		}
 
@@ -775,7 +795,6 @@ if wpm_seems_illegal {
 
 			if (sent_arrayed[0] == text_arrayed[0]) /*&& (sent_arrayed[1] == text_arrayed[1] && (sent_arrayed[len(sent_arrayed)-1] == text_arrayed[len(text_arrayed)-1])*/ {
 				
-
 				/*                     CALCULATE WPM                     */
 				var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
 				var sent_when_unixmilli = sent_when.UnixMilli()
@@ -865,7 +884,7 @@ if wpm_seems_illegal {
 
 	}
 
-	if m.Content == ".textos" {
+	if strings.ToLower(m.Content) == ".textos" {
 		var how_many_texts_stringed = strconv.FormatInt(int64(how_many_texts()), 10)
 		s.ChannelMessageSend(m.ChannelID, "```css\nHay [" + how_many_texts_stringed + "] textos. Usa .textstats para ver más información```")
 	}
@@ -1057,9 +1076,7 @@ if wpm_seems_illegal {
 			}
 		}
 
-
-
-	if m.Content == ".dup" {
+	if strings.ToLower(m.Content) == ".dup" {
 
 		var duplicate = []string{
 			"Escucha, las reglas propias... se tratan de decidir conseguir algo usando medios y maneras propias para conseguirlo. Por eso decimos que son nuestras reglas. Precisamente por eso podemos afrontar sinceramente los desafíos y darlo todo. Y si fracasamos, hay que retomar la práctica y soportar duros entrenamientos para lograrlo. Y así, dedicándote a ello, creas tus propias reglas.",
@@ -1072,7 +1089,7 @@ if wpm_seems_illegal {
  		}
 	}
 
-	if m.Content == ".help" {
+	if strings.ToLower(m.Content) == ".help" {
 		s.ChannelMessageSend(m.ChannelID, "```css\n.tt         empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores\n.mapache    pone el gif de un mapache\n.go         pone una imagen de Gopher\n.ch         pone un gif de Chae-young\n```")
 	}
 	if !(m.Author.ID == s.State.User.ID) && is_started == true {
@@ -1088,16 +1105,16 @@ if wpm_seems_illegal {
 
 	/* FUN COMMANDS */
 	/**/	
-	/**/	if m.Content == ".mapache" {
+	/**/	if strings.ToLower(m.Content) == ".mapache" {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/froze-stop-moving-not-moving-still-standing-gif-16669739")
 	/**/	}
 	/**/
 	/**/
-	/**/	if m.Content == ".go" {
+	/**/	if strings.ToLower(m.Content) == ".go" {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://camo.githubusercontent.com/833cfd306ac2bef74ddf0560ee3b4112321c5b6939e52a1629f0aed8aec46922/687474703a2f2f692e696d6775722e636f6d2f485379686177742e6a7067")
 	/**/	}
 	/**/
-	/**/	if m.Content == ".ch" {
+	/**/	if strings.ToLower(m.Content) == ".ch" {
 	/**/		s.ChannelMessageSend(m.ChannelID, "https://thumbs.gfycat.com/AdmirableLikableFlea-mobile.mp4")
 	/**/	}
 	/**/
@@ -1116,7 +1133,7 @@ if wpm_seems_illegal {
 	/**/	}
 	/**/
 
-	if m.Content == ".textstats" {
+	if strings.ToLower(m.Content) == ".textstats" {
 		var temp1 int
 		var temp2 string
 		var _0 int
@@ -1166,7 +1183,7 @@ if wpm_seems_illegal {
 
 	}
 
-	if m.Content == ".test" {
+	if strings.ToLower(m.Content) == ".test" {
 		var pepino, _ = SnowflakeTimestamp(m.Message.ID)
 
 		//fmt.Println(SnowflakeTimestamp(m.Message.ID))
@@ -1180,6 +1197,10 @@ if wpm_seems_illegal {
 		var AHORA = time.Now()
 
 		fmt.Printf("%T", AHORA.UnixMilli())
+	}
+
+	if m.Content == ".umb" {
+		s.ChannelMessageSend(m.ChannelID, último_mensaje_del_bot_ID + " " + último_canal_del_bot_ID)
 	}
 }
 
