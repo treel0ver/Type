@@ -145,7 +145,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			log.Fatal(err)
 		}
 
-		if _, err := f.Write([]byte("[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content)); err != nil {
+		if _, err := f.Write([]byte("[" + time.Now().Format("02/01/2006 15:04:05") + "] " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content + "\n")); err != nil {
 			f.Close() 
 			log.Fatal(err)
 		}
@@ -173,7 +173,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```Se ha parado la carrera. Ten cuidado con no parar a los demás.```")
 	}
 
-	if (strings.HasPrefix(content_to_lowercase, ".t")) {
+	if (strings.HasPrefix(content_to_lowercase, ".t")) && !(strings.HasPrefix(content_to_lowercase, ".tp")) {
 
 		is_good = false
 		if !(len(abb) < 2) {
@@ -1274,6 +1274,23 @@ if wpm_seems_illegal {
 			}
 		}
 
+		if strings.HasPrefix(content_to_lowercase, ".lb") { 
+			var cuenta int
+			var usuarios_x string
+			var us_existentes string
+
+			for i := 0; i < len(textos); i++ {
+				cuenta++
+				if tops[i][1] != "" {
+					if !strings.Contains(us_existentes, tops[i][1]) {
+						usuarios_x = usuarios_x + ", " + tops[i][1] 
+						us_existentes = us_existentes + tops[i][1]
+					}
+				}
+			}
+			s.ChannelMessageSend(m.ChannelID, "```diff\n- Aún no hay leaderboards. Regresa mañana. \nLo sentimos, paricipantes únicos del bot" + usuarios_x + "```")
+
+		}
 	if strings.ToLower(m.Content) == ".dup" {
 
 		var duplicate = []string{
@@ -1406,4 +1423,3 @@ if wpm_seems_illegal {
 		s.ChannelMessageSend(m.ChannelID, último_mensaje_del_bot_ID + " " + último_canal_del_bot_ID)
 	}
 }
-
