@@ -1304,6 +1304,10 @@ if wpm_seems_illegal {
  		}
 	}
 
+	if strings.ToLower(m.Content) == ".v" {
+		s.ChannelMessageSend(m.ChannelID, "```css\nLa versión actual de Type Bot es [1.2]``` ```A very important change happens in this version: The bot no longer measures time on it's own, but uses a the timestamp of the user sent message, avoiding lag problems. Also other minor changes.```")
+	}
+
 	if strings.ToLower(m.Content) == ".help" {
 		s.ChannelMessageSend(m.ChannelID, "```css\n.t [10ff]   empieza un test de velocidad\n.tp         para el test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores```")
 	}

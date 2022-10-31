@@ -155,6 +155,7 @@ var errores_s string
 var lista_errores string
 
 func calculate_errors(sent string, current string) {
+	
 	/* reseting */
 	errores = 0
 	lista_errores = ""
@@ -422,7 +423,7 @@ var textos [1000]string = [1000]string{
 	"Wikipedia es un wiki. Esto significa que cualquier persona puede editar fácilmente cualquier página (excepto las protegidas) y sus cambios serán visibles inmediatamente.",
 	"A veces se quedaba en silencio, y yo me preguntaba qué pasaba por su mente. Muchas tardes, antes de la noche, salimos a dar un paseo por su barrio. Rebeca era capaz de maravillarse mirando la enredadera de una fachada o de acercarse a sentir el aroma de unos jazmines al atardecer.",
 	"Una pieza de puerco salvaje o jabalí tomarás; y córtalo a tajadas como dos dedos; y hacer tajadas de tocino gordo delgadas, y atravesarlas * por las piezas del puerco jabalí tantas cuantas quisieres.",
-	"Aunque opino que si usan una botella es un arma letal, así que deben asumir las consecuencias. Si te hubiera atacado solo con las manos sería diferente, y no habría sido justo.",
+	"Aunque opino que si usan una botella, es un arma letal, así que deben asumir las consecuencias. Si te hubiera atacado solo con las manos sería diferente, y no habría sido justo.",
 	"Los héroes no son siempre los que ganan. A veces, son los que pierden. Pero siguen luchando, y siguen aguantando. No se rinden. Eso es lo que los convierte en héroes.",
 	"Y entonces les presento a Harvey. Y él es más grande e importante que todo lo que ellos me ofrecen. Y cuando se van, se van impresionados. La misma gente raramente vuelve, pero eso es... envidia, amigo mío.",
 	"¿Quién fue Carl Sagan? A pesar de ser famoso por sus apariciones televisivas, este científico hizo mucho más de lo que mucha gente piensa. Como científico, Sagan marcó un cambio en la ciencia planetaria en la década de 1970 como el joven profesor de Harvard que era, \"en un momento en el cual la ciencia planetaria estaba en un remanso,\" dice Poundstone.",
@@ -614,4 +615,5 @@ var textos [1000]string = [1000]string{
 	"En todos los casos probables de la vida, así como en el aspecto laboral y como en la vida cotidiana siempre lo bueno y rápido es enemigo de lo perfecto.",
 	"Nos dejamos llevar por el miedo a las habladurías, por ese estúpido qué dirán. El qué dirán de unos cuantos a los que nada debíamos, que nada nos dieron, ni nos darán.",
 	"A las doce, como cada noche. Desde que alquilé una habitación en aquella oscura pensión, dormir era un sueño. Mi casero debió advertirme, antes de cobrarme por adelantado, de su costumbre de tocar el violín a medianoche.",
+
 }
