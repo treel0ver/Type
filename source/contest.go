@@ -51,11 +51,11 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	Current_text = Texts[Random]
 
-	s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
+	var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
 	time.Sleep(1 * time.Second)
-	s.ChannelMessageEdit(m.ChannelID, Last_bot_message, "```🟡 Listos...```")
+	s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 Listos...```")
 	time.Sleep(1 * time.Second)
-	s.ChannelMessageEdit(m.ChannelID, Last_bot_message, "**" + υ() + "**")
+	s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**" + υ() + "**")
 	Started_when = time.Now().UnixMilli()
 }
 

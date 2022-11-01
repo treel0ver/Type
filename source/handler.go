@@ -7,18 +7,18 @@ import (
 	"github.com/bwmarrin/discordgo"
 ) 
 
-var Last_bot_message string
+var Last_message string
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	Add_exp(m)
+	Add_exp(s, m, 500)
 
 	if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278"{
 		Log(m)
 	}
 
 	if m.Author.ID == s.State.User.ID {
-		Last_bot_message = m.Message.ID
+		Last_message = m.Message.ID
 		return
 	}
 
@@ -47,6 +47,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				Show_result(s, m)
 				Is_already_in_top_LOWER(m)
 				Save_result(m)
+				Add_exp(s, m, 10001)
 			} else {
 				Show_result_not_improved(s, m)
 			}
@@ -119,8 +120,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```diff\nLongitud promedio de textos: " + temp2 + "\n\n" + "000-100: " + _0s + "\n100-200: " + _100s	+ "\n200-300: " + _200s + "\n300-400: " + _300s	+ "\n400-500: " + _400s	+ "\n500-600: " + _500s + "\n600-700: " + _600s + "```")	
 	}
 
-	if m.Content == ".rank" {
-		Show_level(s, m)
+	if strings.HasPrefix(m.Content, ".level") {
+		var args = strings.Split(m.Content, " ")
+		Show_level(s, m, args)
 	}
 
 	if m.Content == ".info" {
@@ -129,8 +131,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, Date)
 	}
 
-	if m.Content == ".test" {
-		
+	if m.Content == ".abc" {
 	}
 
 	/* FUN COMMANDS */

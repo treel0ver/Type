@@ -13,16 +13,21 @@ import (
 
 var Levels []string
 
-func Add_exp(m *discordgo.MessageCreate) {
+func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 	Load_levels()
-	println(m.Author.ID)
+	/* println(m.Author.ID) */
 	var exists bool = false
 	for i := 0; i < len(Levels); i++ {
 		var CL = strings.Split(Levels[i], " # ")
 		if CL[0] == m.Author.ID {
 			exists = true
 			EXP, _ := strconv.ParseFloat(CL[2], 8)
-			EXP = EXP + 500
+			var Memorized_level = Exp_to_level(EXP)
+			EXP = EXP + n
+			var Current_level = Exp_to_level(EXP)
+			if Current_level != Memorized_level {
+				s.ChannelMessageSend(m.ChannelID, "```diff\n+ Felicidades, " + m.Author.Username + ", has subido al nivel " + Current_level + "```")
+			}
 			EXP_str := fmt.Sprintf("%f", EXP)
 
 			Levels[i] = m.Author.ID + " # " + m.Author.Username + " # " + EXP_str
@@ -66,9 +71,15 @@ func Add_exp(m *discordgo.MessageCreate) {
 }
 
 func Exp_to_level(exp float64) string {
-	var level = 0.04 * math.Sqrt(exp)
-	level_str := fmt.Sprintf("%.0f", level)
-	return level_str
+	var level = 0.02 * math.Sqrt(exp)
+	if level > 99 {
+		var level_str = "99+"
+		return level_str
+	} else {
+		var level_str = fmt.Sprintf("%.0f", level)
+		return level_str
+	}
+	return "error"
 }
 
 func Load_levels() {
@@ -82,13 +93,25 @@ func Load_levels() {
 	Levels = strings.Split(string(fileBytes), "\n")
 }
 
-func Show_level(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Show_level(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	Load_levels()
-	for i := 0; i < len(Levels); i++ {
-		var CL = strings.Split(Levels[i], " # ")
-		if CL[0] == m.Author.ID {
-			EXP, _ := strconv.ParseFloat(CL[2], 8)
-			s.ChannelMessageSend(m.ChannelID, "LVL. " + Exp_to_level(EXP))
+	if len(args) > 1{
+		for i := 0; i < len(Levels); i++ {
+			var CL = strings.Split(Levels[i], " # ")
+			if len(CL) > 1 {
+				if CL[1] == args[1] || CL[0] == args[1] {
+					EXP, _ := strconv.ParseFloat(CL[2], 8)
+					s.ChannelMessageSend(m.ChannelID, "```css\n" + args[1] + " es nivel [" + Exp_to_level(EXP) + "]```")
+				}
+			}
+		}
+	} else {
+		for i := 0; i < len(Levels); i++ {
+			var CL = strings.Split(Levels[i], " # ")
+			if CL[0] == m.Author.ID {
+				EXP, _ := strconv.ParseFloat(CL[2], 8)
+				s.ChannelMessageSend(m.ChannelID, "```css\n" + m.Author.Username + ", eres nivel [" + Exp_to_level(EXP) + "]```")
+			}
 		}
 	}
 }
