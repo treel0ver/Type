@@ -23,6 +23,11 @@ var WPM_str string
 
 var Random int
 
+func Is_illegal(ζ string) bool {
+	var π = strings.Contains(ζ, "​")
+	return π
+}
+
 func υ() string {
 
 	var Texts_arr = strings.Split(Current_text, " ")
@@ -38,7 +43,6 @@ func υ() string {
 }
 
 func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Started_when = time.Now().UnixMilli()
 	Is_started = true
 
 	rand.Seed(time.Now().UnixNano())
@@ -47,7 +51,12 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	Current_text = Texts[Random]
 
-	s.ChannelMessageSend(m.ChannelID, "**" + υ() + "**")
+	s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
+	time.Sleep(1 * time.Second)
+	s.ChannelMessageEdit(m.ChannelID, Last_bot_message, "```🟡 Listos...```")
+	time.Sleep(1 * time.Second)
+	s.ChannelMessageEdit(m.ChannelID, Last_bot_message, "**" + υ() + "**")
+	Started_when = time.Now().UnixMilli()
 }
 
 func Judge(m *discordgo.MessageCreate, S string) int8 {
@@ -130,8 +139,6 @@ func Show_result_not_improved(s *discordgo.Session, m *discordgo.MessageCreate) 
 
 	s.ChannelMessageSend(m.ChannelID, "```diff\n- No has superado tu anterior marca, " + m.Author.Username + ".\nTu resultado es: " + WPM_str + " WPM```")
 }
-
-
 
 func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var WPM_rounded = (math.Round(WPM*10)/10)

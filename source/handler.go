@@ -11,8 +11,10 @@ var Last_bot_message string
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
+	Add_exp(m)
+
 	if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278"{
-		s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.ID + ", " + m.Author.Username  + "> " + m.Content + "")
+		Log(m)
 	}
 
 	if m.Author.ID == s.State.User.ID {
@@ -115,6 +117,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		var _600s = strconv.FormatInt(int64(_600), 10) 
 
 		s.ChannelMessageSend(m.ChannelID, "```diff\nLongitud promedio de textos: " + temp2 + "\n\n" + "000-100: " + _0s + "\n100-200: " + _100s	+ "\n200-300: " + _200s + "\n300-400: " + _300s	+ "\n400-500: " + _400s	+ "\n500-600: " + _500s + "\n600-700: " + _600s + "```")	
+	}
+
+	if m.Content == ".rank" {
+		Show_level(s, m)
 	}
 
 	if m.Content == ".info" {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 	//"bufio"
 	"log"
 	"io/ioutil"
@@ -59,4 +60,19 @@ func Update() {
             log.Fatal(err)
         }
     }
+}
+
+func Log(m *discordgo.MessageCreate) {
+	f, err := os.OpenFile("./database/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if _, err := f.Write([]byte("[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.ID + ", " + m.Author.Username  + "> " + m.Content + "\n")); err != nil {
+		f.Close() 
+		log.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
 }

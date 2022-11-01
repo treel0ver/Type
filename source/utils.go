@@ -27,3 +27,14 @@ func How_many_texts() int {
 func ID_Text() {
 	
 }
+
+func First_n(s string, n int) string {
+    i := 0
+    for j := range s {
+        if i == n {
+            return s[:j]
+        }
+        i++
+    }
+    return s
+}
