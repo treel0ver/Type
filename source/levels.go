@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"time"
 	"math"
 	"strings"
 	"strconv"
 	"io/ioutil"
 	"os"
-	"log"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -34,22 +34,25 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 
 		    e := os.Remove("./database/levels.lbsv")
 		    if e != nil {
-		        log.Fatal(e)
+			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+			    fmt.Println(e)
 		    }
 
 
 		    // create file
 		    f, err := os.Create("./database/levels.lbsv")
 		    if err != nil {
-		        log.Fatal(err)
-		    }
+			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+			    fmt.Println(err)
+			}
 		    // remember to close the file
 		    defer f.Close()
 
 		    for _, line := range Levels {
 		        _, err := fmt.Fprintln(f, line)
 		        if err != nil {
-		            log.Fatal(err)
+			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+			    fmt.Println(err)
 		        }
 		    }
 		}
@@ -57,15 +60,18 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 	if exists == false {
 		f, err := os.OpenFile("./database/levels.lbsv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
-			log.Fatal(err)
+			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+			    fmt.Println(err)
 		}
 
 		if _, err := f.Write([]byte(m.Author.ID + " # " + m.Author.Username + " # " + "0")); err != nil {
 			f.Close() 
-			log.Fatal(err)
+			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+			    fmt.Println(err)
 		}
 		if err := f.Close(); err != nil {
-			log.Fatal(err)
+			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+			    fmt.Println(err)
 		}
 	}
 }

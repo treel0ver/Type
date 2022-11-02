@@ -55,8 +55,10 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 	time.Sleep(1 * time.Second)
 	s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 Listos...```")
 	time.Sleep(1 * time.Second)
-	s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**" + υ() + "**")
-	Started_when = time.Now().UnixMilli()
+	var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**" + υ() + "**")
+	_ = Text_shown
+	var Started_when_time = Text_shown.EditedTimestamp
+	Started_when = Started_when_time.UnixMilli()
 }
 
 func Judge(m *discordgo.MessageCreate, S string) int8 {
@@ -144,5 +146,5 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var WPM_rounded = (math.Round(WPM*10)/10)
 	WPM_str = fmt.Sprint(WPM_rounded)
 
-	s.ChannelMessageSend(m.ChannelID, "```diff\n- " + m.Author.Username + ", no has terminado correctamente.\nHas cometido " + Errors_str + " errores: " + Error_list + "\nTu hubiera sido: " + WPM_str + " WPM```")
+	s.ChannelMessageSend(m.ChannelID, "```diff\n- " + m.Author.Username + ", no has terminado correctamente.\nHas cometido " + Errors_str + " errores: " + Error_list + "\nTu resultado hubiera sido: " + WPM_str + " WPM```")
 }

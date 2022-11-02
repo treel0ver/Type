@@ -68,7 +68,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if strings.HasPrefix(m.Content, ".stats") {
-		s.ChannelMessageSend(m.ChannelID, Stats(s, m))
+		s.ChannelMessageSend(m.ChannelID, "```css\nHas participado en " + Stat_list(s, m) + " textos```")
 	}
 
 	if strings.ToLower(m.Content) == ".textstats" {
@@ -134,18 +134,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Content == ".abc" {
 	}
 
-	/* FUN COMMANDS */
-	/**/	
-	/**/	if strings.ToLower(m.Content) == ".mapache" {
-	/**/		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/froze-stop-moving-not-moving-still-standing-gif-16669739")
-	/**/	}
-	/**/
-	/**/	if strings.ToLower(m.Content) == ".go" {
-	/**/		s.ChannelMessageSend(m.ChannelID, "https://camo.githubusercontent.com/833cfd306ac2bef74ddf0560ee3b4112321c5b6939e52a1629f0aed8aec46922/687474703a2f2f692e696d6775722e636f6d2f485379686177742e6a7067")
-	/**/	}
-	/**/
-	/**/	if strings.ToLower(m.Content) == ".ch" {
-	/**/		s.ChannelMessageSend(m.ChannelID, "https://thumbs.gfycat.com/AdmirableLikableFlea-mobile.mp4")
-	/**/	}
+	Fun_commands(s, m)
 
 }

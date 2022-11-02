@@ -192,10 +192,11 @@ func Is_already_in_top_LOWER(m *discordgo.MessageCreate) {
 	}
 }
 
-func Stats(s *discordgo.Session, m *discordgo.MessageCreate) string {
+func Stat_list(s *discordgo.Session, m *discordgo.MessageCreate) string {
 	//var Tops_1 = 0
 
 	var stats string
+	var C int 
 
 	Load()
 	for i := 0; i < len(DB); i++ {
@@ -203,10 +204,18 @@ func Stats(s *discordgo.Session, m *discordgo.MessageCreate) string {
 		/* Check if is not empty line */
 		if len(CL) > 1 {
 			if CL[1] == m.Author.ID {
+				C++
 				stats = stats + DB[i] + "\n"
 			}
 		}
 	}
 
+	C_str := strconv.Itoa(C)
+	stats = C_str
+	
 	return stats
+}
+
+func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
+	// 🚧👷
 }
