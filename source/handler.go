@@ -25,6 +25,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.ToLower(m.Content) == ".help" {
 		s.ChannelMessageSend(m.ChannelID, "```css\n.t          empieza un test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores```")
 	}
+
+	if strings.ToLower(m.Content) == ".help fun" {
+		s.ChannelMessageSend(m.ChannelID, "```css\n.ch         pone un gif de Chaeyoung\n.mapache    pone gifs de mapaches\n.go         pone imágenes de Gopher\n.sha256     hashea una cadena de valores en SHA256\n.stb        pasa una cadena de valores al código binario\n.ntb        pasa un número al código binario```")
+	}
 	if Is_illegal(m.Content) {
 		s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.Username + " ha hecho trampas en el texto: \"" + First_n(Current_text, 60) + "[…]\"``")
 		s.ChannelMessageSend("1034791654202294342", "<@910067180706627594>")

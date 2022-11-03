@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 	"strconv"
 )
@@ -37,4 +38,11 @@ func First_n(s string, n int) string {
         i++
     }
     return s
+}
+
+func String_to_binary(s string) (binString string) {
+    for _, c := range s {
+        binString = fmt.Sprintf("%s%b",binString, c)
+    }
+    return 
 }

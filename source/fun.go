@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 	"strings"
+	"strconv"
+    "crypto/sha256"
 	"github.com/bwmarrin/discordgo"
 )
 func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -36,4 +39,35 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 			case 1: s.ChannelMessageSend(m.ChannelID, "https://camo.githubusercontent.com/833cfd306ac2bef74ddf0560ee3b4112321c5b6939e52a1629f0aed8aec46922/687474703a2f2f692e696d6775722e636f6d2f485379686177742e6a7067")
 			}
 		}
+
+		if strings.HasPrefix(strings.ToLower(m.Content), ".sha256") {
+			var content = strings.Replace(m.Content, ".sha256 ", "", -1)
+
+			h := sha256.New()
+
+			h.Write([]byte(content))
+
+			bs := h.Sum(nil)
+
+			var result_str = fmt.Sprintf("%x", bs)
+
+			s.ChannelMessageSend(m.ChannelID, "```" + result_str + "```")
+		}
+
+		if strings.HasPrefix(strings.ToLower(m.Content), ".stb") {
+			var content = strings.Replace(m.Content, ".stb ", "", -1)
+
+			s.ChannelMessageSend(m.ChannelID, "```" + String_to_binary(content) + "```")
+		}
+
+		if strings.HasPrefix(strings.ToLower(m.Content), ".ntb") {
+			var content = strings.Replace(m.Content, ".ntb ", "", -1)
+
+			content2, _ := strconv.Atoi(content)
+			var content3 = int64(content2)
+
+			s.ChannelMessageSend(m.ChannelID, "```" + strconv.FormatInt(content3, 2) + "```")
+		}
+
+
 }
