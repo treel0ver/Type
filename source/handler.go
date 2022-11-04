@@ -29,16 +29,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.ToLower(m.Content) == ".help fun" {
 		s.ChannelMessageSend(m.ChannelID, "```css\n.ch         pone un gif de Chaeyoung\n.mapache    pone gifs de mapaches\n.go         pone imágenes de Gopher\n.sha256     hashea una cadena de valores en SHA256\n.stb        pasa una cadena de valores al código binario\n.ntb        pasa un número al código binario```")
 	}
-	if Is_illegal(m.Content) {
-		s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.Username + " ha hecho trampas en el texto: \"" + First_n(Current_text, 60) + "[…]\"``")
-		s.ChannelMessageSend("1034791654202294342", "<@910067180706627594>")
-	}
-
-	if !strings.HasPrefix(m.Content, ".") && !(Judge(m, m.Content) == 1){
-		if !(len(m.Content) > len(Current_text) - 3) {
-			return
-		}
-	}
 
 	if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" || m.ChannelID == "1035687048000053288" {
 		if strings.ToLower(m.Content) == ".t" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats"){
@@ -63,13 +53,35 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			time.Sleep(500 * time.Millisecond); Top(s, m)
 
 		} else if (Judge(m, m.Content) == 2) {
-			Calculate(m)
-			Errors_calculate(m.Content, Current_text)
-			Show_result_with_errors(s, m)
+			if !Is_illegal(m.Content) {
+				Calculate(m)
+				Errors_calculate(m.Content, Current_text)
+				Show_result_with_errors(s, m)
 
-			time.Sleep(500 * time.Millisecond); Top(s, m)
+				time.Sleep(300 * time.Millisecond); Top(s, m)
+			} else {
+				Calculate(m)
+				Errors_calculate(m.Content, Current_text)
+				//s.ChannelMessageSend(m.ChannelID, "```🤔```")
+				s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.Username + " ha hecho trampas en el texto: \"" + First_n(Current_text, 60) + "[…]\"\n" + Error_list + "`` <@910067180706627594>")
+			}
+		} else if (Judge(m, m.Content) == 4) {
+			if !Is_illegal(m.Content) {
+				s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... Tu resultado (WPM) es una vaga representación de la realidad. 😬```")
+				Calculate(m)
+				Errors_calculate(m.Content, Current_text)
+				Show_result_with_errors(s, m)
+				time.Sleep(300 * time.Millisecond); Top(s, m)
+			} else {
+				Calculate(m)
+				Errors_calculate(m.Content, Current_text)
+				//s.ChannelMessageSend(m.ChannelID, "```🤔```")
+				s.ChannelMessageSend("1034791654202294342", "[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.Username + " ha hecho trampas en el texto: \"" + First_n(Current_text, 60) + "[…]\"\n" + Error_list + "`` <@910067180706627594>")
+			}
 		}
 	}
+
+
 
 	if strings.HasPrefix(m.Content, ".tops") {
 		Tops(s, m)

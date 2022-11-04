@@ -32,7 +32,7 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 
 			Levels[i] = m.Author.ID + " # " + m.Author.Username + " # " + EXP_str
 
-		    e := os.Remove("./database/levels.lbsv")
+		    e := os.Remove("./database/levels.csv")
 		    if e != nil {
 			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
 			    fmt.Println(e)
@@ -40,7 +40,7 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 
 
 		    // create file
-		    f, err := os.Create("./database/levels.lbsv")
+		    f, err := os.Create("./database/levels.csv")
 		    if err != nil {
 			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
 			    fmt.Println(err)
@@ -58,7 +58,7 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 		}
 	}
 	if exists == false {
-		f, err := os.OpenFile("./database/levels.lbsv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		f, err := os.OpenFile("./database/levels.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			    fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
 			    fmt.Println(err)
@@ -89,7 +89,7 @@ func Exp_to_level(exp float64) string {
 }
 
 func Load_levels() {
-	fileBytes, err := ioutil.ReadFile("./database/levels.lbsv")
+	fileBytes, err := ioutil.ReadFile("./database/levels.csv")
 
 	if err != nil {
 		fmt.Println(err)

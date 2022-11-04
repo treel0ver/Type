@@ -71,11 +71,16 @@ func Judge(m *discordgo.MessageCreate, S string) int8 {
 		return 1
 	}
 
-	if (len(m.Content) > len(Current_text) - 9) {
-		var Content_arr = strings.Split(m.Content, " ")
-		var Current_text_arr = strings.Split(Current_text, " ")
-		if Content_arr[0] == Current_text_arr[0] {
-			return 2
+	var Content_arr = strings.Split(m.Content, " ")
+	var Current_text_arr = strings.Split(Current_text, " ")
+
+	if Content_arr[0] == Current_text_arr[0] {
+		if (len(m.Content) > len(Current_text) - 20) {
+				return 2
+		}
+
+		if (len(m.Content) > len(Current_text) - 60) {
+				return 4
 		}
 	}
 	return 3
@@ -166,7 +171,7 @@ func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
 	Is_started = true
 
 	rand.Seed(time.Now().UnixNano())
-	Random = rand.Intn(414 - 400) + 400
+	Random = rand.Intn(435 - 400) + 400
 	//Random = 76
 	Current_text = Texts[Random]
 

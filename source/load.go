@@ -13,7 +13,7 @@ import (
 )
 
 func Load() {
-	fileBytes, err := ioutil.ReadFile("./database/texts.lbsv")
+	fileBytes, err := ioutil.ReadFile("./database/texts.csv")
 
 	if err != nil {
 		fmt.Println(err)
@@ -24,7 +24,7 @@ func Load() {
 }
 
 func Save_result(m *discordgo.MessageCreate) {
-	f, err := os.OpenFile("./database/texts.lbsv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("./database/texts.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func Save_result(m *discordgo.MessageCreate) {
 }
 
 func Update() {
-    e := os.Remove("./database/texts.lbsv")
+    e := os.Remove("./database/texts.csv")
     if e != nil {
         log.Fatal(e)
     }
@@ -47,7 +47,7 @@ func Update() {
 
 
     // create file
-    f, err := os.Create("./database/texts.lbsv")
+    f, err := os.Create("./database/texts.csv")
     if err != nil {
         log.Fatal(err)
     }
