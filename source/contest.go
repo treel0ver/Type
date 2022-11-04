@@ -171,7 +171,7 @@ func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
 	Is_started = true
 
 	rand.Seed(time.Now().UnixNano())
-	Random = rand.Intn(435 - 400) + 400
+	Random = rand.Intn(452 - 400) + 400
 	//Random = 76
 	Current_text = Texts[Random]
 

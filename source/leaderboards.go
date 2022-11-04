@@ -66,18 +66,13 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-    fmt.Println(Leaderboard_WPM)
-    fmt.Println(Leaderboard)
-
     var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
-    fmt.Println(Leaderboard_WPM)
-    fmt.Println(Leaderboard)
-    /* fmt.Println("Not sorted : ", my_two_slices.main_slice) */
+
+    fmt.Println("Not sorted : ", my_two_slices.main_slice)
 
     sort.Sort(SortByOther(my_two_slices))
-    fmt.Println(Leaderboard_WPM)
-    fmt.Println(Leaderboard)
-    /* fmt.Println("Sorted : ", my_two_slices.main_slice) */
+
+    fmt.Println("Sorted : ", my_two_slices.main_slice)
 
 	var DISPLAY string
 	var C int = 0
