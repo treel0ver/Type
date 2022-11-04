@@ -69,5 +69,12 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "```" + strconv.FormatInt(content3, 2) + "```")
 		}
 
+		if strings.HasPrefix(strings.ToLower(m.Content), ".len") {
+			var content = strings.Replace(m.Content, ".len ", "", -1)
+			var length = len(content)
+			var length_str = strconv.Itoa(length)
+
+			s.ChannelMessageSend(m.ChannelID, "```css\n[" + length_str + "]```")
+		}
 
 }
