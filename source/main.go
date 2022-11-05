@@ -20,6 +20,7 @@ func init() {
 }
 
 func main() {
+	Load_texts()
 	/* Create a new Discord session using the provided bot token. */
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {

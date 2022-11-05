@@ -97,6 +97,16 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	var FOUND_how_many_times_str = strconv.Itoa(FOUND_how_many_times)
 	if FOUND {
+		var Texts_arr = strings.Split(Texts[WHERE], " ")
+		var λ string
+		for i := 0; i < len(Texts_arr); i++ {
+			if i != len(Texts_arr)-1 {
+				λ = λ + Texts_arr[i] + "​ "
+			} else {
+				λ = λ + Texts_arr[i]
+			}
+		}
+		s.ChannelMessageSend(m.ChannelID, "```" + λ + "```")
 		s.ChannelMessageSend(m.ChannelID, "```diff\n+ Se encontraron " + FOUND_how_many_times_str + " marcas del texto ID:" + WHERE_str + "\n" + DISPLAY + "```")
 	} else {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- No se encontró```")

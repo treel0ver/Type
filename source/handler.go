@@ -151,7 +151,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, Date)
 	}
 
-	if m.Content == ".abc" {
+	if m.Content == ".load" {
+		Load_texts()
+		var len_str = strconv.Itoa(len(Texts))
+		s.ChannelMessageSend(m.ChannelID, "```css\nCargados [" + len_str + "] elementos```")
+	}
+
+	if m.Content == ".free" {
+		var len_str = strconv.Itoa(len(Texts))
+		s.ChannelMessageSend(m.ChannelID, "```css\nLiberados [" + len_str + "] elementos```")
+		Free_texts()
 	}
 
 	Fun_commands(s, m)

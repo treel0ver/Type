@@ -76,3 +76,18 @@ func Log(m *discordgo.MessageCreate) {
 		log.Fatal(err)
 	}
 }
+
+func Load_texts() {
+	fileBytes, err := ioutil.ReadFile("./database/texts.csv")
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	Texts = strings.Split(string(fileBytes), "\n")
+}
+
+func Free_texts() {
+ Texts = nil
+}
