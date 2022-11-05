@@ -138,11 +138,15 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 
     var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
 
-    /* fmt.Println("Not sorted : ", my_two_slices.main_slice) */
+    //fmt.Println("Not sorted : ", my_two_slices.main_slice)
+    //fmt.Println("Not soerted : ", my_two_slices.other_slice)
 
-    sort.Sort(SortByOther(my_two_slices))
-    
-    /* fmt.Println("Sorted : ", my_two_slices.main_slice) */
+    sort.Sort(sort.Reverse(sort.StringSlice(my_two_slices.other_slice)))
+    //sort.Sort(sort.Reverse(sort.Float64Slice(my_two_slices.main_slice)))
+
+
+    //fmt.Println("Sorted : ", my_two_slices.main_slice)
+    //fmt.Println("Sorted : ", my_two_slices.other_slice)
 
 	var DISPLAY string
 	var C int = 0
