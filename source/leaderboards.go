@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 	"strconv"
@@ -68,15 +67,19 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 
     var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
 
-    fmt.Println("Not sorted : ", my_two_slices.main_slice)
+    //fmt.Println("Not sorted : ", my_two_slices.main_slice)
+    //fmt.Println("Not soerted : ", my_two_slices.other_slice)
 
-    sort.Sort(SortByOther(my_two_slices))
+    sort.Sort(sort.Reverse(sort.StringSlice(my_two_slices.other_slice)))
+    //sort.Sort(sort.Reverse(sort.Float64Slice(my_two_slices.main_slice)))
 
-    fmt.Println("Sorted : ", my_two_slices.main_slice)
+
+    //fmt.Println("Sorted : ", my_two_slices.main_slice)
+    //fmt.Println("Sorted : ", my_two_slices.other_slice)
 
 	var DISPLAY string
-	var C int = 0
-	for i := 0; i < 6; i++ {
+	var C int = 1
+	for i := 0; i < 5; i++ {
 		if i != 0{
 			if i>len(my_two_slices.other_slice)-1 {
 				var C_str = strconv.Itoa(C)
@@ -85,6 +88,9 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 				var C_str = strconv.Itoa(C)
 				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[i] + "\n"
 			}
+		} else {
+				var C_str = strconv.Itoa(C)
+				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[0] + "\n"
 		}
 		C++
 	}
