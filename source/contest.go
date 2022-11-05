@@ -50,7 +50,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	rand.Seed(time.Now().UnixNano())
 	Random = rand.Intn(How_many_texts())
-	Random = rand.Intn(400)
+	Random = rand.Intn(399) + 1
 	//Random = 76
 
 	Current_text = Texts[Random]

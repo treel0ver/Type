@@ -149,8 +149,8 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
     //fmt.Println("Sorted : ", my_two_slices.other_slice)
 
 	var DISPLAY string
-	var C int = 0
-	for i := 0; i < 6; i++ {
+	var C int = 1
+	for i := 0; i < 5; i++ {
 		if i != 0{
 			if i>len(my_two_slices.other_slice)-1 {
 				var C_str = strconv.Itoa(C)
@@ -159,6 +159,9 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 				var C_str = strconv.Itoa(C)
 				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[i] + "\n"
 			}
+		} else {
+				var C_str = strconv.Itoa(C)
+				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[0] + "\n"
 		}
 		C++
 	}

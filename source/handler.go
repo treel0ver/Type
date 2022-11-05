@@ -58,7 +58,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				Errors_calculate(m.Content, Current_text)
 				Show_result_with_errors(s, m)
 
-				time.Sleep(300 * time.Millisecond); Top(s, m)
+				time.Sleep(500 * time.Millisecond); Top(s, m)
 			} else {
 				Calculate(m)
 				Errors_calculate(m.Content, Current_text)
@@ -71,7 +71,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				Calculate(m)
 				Errors_calculate(m.Content, Current_text)
 				Show_result_with_errors(s, m)
-				time.Sleep(300 * time.Millisecond); Top(s, m)
+				time.Sleep(500 * time.Millisecond); Top(s, m)
 			} else {
 				Calculate(m)
 				Errors_calculate(m.Content, Current_text)
