@@ -2,29 +2,30 @@ package main
 
 import (
 	"sort"
-	"strings"
 	"strconv"
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 )
 
 type TwoSlices struct {
-    main_slice  	 []float64
-    other_slice  	 []string
+	main_slice  []float64
+	other_slice []string
 }
 
 type SortByOther TwoSlices
 
 func (sbo SortByOther) Len() int {
-    return len(sbo.main_slice)
+	return len(sbo.main_slice)
 }
 
 func (sbo SortByOther) Swap(i, j int) {
-    sbo.main_slice[i], sbo.main_slice[j] = sbo.main_slice[j], sbo.main_slice[i]
-    sbo.other_slice[i], sbo.other_slice[j] = sbo.other_slice[j], sbo.other_slice[i]
+	sbo.main_slice[i], sbo.main_slice[j] = sbo.main_slice[j], sbo.main_slice[i]
+	sbo.other_slice[i], sbo.other_slice[j] = sbo.other_slice[j], sbo.other_slice[i]
 }
 
 func (sbo SortByOther) Less(i, j int) bool {
-    return sbo.other_slice[i] < sbo.other_slice[j] 
+	return sbo.other_slice[i] < sbo.other_slice[j]
 }
 
 func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -47,7 +48,7 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	Load()
 	for i := 0; i < len(DB); i++ {
-		if strings.HasPrefix(DB[i], WHERE_str + " #") {
+		if strings.HasPrefix(DB[i], WHERE_str+" #") {
 			if i == 0 {
 				var CL = strings.Split(DB[i], " # ")
 				WPM_f64, _ := strconv.ParseFloat(CL[3], 8)
@@ -65,23 +66,22 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-    var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
+	var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
 
-    //fmt.Println("Not sorted : ", my_two_slices.main_slice)
-    //fmt.Println("Not soerted : ", my_two_slices.other_slice)
+	//fmt.Println("Not sorted : ", my_two_slices.main_slice)
+	//fmt.Println("Not soerted : ", my_two_slices.other_slice)
 
-    sort.Sort(sort.Reverse(sort.StringSlice(my_two_slices.other_slice)))
-    //sort.Sort(sort.Reverse(sort.Float64Slice(my_two_slices.main_slice)))
+	sort.Sort(sort.Reverse(sort.StringSlice(my_two_slices.other_slice)))
+	//sort.Sort(sort.Reverse(sort.Float64Slice(my_two_slices.main_slice)))
 
-
-    //fmt.Println("Sorted : ", my_two_slices.main_slice)
-    //fmt.Println("Sorted : ", my_two_slices.other_slice)
+	//fmt.Println("Sorted : ", my_two_slices.main_slice)
+	//fmt.Println("Sorted : ", my_two_slices.other_slice)
 
 	var DISPLAY string
 	var C int = 1
 	for i := 0; i < 5; i++ {
-		if i != 0{
-			if i>len(my_two_slices.other_slice)-1 {
+		if i != 0 {
+			if i > len(my_two_slices.other_slice)-1 {
 				var C_str = strconv.Itoa(C)
 				DISPLAY = DISPLAY + C_str + "." + "\n"
 			} else {
@@ -89,8 +89,8 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[i] + "\n"
 			}
 		} else {
-				var C_str = strconv.Itoa(C)
-				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[0] + "\n"
+			var C_str = strconv.Itoa(C)
+			DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[0] + "\n"
 		}
 		C++
 	}
@@ -101,17 +101,17 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 		var λ string
 		for i := 0; i < len(Texts_arr); i++ {
 			if i != len(Texts_arr)-1 {
-				λ = λ + Texts_arr[i] + "​ "
+				λ = λ + Texts_arr[i] + "\u200b "
 			} else {
 				λ = λ + Texts_arr[i]
 			}
 		}
-		s.ChannelMessageSend(m.ChannelID, "```" + λ + "```")
-		s.ChannelMessageSend(m.ChannelID, "```diff\n+ Se encontraron " + FOUND_how_many_times_str + " marcas del texto ID:" + WHERE_str + "\n" + DISPLAY + "```")
+		s.ChannelMessageSend(m.ChannelID, "```"+λ+"```")
+		s.ChannelMessageSend(m.ChannelID, "```diff\n+ Se encontraron "+FOUND_how_many_times_str+" marcas del texto ID:"+WHERE_str+"\n"+DISPLAY+"```")
 	} else {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- No se encontró```")
 	}
-	
+
 }
 
 func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -131,7 +131,7 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	Load()
 	for i := 0; i < len(DB); i++ {
-		if strings.HasPrefix(DB[i], WHERE_str + " #") {
+		if strings.HasPrefix(DB[i], WHERE_str+" #") {
 			if i == 0 {
 				var CL = strings.Split(DB[i], " # ")
 				WPM_f64, _ := strconv.ParseFloat(CL[3], 8)
@@ -146,23 +146,22 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-    var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
+	var my_two_slices = TwoSlices{main_slice: Leaderboard_WPM, other_slice: Leaderboard}
 
-    //fmt.Println("Not sorted : ", my_two_slices.main_slice)
-    //fmt.Println("Not soerted : ", my_two_slices.other_slice)
+	//fmt.Println("Not sorted : ", my_two_slices.main_slice)
+	//fmt.Println("Not soerted : ", my_two_slices.other_slice)
 
-    sort.Sort(sort.Reverse(sort.StringSlice(my_two_slices.other_slice)))
-    //sort.Sort(sort.Reverse(sort.Float64Slice(my_two_slices.main_slice)))
+	sort.Sort(sort.Reverse(sort.StringSlice(my_two_slices.other_slice)))
+	//sort.Sort(sort.Reverse(sort.Float64Slice(my_two_slices.main_slice)))
 
-
-    //fmt.Println("Sorted : ", my_two_slices.main_slice)
-    //fmt.Println("Sorted : ", my_two_slices.other_slice)
+	//fmt.Println("Sorted : ", my_two_slices.main_slice)
+	//fmt.Println("Sorted : ", my_two_slices.other_slice)
 
 	var DISPLAY string
 	var C int = 1
 	for i := 0; i < 5; i++ {
-		if i != 0{
-			if i>len(my_two_slices.other_slice)-1 {
+		if i != 0 {
+			if i > len(my_two_slices.other_slice)-1 {
 				var C_str = strconv.Itoa(C)
 				DISPLAY = DISPLAY + C_str + "." + "\n"
 			} else {
@@ -170,14 +169,14 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[i] + "\n"
 			}
 		} else {
-				var C_str = strconv.Itoa(C)
-				DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[0] + "\n"
+			var C_str = strconv.Itoa(C)
+			DISPLAY = DISPLAY + C_str + ". " + my_two_slices.other_slice[0] + "\n"
 		}
 		C++
 	}
 
-	s.ChannelMessageSend(m.ChannelID, "```🏆 LEADERBOARD 🏆\n" + DISPLAY + "```")
-	
+	s.ChannelMessageSend(m.ChannelID, "```🏆 LEADERBOARD 🏆\n"+DISPLAY+"```")
+
 }
 
 func Is_already_in_top(m *discordgo.MessageCreate) bool {
@@ -220,7 +219,7 @@ func Stat_list(s *discordgo.Session, m *discordgo.MessageCreate) string {
 	//var Tops_1 = 0
 
 	var stats string
-	var C int 
+	var C int
 
 	Load()
 	for i := 0; i < len(DB); i++ {
@@ -236,7 +235,7 @@ func Stat_list(s *discordgo.Session, m *discordgo.MessageCreate) string {
 
 	C_str := strconv.Itoa(C)
 	stats = C_str
-	
+
 	return stats
 }
 
