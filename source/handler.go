@@ -40,16 +40,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			TT_short(s, m)
 		}
 
-		if Is_started && m.Content == Current_text {
+		if m.Content == Current_text {
 			Calculate(m)
 			if !Is_already_in_top(m) {
 				Show_result(s, m)
 				Is_already_in_top_LOWER(m)
-				if WPM >= 100 {
-					Save_result(m)
-				} else {
-					s.ChannelMessageSend(m.ChannelID, "```diff\n- Tu marca no se guardó por estar debajo del mínimo de 100 WPM```")
-				}
+				Save_result(m)
 				Add_exp(s, m, 10001)
 			} else {
 				Show_result_not_improved(s, m)

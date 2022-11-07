@@ -21,6 +21,8 @@ var Current_text string = "Escucha, las reglas propias... se tratan de decidir c
 var Is_started bool
 var Started_when = time.Now().UnixMilli()
 
+var Requested_when = time.Now().UnixMilli()
+
 var Text_message_ID string
 
 var WPM float64
@@ -49,24 +51,69 @@ func υ() string {
 }
 
 func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Is_started = true
+	var Now = time.Now().UnixMilli()
 
-	rand.Seed(time.Now().UnixNano())
-	Random = rand.Intn(How_many_texts())
-	Random = rand.Intn(399) + 1
-	//Random = 76
+	/*
+		println("-----")
+		println("Now: ")
+		println(Now)
+		println("Started_when: ")
+		println(Started_when)
+		println("diff: ")
+		println(Now - Started_when)
+	*/
 
-	Current_text = Texts[Random]
+	if Now-Requested_when < 3000 {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
+	} else {
 
-	var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
-	Text_message_ID = Test_message.ID
-	time.Sleep(1 * time.Second)
-	s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 Listos...```")
-	time.Sleep(1 * time.Second)
-	var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ()+"**")
-	_ = Text_shown
-	var Started_when_time = Text_shown.EditedTimestamp
-	Started_when = Started_when_time.UnixMilli()
+		rand.Seed(time.Now().UnixNano())
+		Random = rand.Intn(How_many_texts())
+		Random = rand.Intn(399) + 1
+		//Random = 76
+
+		Current_text = Texts[Random]
+
+		var Requested_when_time = time.Now()
+		Requested_when = Requested_when_time.UnixMilli()
+
+		var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
+		Text_message_ID = Test_message.ID
+		time.Sleep(1 * time.Second)
+		s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 Listos...```")
+		time.Sleep(1 * time.Second)
+
+		var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ()+"**")
+		_ = Text_shown
+		var Started_when_time = Text_shown.EditedTimestamp
+		Started_when = Started_when_time.UnixMilli()
+
+	}
+}
+
+func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
+	var Now = time.Now().UnixMilli()
+
+	if Now-Requested_when < 3000 {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
+	} else {
+		rand.Seed(time.Now().UnixNano())
+		Random = rand.Intn(455-400) + 400
+		//Random = 76
+		Current_text = Texts[Random]
+
+		var Requested_when_time = time.Now()
+		Requested_when = Requested_when_time.UnixMilli()
+
+		var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 (Textos cortos) Preparados...```")
+		time.Sleep(1 * time.Second)
+		s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 (Textos cortos) Listos...```")
+		time.Sleep(1 * time.Second)
+		var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ()+"**")
+		_ = Text_shown
+		var Started_when_time = Text_shown.EditedTimestamp
+		Started_when = Started_when_time.UnixMilli()
+	}
 }
 
 func Judge(m *discordgo.MessageCreate, S string) int8 {
@@ -133,9 +180,11 @@ func Errors_calculate(sent string, current string) {
 		}
 	}
 
-	if len(text_arrayed) > len(sent_arrayed) {
+	/*
+		if len(text_arrayed) > len(sent_arrayed) {
 
-	}
+		}
+	*/
 
 	Errors_str = strconv.FormatInt(int64(Errors), 10)
 }
@@ -167,22 +216,4 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- "+m.Author.Username+", no has terminado correctamente.\nHas cometido "+Errors_str+" errores: "+Error_list+"\nTu resultado hubiera sido: "+WPM_str+" WPM```")
 	}
 
-}
-
-func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Is_started = true
-
-	rand.Seed(time.Now().UnixNano())
-	Random = rand.Intn(455-400) + 400
-	//Random = 76
-	Current_text = Texts[Random]
-
-	var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 (Textos cortos) Preparados...```")
-	time.Sleep(1 * time.Second)
-	s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 (Textos cortos) Listos...```")
-	time.Sleep(1 * time.Second)
-	var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ()+"**")
-	_ = Text_shown
-	var Started_when_time = Text_shown.EditedTimestamp
-	Started_when = Started_when_time.UnixMilli()
 }

@@ -30,7 +30,7 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if strings.ToLower(m.Content) == ".go" {
 		rand.Seed(time.Now().UnixNano())
-		var Fun_random = rand.Intn(1)
+		var Fun_random = rand.Intn(2)
 		switch Fun_random {
 		case 0:
 			s.ChannelMessageSend(m.ChannelID, "https://cdn.dribbble.com/userupload/2624050/file/original-59266f4dea1c2aa43f2064cc0f3b165a.png?resize=400x0")
@@ -45,12 +45,14 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if strings.ToLower(m.Content) == ".chaeyoung" {
 		rand.Seed(time.Now().UnixNano())
-		var Fun_random = rand.Intn(1)
+		var Fun_random = rand.Intn(3)
 		switch Fun_random {
 		case 0:
-			s.ChannelMessageSend(m.ChannelID, "https://cdn.dribbble.com/userupload/2624050/file/original-59266f4dea1c2aa43f2064cc0f3b165a.png?resize=400x0")
+			s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/twice-chaeyoung-son-chae-young-main-rapper-vocalist-gif-16635352")
 		case 1:
-			s.ChannelMessageSend(m.ChannelID, "https://camo.githubusercontent.com/833cfd306ac2bef74ddf0560ee3b4112321c5b6939e52a1629f0aed8aec46922/687474703a2f2f692e696d6775722e636f6d2f485379686177742e6a7067")
+			s.ChannelMessageSend(m.ChannelID, "https://c.tenor.com/4OguOnYonmYAAAAC/son-chaeyoung.gif")
+		case 2:
+			s.ChannelMessageSend(m.ChannelID, "https://i.pinimg.com/originals/03/66/e5/0366e550bcf2faf81753338acf1cda63.gif")
 		}
 	}
 
