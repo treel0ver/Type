@@ -147,7 +147,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		Show_level(s, m, args)
 	}
 
-	if m.Content == ".info" {
+	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
 		s.ChannelMessageSend(m.ChannelID, "Started_when: "+Started_when_stringed)
 		s.ChannelMessageSend(m.ChannelID, Date)
