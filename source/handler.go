@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -70,12 +71,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		} else if Judge(m, m.Content) == 4 {
 			if !Is_illegal(m.Content) {
-				s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```")
+				/**** s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```") */
 				Calculate(m)
 				Errors_calculate(m.Content, Current_text)
 				//Show_result_with_errors(s, m)
 				time.Sleep(500 * time.Millisecond)
-				Top(s, m)
+				/**** Top(s, m) */
 			} else {
 				Calculate(m)
 				Errors_calculate(m.Content, Current_text)
@@ -167,4 +168,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	Fun_commands(s, m)
 
+	if m.Content == ".test" {
+		var abcd, err = s.ChannelMessage("354889814635446273", "1014172593101746217")
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println(abcd.EditedTimestamp.UnixMilli())
+	}
 }

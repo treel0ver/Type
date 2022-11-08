@@ -28,7 +28,7 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 			EXP = EXP + n
 			var Current_level = Exp_to_level(EXP)
 			if Current_level != Memorized_level {
-				s.ChannelMessageSend(m.ChannelID, "```diff\n+ Felicidades, "+m.Author.Username+", has subido al nivel "+Current_level+"```")
+				//s.ChannelMessageSend(m.ChannelID, "```diff\n+ Felicidades, "+m.Author.Username+", has subido al nivel "+Current_level+"```")
 			}
 			EXP_str := fmt.Sprintf("%f", EXP)
 
@@ -146,5 +146,17 @@ func Show_level(s *discordgo.Session, m *discordgo.MessageCreate, args []string)
 				s.ChannelMessageSend(m.ChannelID, "```css\n"+m.Author.Username+", eres nivel ["+Exp_to_level(EXP)+"]```")
 			}
 		}
+	}
+}
+
+func Exp_until_next_level(n int) int {
+	var adding = n
+
+	for {
+		var hipo_level = Exp_to_level(float64(adding))
+		if hipo_level > Exp_to_level(float64(n)) {
+			return adding
+		}
+		adding++
 	}
 }

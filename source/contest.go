@@ -70,7 +70,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 		rand.Seed(time.Now().UnixNano())
 		Random = rand.Intn(How_many_texts())
 		Random = rand.Intn(399) + 1
-		//Random = 76
+		//Random = 1
 
 		Current_text = Texts[Random]
 
@@ -98,7 +98,7 @@ func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
 	} else {
 		rand.Seed(time.Now().UnixNano())
-		Random = rand.Intn(455-400) + 400
+		Random = rand.Intn(455-401) + 401
 		//Random = 76
 		Current_text = Texts[Random]
 
