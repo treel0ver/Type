@@ -1,7 +1,7 @@
 # Type Bot
 
 ## Example
-![alt text](Example.png)
+![alt text](Example.gif)
 
 ## Build
 
