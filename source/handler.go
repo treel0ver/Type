@@ -149,7 +149,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
-		s.ChannelMessageSend(m.ChannelID, "Started_when: "+Started_when_stringed)
+		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"\nhi```")
 		s.ChannelMessageSend(m.ChannelID, Date)
 	}
 	/*
