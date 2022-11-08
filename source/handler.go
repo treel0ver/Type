@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -153,27 +152,18 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "Started_when: "+Started_when_stringed)
 		s.ChannelMessageSend(m.ChannelID, Date)
 	}
-
-	if m.Content == ".load" {
-		Load_texts()
-		var len_str = strconv.Itoa(len(Texts))
-		s.ChannelMessageSend(m.ChannelID, "```css\nCargados ["+len_str+"] elementos```")
-	}
-
-	if m.Content == ".free" {
-		var len_str = strconv.Itoa(len(Texts))
-		s.ChannelMessageSend(m.ChannelID, "```css\nLiberados ["+len_str+"] elementos```")
-		Free_texts()
-	}
-
-	Fun_commands(s, m)
-
-	if m.Content == ".test" {
-		var abcd, err = s.ChannelMessage("354889814635446273", "1014172593101746217")
-		if err != nil {
-			panic(err)
+	/*
+		if m.Content == ".load" {
+			Load_texts()
+			var len_str = strconv.Itoa(len(Texts))
+			s.ChannelMessageSend(m.ChannelID, "```css\nCargados ["+len_str+"] elementos```")
 		}
 
-		fmt.Println(abcd.EditedTimestamp.UnixMilli())
-	}
+		if m.Content == ".free" {
+			var len_str = strconv.Itoa(len(Texts))
+			s.ChannelMessageSend(m.ChannelID, "```css\nLiberados ["+len_str+"] elementos```")
+			Free_texts()
+		}
+	*/
+	Fun_commands(s, m)
 }
