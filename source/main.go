@@ -1,11 +1,12 @@
 package main
 
-import (	
+import (
 	"flag"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -45,11 +46,11 @@ func main() {
 	if err != nil {
 		println("Unable to set activity: ", err)
 	} else {
-		
+
 	}
 
 	/* Wait here until CTRL-C or other term signal is received. */
-	println("[" + time.Now().Format("02/01/2006 15:04:05") + "] ✅ RUNNING")
+	println("[" + time.Now().Format("02/01/2006 15:04:05") + "] ✔️  Type is running")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
@@ -57,5 +58,3 @@ func main() {
 	/* Cleanly close down the Discord session. */
 	dg.Close()
 }
-
-

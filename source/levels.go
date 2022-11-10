@@ -28,7 +28,10 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 			EXP = EXP + n
 			var Current_level = Exp_to_level(EXP)
 			if Current_level != Memorized_level {
-				//s.ChannelMessageSend(m.ChannelID, "```diff\n+ Felicidades, "+m.Author.Username+", has subido al nivel "+Current_level+"```")
+				print("[")
+				print(time.Now().Format("02/01/2006 15:04:05"))
+				print("] " + m.Author.Username + " ha subido a nivel " + Current_level)
+				s.ChannelMessageSend(m.ChannelID, "```diff\n+ Felicidades, "+m.Author.Username+", has subido al nivel "+Current_level+"```")
 			}
 			EXP_str := fmt.Sprintf("%f", EXP)
 

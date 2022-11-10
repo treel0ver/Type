@@ -40,6 +40,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			TT_short(s, m)
 		}
 
+		if strings.ToLower(m.Content) == ".t dev" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
+			TT_dev(s, m)
+		}
+
 		if m.Content == Current_text {
 			Calculate(m)
 			if !Is_already_in_top(m) {

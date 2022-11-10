@@ -98,16 +98,41 @@ func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
 	} else {
 		rand.Seed(time.Now().UnixNano())
-		Random = rand.Intn(455-401) + 401
+		Random = rand.Intn(458-401) + 401
 		//Random = 76
 		Current_text = Texts[Random]
 
 		var Requested_when_time = time.Now()
 		Requested_when = Requested_when_time.UnixMilli()
 
-		var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 (Textos cortos) Preparados...```")
+		var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴🩳 (Textos cortos) Preparados...```")
 		time.Sleep(1 * time.Second)
-		s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 (Textos cortos) Listos...```")
+		s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡🤏 (Textos cortos) Listos...```")
+		time.Sleep(1 * time.Second)
+		var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ()+"**")
+		_ = Text_shown
+		var Started_when_time = Text_shown.EditedTimestamp
+		Started_when = Started_when_time.UnixMilli()
+	}
+}
+
+func TT_dev(s *discordgo.Session, m *discordgo.MessageCreate) {
+	var Now = time.Now().UnixMilli()
+
+	if Now-Requested_when < 3000 {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
+	} else {
+		rand.Seed(time.Now().UnixNano())
+		Random = rand.Intn(468-459) + 459
+		//Random = 459
+		Current_text = Texts[Random]
+
+		var Requested_when_time = time.Now()
+		Requested_when = Requested_when_time.UnixMilli()
+
+		var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴💻 (Programación) Preparados...```")
+		time.Sleep(1 * time.Second)
+		s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡👩🏾‍💻 (Programación) Listos...```")
 		time.Sleep(1 * time.Second)
 		var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ()+"**")
 		_ = Text_shown
@@ -147,7 +172,7 @@ func Calculate(m *discordgo.MessageCreate) {
 	var length_as_a_float float64 = float64(length)
 
 	var Started_when_float float64 = float64(Started_when)
-	WPM = length_as_a_float / 5 / ((sent_when_unixmilli_float64 - Started_when_float) - 500) * 60000
+	WPM = length_as_a_float / 5 / ((sent_when_unixmilli_float64 - Started_when_float) - 600) * 60000
 }
 
 var Error_list string

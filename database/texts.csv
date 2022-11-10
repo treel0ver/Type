@@ -456,3 +456,13 @@ hoy es mi primera vez viviendo semejante experiencia... voy a probar
 la humildad y sinceridad que desprendes no va a haber quien te la quite
 segundo porque aunque no haya sido agradable, me alegra que hayas soltado lastre y te mantengas firme en tus principios y valores
 cuarenta personas van hacia el horizonte
+
+if condition {some_function()} else {some_other_function()}
+for iterator in range statements(s) end
+print("\nTuple Iteration\n")
+for (i = 0; i < 100; i++) printf("hello");
+printf("\nHello, world\n");
+with Text_IO; use Text_IO; procedure Hello is begin Put_Line("Hello, World!"); end Hello;
+for I in 1..3 loop for P in CS loop Put(A(I)(P));
+<!DOCTYPE html><html><head><style>
+x = re.search("^The.*Spain$", txt)
