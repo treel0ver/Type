@@ -47,15 +47,17 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if m.Content == Current_text {
 			Calculate(m)
 			if !Is_already_in_top(m) {
+				Calc_WPM(s, m)
+				Is_already_in_top_LOWER(s, m)
 				Show_result(s, m)
-				Is_already_in_top_LOWER(m)
 				Save_result(m)
 				Add_exp(s, m, 10001)
+				Show_result(s, m)
 			} else {
 				Show_result_not_improved(s, m)
 			}
 
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 			Top(s, m)
 
 		} else if Judge(m, m.Content) == 2 {
@@ -64,7 +66,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				Errors_calculate(m.Content, Current_text)
 				Show_result_with_errors(s, m)
 
-				time.Sleep(500 * time.Millisecond)
+				time.Sleep(100 * time.Millisecond)
 				Top(s, m)
 			} else {
 				Calculate(m)
@@ -89,8 +91,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	if strings.HasPrefix(m.Content, ".tops") {
+	if strings.HasPrefix(m.Content, ".tops") && !(strings.HasPrefix(m.Content, ".topsID")) {
 		Tops(s, m)
+	}
+
+	if strings.HasPrefix(m.Content, ".topsID") {
+		TopsID(s, m)
 	}
 
 	if strings.HasPrefix(m.Content, ".stats") {

@@ -159,6 +159,82 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelMessageSend(m.ChannelID, "```🏆 LEADERBOARD 🏆\n"+DISPLAY+"```")
 }
 
+func TopsID(s *discordgo.Session, m *discordgo.MessageCreate) {
+	var What = strings.Replace(m.Content, ".topsID ", "", -1)
+
+	var What_int, _ = strconv.Atoi(What)
+
+	var FOUND bool = false
+	var FOUND_how_many_times int = 0
+
+	var ts []Two_Slices
+
+	var slice Two_Slices
+
+	Load()
+	for i := 0; i < len(DB); i++ {
+		if strings.HasPrefix(DB[i], What+" #") {
+			if i == 0 {
+
+			} else {
+				var CL = strings.Split(DB[i], " # ")
+				WPM_f64, _ := strconv.ParseFloat(CL[3], 8)
+
+				slice = Two_Slices{
+					WPM_f64, CL[2], CL[4],
+				}
+				ts = append(ts, slice)
+			}
+			FOUND = true
+			FOUND_how_many_times++
+		}
+	}
+
+	sort.Slice(ts, func(i, j int) bool {
+		return ts[i].WPM > ts[j].WPM
+	})
+
+	var DISPLAY string
+	var C int = 1
+	for i := 0; i < 5; i++ {
+		if i != 0 {
+			if i > len(ts)-1 {
+				var C_str = strconv.Itoa(C)
+				DISPLAY = DISPLAY + C_str + "." + "\n"
+			} else {
+				var C_str = strconv.Itoa(C)
+				var WPM_str = fmt.Sprintf("%.1f", ts[i].WPM)
+				DISPLAY = DISPLAY + C_str + ". " + ts[i].Username + " (" + WPM_str + ") " + ts[i].Date + "\n"
+			}
+		} else {
+			if len(ts) > 0 {
+				var C_str = strconv.Itoa(C)
+				var WPM_str = fmt.Sprintf("%.1f", ts[i].WPM)
+				DISPLAY = DISPLAY + C_str + ". " + ts[i].Username + " (" + WPM_str + ") " + ts[i].Date + "\n"
+			}
+		}
+		C++
+	}
+
+	var FOUND_how_many_times_str = strconv.Itoa(FOUND_how_many_times)
+	if FOUND {
+		var Texts_arr = strings.Split(Texts[What_int], " ")
+		var λ string
+		for i := 0; i < len(Texts_arr); i++ {
+			if i != len(Texts_arr)-1 {
+				λ = λ + Texts_arr[i] + "\u200b "
+			} else {
+				λ = λ + Texts_arr[i]
+			}
+		}
+		s.ChannelMessageSend(m.ChannelID, "```"+λ+"```")
+		s.ChannelMessageSend(m.ChannelID, "```diff\n+ Se encontraron "+FOUND_how_many_times_str+" marcas del texto ID:"+What+"\n"+DISPLAY+"```")
+	} else {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- No se encontró```")
+	}
+
+}
+
 var Date_temp string
 var WPM_temp string
 
@@ -182,7 +258,7 @@ func Is_already_in_top(m *discordgo.MessageCreate) bool {
 	return false
 }
 
-func Is_already_in_top_LOWER(m *discordgo.MessageCreate) {
+func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate) {
 	Load()
 
 	var Random_str = strconv.Itoa(Random)
@@ -192,6 +268,9 @@ func Is_already_in_top_LOWER(m *discordgo.MessageCreate) {
 			if CL[1] == m.Author.ID {
 				CL_f64, _ := strconv.ParseFloat(CL[3], 8)
 				if CL_f64 < WPM {
+					Delete_last_score_because_improved = true
+					Date_temp = CL[4]
+					WPM_temp = CL[3]
 					DB[i] = ""
 					Update()
 				}

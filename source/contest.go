@@ -214,13 +214,22 @@ func Errors_calculate(sent string, current string) {
 	Errors_str = strconv.FormatInt(int64(Errors), 10)
 }
 
+var Delete_last_score_because_improved bool = false
+
 func Show_result(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if !Delete_last_score_because_improved {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n+ "+m.Author.Username+", has terminado.\nTu resultado es: "+WPM_str+" WPM```")
+	} else {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n+ ¡"+m.Author.Username+", has superado tu anterior marca de "+WPM_temp+" WPM de la fecha "+Date_temp+"!\nTu resultado es: "+WPM_str+" WPM```")
+		Delete_last_score_because_improved = false
+	}
+}
+
+func Calc_WPM(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var WPM_rounded = (math.Round(WPM*10) / 10)
 	WPM_str = fmt.Sprint(WPM_rounded)
 
 	WPM_str_save = fmt.Sprint(WPM)
-
-	s.ChannelMessageSend(m.ChannelID, "```diff\n+ "+m.Author.Username+", has terminado.\nTu resultado es: "+WPM_str+" WPM```")
 }
 
 func Show_result_not_improved(s *discordgo.Session, m *discordgo.MessageCreate) {
