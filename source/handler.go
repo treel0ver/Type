@@ -94,7 +94,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if strings.HasPrefix(m.Content, ".stats") {
-		s.ChannelMessageSend(m.ChannelID, "```css\nHas participado en "+Stat_list(s, m)+" textos```")
+		Stats(s, m)
 	}
 
 	if strings.ToLower(m.Content) == ".textstats" {

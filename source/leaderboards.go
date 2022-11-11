@@ -158,6 +158,10 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	s.ChannelMessageSend(m.ChannelID, "```🏆 LEADERBOARD 🏆\n"+DISPLAY+"```")
 }
+
+var Date_temp string
+var WPM_temp string
+
 func Is_already_in_top(m *discordgo.MessageCreate) bool {
 	Load()
 
@@ -168,6 +172,8 @@ func Is_already_in_top(m *discordgo.MessageCreate) bool {
 			if CL[1] == m.Author.ID {
 				CL_f64, _ := strconv.ParseFloat(CL[3], 8)
 				if CL_f64 > WPM {
+					Date_temp = CL[4]
+					WPM_temp = CL[3]
 					return true
 				}
 			}
@@ -220,4 +226,46 @@ func Stat_list(s *discordgo.Session, m *discordgo.MessageCreate) string {
 
 func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// 🚧👷
+	var Texts_where_user_is_in []string
+
+	var How_many_texts_in int
+	var Not_tops_1 int
+
+	Load()
+	for i := 0; i < len(DB); i++ {
+		var CL = strings.Split(DB[i], " # ")
+		/* Check if is not empty line */
+		if len(CL) > 1 {
+			if CL[1] == m.Author.ID {
+				if !(Slice_contains(Texts_where_user_is_in, CL[0])) {
+					Texts_where_user_is_in = append(Texts_where_user_is_in, CL[0])
+					How_many_texts_in++
+					var what_text = CL[0]
+					var what_WPM, _ = strconv.ParseFloat(CL[3], 64)
+					println(what_text)
+					println(what_WPM)
+					for k := 0; k < len(DB); k++ {
+						var CK = strings.Split(DB[k], " # ")
+						println("CK0: " + CK[0])
+						if CK[0] == what_text && CK[1] != m.Author.ID {
+							println("hola")
+							CK_float, _ := strconv.ParseFloat(CK[3], 64)
+							println(CK_float)
+							print(" > ")
+							println(what_WPM)
+							if CK_float > what_WPM {
+								Not_tops_1++
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	println(How_many_texts_in - Not_tops_1)
+	println(Not_tops_1)
+
+	var TOPS = How_many_texts_in - Not_tops_1
+	var TOPS_str = strconv.Itoa(TOPS)
+	s.ChannelMessageSend(m.ChannelID, "```css\nHas participado en "+Stat_list(s, m)+" textos\n"+m.Author.Username+", tienes "+TOPS_str+" tops 1.```")
 }

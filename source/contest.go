@@ -19,8 +19,8 @@ var Date string
 
 var Current_text string = "Escucha, las reglas propias... se tratan de decidir conseguir algo usando medios y maneras propias para conseguirlo. Por eso decimos que son nuestras reglas. Precisamente por eso podemos afrontar sinceramente los desafíos y darlo todo. Y si fracasamos, hay que retomar la práctica y soportar duros entrenamientos para lograrlo. Y así, dedicándote a ello, creas tus propias reglas."
 var Is_started bool
-var Started_when = time.Now().UnixMilli()
 
+var Started_when = time.Now().UnixMilli()
 var Requested_when = time.Now().UnixMilli()
 
 var Text_message_ID string
@@ -227,7 +227,7 @@ func Show_result_not_improved(s *discordgo.Session, m *discordgo.MessageCreate) 
 	var WPM_rounded = (math.Round(WPM*10) / 10)
 	WPM_str = fmt.Sprint(WPM_rounded)
 
-	s.ChannelMessageSend(m.ChannelID, "```diff\n- No has superado tu anterior marca, "+m.Author.Username+".\nTu resultado es: "+WPM_str+" WPM```")
+	s.ChannelMessageSend(m.ChannelID, "```diff\n- No has superado tu anterior marca de "+WPM_temp+" WPM de la fecha "+Date_temp+", "+m.Author.Username+".\nTu resultado es: "+WPM_str+" WPM```")
 }
 
 func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {

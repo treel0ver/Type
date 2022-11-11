@@ -45,3 +45,13 @@ func String_to_binary(s string) (binString string) {
 	}
 	return
 }
+
+func Slice_contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
+}
