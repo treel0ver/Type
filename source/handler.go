@@ -15,7 +15,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	Add_exp(s, m, 500)
 
 	if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" {
-		Log(m)
+		//Log(m)
 	}
 
 	if m.Author.ID == s.State.User.ID {

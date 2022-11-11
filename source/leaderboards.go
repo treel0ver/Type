@@ -242,17 +242,10 @@ func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
 					How_many_texts_in++
 					var what_text = CL[0]
 					var what_WPM, _ = strconv.ParseFloat(CL[3], 64)
-					println(what_text)
-					println(what_WPM)
 					for k := 0; k < len(DB); k++ {
 						var CK = strings.Split(DB[k], " # ")
-						println("CK0: " + CK[0])
 						if CK[0] == what_text && CK[1] != m.Author.ID {
-							println("hola")
 							CK_float, _ := strconv.ParseFloat(CK[3], 64)
-							println(CK_float)
-							print(" > ")
-							println(what_WPM)
 							if CK_float > what_WPM {
 								Not_tops_1++
 							}
@@ -262,9 +255,6 @@ func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 	}
-	println(How_many_texts_in - Not_tops_1)
-	println(Not_tops_1)
-
 	var TOPS = How_many_texts_in - Not_tops_1
 	var TOPS_str = strconv.Itoa(TOPS)
 	s.ChannelMessageSend(m.ChannelID, "```css\nHas participado en "+Stat_list(s, m)+" textos\n"+m.Author.Username+", tienes "+TOPS_str+" tops 1.```")
