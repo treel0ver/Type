@@ -49,7 +49,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if !Is_already_in_top(m) {
 				Calc_WPM(s, m)
 				Is_already_in_top_LOWER(s, m)
-				Show_result(s, m)
 				Save_result(m)
 				Add_exp(s, m, 10001)
 				Show_result(s, m)
