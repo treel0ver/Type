@@ -160,6 +160,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		Show_level(s, m, args)
 	}
 
+	if strings.HasPrefix(strings.ToLower(m.Content), ".perfil") {
+		var args = strings.Split(m.Content, " ")
+		Profile(s, m, args)
+	}
+
+	if strings.HasPrefix(strings.ToLower(m.Content), ".frase") || strings.HasPrefix(strings.ToLower(m.Content), ".quote") {
+		var args = strings.Split(m.Content, " ")
+		Quote(s, m, args)
+	}
+
 	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
 		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"\nhi```")

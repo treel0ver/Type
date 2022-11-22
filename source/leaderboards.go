@@ -394,7 +394,7 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 				}
 			}
 		}
-		if (How_many_texts_in - Not_tops_1) < 1 {
+		if /*(How_many_texts_in - Not_tops_1) < 1*/ false {
 			User_tops = append(User_tops, 0)
 
 		} else {
