@@ -94,6 +94,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		Tops(s, m)
 	}
 
+	if strings.ToLower(m.Content) == ".lb" || strings.ToLower(m.Content) == ".leaderboard" || strings.ToLower(m.Content) == ".leaderboards" {
+		Leaderboards(s, m)
+	}
+
 	if strings.HasPrefix(m.Content, ".topsID") {
 		TopsID(s, m)
 	}
