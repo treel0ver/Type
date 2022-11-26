@@ -5,6 +5,18 @@ Discord bot to measure your typing speed. Type is not a huge project, so it is n
 ![alt text](Example.gif)
 
 ## Build
+1. Clone repository.
 
-`$ go run source/*.go -t TOKEN`
+`git clone https://github.com/YogurtQQ/Type`
 
+2. Change directory into directory.
+
+`cd Type`
+
+3. Change your token at private.sh file.
+
+`nano private.sh`
+
+4. Run.
+
+`sh private.sh`
