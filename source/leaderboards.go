@@ -92,7 +92,7 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```"+λ+"```")
 		s.ChannelMessageSend(m.ChannelID, "```diff\n+ Se encontraron "+FOUND_how_many_times_str+" marcas del texto ID:"+WHERE_str+"\n"+DISPLAY+"```")
 	} else {
-		s.ChannelMessageSend(m.ChannelID, "```diff\n- No se encontró```")
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- No se encontró o no existe.```")
 	}
 
 }

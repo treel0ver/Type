@@ -155,25 +155,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```diff\nLongitud promedio de textos: "+temp2+"\n\n"+"000-100: "+_0s+"\n100-200: "+_100s+"\n200-300: "+_200s+"\n300-400: "+_300s+"\n400-500: "+_400s+"\n500-600: "+_500s+"\n600-700: "+_600s+"```")
 	}
 
-	if strings.HasPrefix(m.Content, ".level") {
-		var args = strings.Split(m.Content, " ")
-		Show_level(s, m, args)
-	}
-
-	if strings.HasPrefix(strings.ToLower(m.Content), ".perfil") {
-		var args = strings.Split(m.Content, " ")
-		Profile(s, m, args)
-	}
-
-	if strings.HasPrefix(strings.ToLower(m.Content), ".frase") || strings.HasPrefix(strings.ToLower(m.Content), ".quote") {
-		var args = strings.Split(m.Content, " ")
-		Quote(s, m, args)
-	}
-
 	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
-		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"\nhi```")
-		s.ChannelMessageSend(m.ChannelID, Date)
+		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date)
+
 	}
 	/*
 		if m.Content == ".load" {

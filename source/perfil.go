@@ -48,11 +48,15 @@ func Load_profiles() {
 func Profile(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 	Load_profiles()
+	var mascot string
 	var exists bool = false
 	for i := range Profiles {
 		var CL = strings.Split(Profiles[i], " # ")
 		if CL[0] == m.Author.ID {
 			exists = true
+			if len(CL) > 3 {
+				mascot = CL[3]
+			}
 		}
 	}
 	if !exists {
@@ -76,7 +80,7 @@ func Profile(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 	var username string
 	var quote string
-	var mascot string = "🐳"
+
 	Load_profiles()
 	for i := range Profiles {
 		var CL = strings.Split(Profiles[i], " # ")
@@ -174,4 +178,67 @@ func Quote(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		}
 	}
 
+}
+
+var Doing_action_Mascot bool
+
+func Mascot(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	var where int
+	var exists bool = false
+	var mascot string
+
+	for i := range Profiles {
+		var CL = strings.Split(Profiles[i], " # ")
+		if CL[0] == m.Author.ID {
+			exists = true
+			where = i
+		}
+	}
+	if exists {
+		if len(args) > 1 {
+			switch args[1] {
+			case "1":
+				mascot = "🐖"
+			case "2":
+				mascot = "🐊"
+			default:
+				mascot = "🐮"
+			}
+			var CL = strings.Split(Profiles[where], " # ")
+			Profiles[where] = m.Author.ID + " # " + m.Author.Username + " # " + CL[2] + " # " + mascot
+			if !Doing_action_Mascot {
+				Doing_action_Mascot = true
+				e := os.Remove("./database/profiles.csv")
+				if e != nil {
+					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+					fmt.Println(e)
+				}
+
+				// create file
+				f, err := os.Create("./database/profiles.csv")
+				if err != nil {
+					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+					fmt.Println(err)
+				}
+				// remember to close the file
+				defer f.Close()
+
+				for _, line := range Profiles {
+					_, err := fmt.Fprintln(f, line)
+					if err != nil {
+						fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+						fmt.Println(err)
+					}
+				}
+
+				s.ChannelMessageSend(m.ChannelID, "```diff\n+ Tu mascota se ha añadido correctamente.```")
+
+				Doing_action_Mascot = false
+			}
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "```diff\n- Necesitas más argumentos.```")
+		}
+	} else {
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- No tienes un perfil. Usa .perfil para crear uno.```")
+	}
 }

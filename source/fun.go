@@ -3,7 +3,11 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"math/rand"
+	"os"
+	"os/exec"
 	"sort"
 	"strconv"
 	"strings"
@@ -107,4 +111,72 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "```css\n"+display_mem+"\n"+display2+"```")
 
 	}
+
+	if strings.HasPrefix(m.Content, ".img") {
+		var args = strings.Split(m.Content, " ")
+
+		e := os.Remove("text_to_img/content")
+		if e != nil {
+			log.Fatal(e)
+		}
+
+		// create file
+		f, err := os.Create("text_to_img/content")
+		if err != nil {
+			log.Fatal(err)
+		}
+		// remember to close the file
+		defer f.Close()
+
+		for _, line := range args {
+			_, err := fmt.Fprintln(f, line)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		cmd := exec.Command("/usr/bin/python3", "/home/ggg/SPACE/Type/text_to_img/text_to_img.py")
+
+		err = cmd.Start()
+		if err != nil {
+			panic(err)
+		}
+
+		cmd.Wait()
+
+		filebytes, err := ioutil.ReadFile("text_to_img/result.png")
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		var abc = string(filebytes[:])
+
+		r := strings.NewReader(abc)
+		s.ChannelFileSend(m.ChannelID, "mori.png", r)
+
+		exec.Command("python3 text_to_img/text_to_img.py").Run()
+	}
+
+	if strings.HasPrefix(m.Content, ".level") {
+		var args = strings.Split(m.Content, " ")
+		Show_level(s, m, args)
+	}
+
+	if strings.HasPrefix(strings.ToLower(m.Content), ".perfil") {
+		var args = strings.Split(m.Content, " ")
+		Profile(s, m, args)
+	}
+
+	if strings.HasPrefix(strings.ToLower(m.Content), ".frase") || strings.HasPrefix(strings.ToLower(m.Content), ".quote") {
+		var args = strings.Split(m.Content, " ")
+		Quote(s, m, args)
+	}
+
+	if strings.HasPrefix(strings.ToLower(m.Content), ".mascota") {
+		var args = strings.Split(m.Content, " ")
+		Mascot(s, m, args)
+	}
+
 }
