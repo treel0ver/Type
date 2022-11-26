@@ -1,1 +1,1 @@
-usr/local/go/bin/go run source/*.go -t tOk5n.g0Es.h5re
+go run source/*.go -t tOk5n.g0Es.h5re
