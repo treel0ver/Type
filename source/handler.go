@@ -3,6 +3,7 @@ package main
 import (
 	"strconv"
 	"strings"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -28,16 +29,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if !(strings.HasPrefix(m.Content, ".")) {
 		return
 	}
-	
-	if m.Content == "jajajear" {
-		s.ChannelMessageSend(m.ChannelID, "noooriii")
-	}
+
 	if strings.ToLower(m.Content) == ".help" {
 		s.ChannelMessageSend(m.ChannelID, "```css\n.t          empieza un test de velocidad\n.tops       muestra el leaderboard de un texto\n.stats      muestra tu número de tops\n.textstats  muestra información de los textos\n.info       infomación para desarrolladores```")
 	}
 
-	if strings.ToLower(m.Content) == ".help fun" {
-		s.ChannelMessageSend(m.ChannelID, "```css\n.ch         pone un gif de Chaeyoung\n.mapache    pone gifs de mapaches\n.go         pone imágenes de Gopher\n.sha256     hashea una cadena de valores en SHA256\n.stb        pasa una cadena de valores al código binario\n.ntb        pasa un número al código binario```")
+	if strings.ToLower(m.Content) == ".help2" {
+		s.ChannelMessageSend(m.ChannelID, "```css\nPerfil\n.perfil     muestra un perfil\n.frase      para cambiar la frase de tu perfil\n.mascota    para cambiar la mascota de tu perfil\n\nHerramientas\n.len        para ver la longitud de un texto\n.img        herramienta para pasar un texto en imagen\n.sha256     hashea una cadena de valores en SHA256\n.stb        pasa una cadena de valores al código binario\n.ntb        pasa un número al código binario\n.csv        herramienta random\n\nFun\n.level      para ver tu nivel\n.ch         pone un gif de chae-young\n.mapache    pone gifs de mapaches\n.go         pone imágenes de Gopher\n```")
 	}
 
 	if strings.HasPrefix(m.Content, ".tops") && !(strings.HasPrefix(m.Content, ".topsID")) {
@@ -62,21 +60,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
-		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date)
-
+		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date+"\n")
 	}
-	/*
-		if m.Content == ".load" {
-			Load_texts()
-			var len_str = strconv.Itoa(len(Texts))
-			s.ChannelMessageSend(m.ChannelID, "```css\nCargados ["+len_str+"] elementos```")
-		}
 
-		if m.Content == ".free" {
-			var len_str = strconv.Itoa(len(Texts))
-			s.ChannelMessageSend(m.ChannelID, "```css\nLiberados ["+len_str+"] elementos```")
-			Free_texts()
-		}
-	*/
 	Fun_commands(s, m)
 }

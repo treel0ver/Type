@@ -249,11 +249,10 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 		WPM_str = fmt.Sprint(WPM_rounded)
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- "+m.Author.Username+", no has terminado correctamente.\nHas cometido "+Errors_str+" errores: "+Error_list+"\nTu resultado hubiera sido: "+WPM_str+" WPM```")
 	}
-
 }
 
 func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
-		if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" || m.ChannelID == "1035687048000053288" {
+	if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" || m.ChannelID == "1035687048000053288" {
 		if strings.ToLower(m.Content) == ".t" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
 			Typing_test(s, m)
 		}
