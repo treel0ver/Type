@@ -16,6 +16,11 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+const (
+	PYTHON_PATH      = "/usr/bin/python3"
+	TEXT_TO_IMG_PATH = "/home/ggg/Type/source/text_to_img/text_to_img.py"
+)
+
 func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.ToLower(m.Content) == ".mapache" {
 		rand.Seed(time.Now().UnixNano())
@@ -115,13 +120,13 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.HasPrefix(m.Content, ".img") {
 		var args = strings.Split(m.Content, " ")
 
-		e := os.Remove("text_to_img/content")
+		e := os.Remove("source/text_to_img/content")
 		if e != nil {
 			log.Fatal(e)
 		}
 
 		// create file
-		f, err := os.Create("text_to_img/content")
+		f, err := os.Create("source/text_to_img/content")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -135,7 +140,7 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 
-		cmd := exec.Command("/usr/bin/python3", "/home/ggg/SPACE/Type/text_to_img/text_to_img.py")
+		cmd := exec.Command(PYTHON_PATH, TEXT_TO_IMG_PATH)
 
 		err = cmd.Start()
 		if err != nil {
@@ -144,7 +149,7 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		cmd.Wait()
 
-		filebytes, err := ioutil.ReadFile("text_to_img/result.png")
+		filebytes, err := ioutil.ReadFile("source/text_to_img/result.png")
 
 		if err != nil {
 			fmt.Println(err)
@@ -155,8 +160,6 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		r := strings.NewReader(abc)
 		s.ChannelFileSend(m.ChannelID, "mori.png", r)
-
-		exec.Command("python3 text_to_img/text_to_img.py").Run()
 	}
 
 	if strings.HasPrefix(m.Content, ".level") {
