@@ -27,10 +27,9 @@ func main() {
 		println("error creating Discord session,", err)
 		return
 	}
-
+	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentGuildMessageTyping
 	dg.AddHandler(messageCreate)
-
-	dg.Identify.Intents = discordgo.IntentsGuildMessages
+	dg.AddHandler(Typing_start_handler)
 
 	err = dg.Open()
 	if err != nil {
@@ -45,7 +44,7 @@ func main() {
 
 	}
 
-	println("[" + time.Now().Format("02/01/2006 15:04:05") + "] ✔️  Type is running")
+	println("[" + time.Now().Format("02/01/2006 15:04:05") + "] ✔️  Type is running\n                                                         \n                                                            \n      ,(%%%%%%%%#,                                          \n      #%(.#%#,/&#*,*/*.  **//**/***///*,    ,*/(//,.        \n      ,...%#, .*  ,&&(. .(%%,.*@@%*,.*#&(./@%/  *#&%,       \n        .(%(       /%&,/#%*  .(@(.   .(%((&&#(((###(,       \n      *(%&&%(,      (@@%/    *%&&%##%%(* *#&%((((#(*        \n                   .(&/.    .(&/.            ...            \n               .(%%%&%*.  .*#&&%(,                          \n                                                            \n                                     .*(#%&&%(*.            \n                                   ./%%(/**/#&%/.           \n                                   .,,,   .,(&%*.           \n                                        ,/#&%/,             \n                                    .,/%&%(*.               \n                                 ,*(%&&#/,,*,.              \n                                *%@@@@&%%%&@%/.             \n                                                            \n                                                            ")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc

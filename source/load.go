@@ -3,12 +3,14 @@ package main
 import (
 	"fmt"
 	"time"
+
 	//"bufio"
-	"log"
 	"io/ioutil"
+	"log"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -30,7 +32,7 @@ func Save_result(m *discordgo.MessageCreate) {
 	}
 	Random_str := strconv.Itoa(Random)
 	if _, err := f.Write([]byte(Random_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + " # " + Text_message_ID + "\n")); err != nil {
-		f.Close() 
+		f.Close()
 		log.Fatal(err)
 	}
 	if err := f.Close(); err != nil {
@@ -38,28 +40,34 @@ func Save_result(m *discordgo.MessageCreate) {
 	}
 }
 
+var changing bool = false
+
 func Update() {
-    e := os.Remove("./database/saved_results.csv")
-    if e != nil {
-        log.Fatal(e)
-    }
+	for true {
+		if !changing {
+			changing = true
+			e := os.Remove("./database/saved_results.csv")
+			if e != nil {
+				log.Fatal(e)
+			}
 
+			f, err := os.Create("./database/saved_results.csv")
+			if err != nil {
+				log.Fatal(err)
+			}
 
+			defer f.Close()
 
-    // create file
-    f, err := os.Create("./database/saved_results.csv")
-    if err != nil {
-        log.Fatal(err)
-    }
-    // remember to close the file
-    defer f.Close()
-
-    for _, line := range DB {
-        _, err := fmt.Fprintln(f, line)
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
+			for _, line := range DB {
+				_, err := fmt.Fprintln(f, line)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			changing = false
+			break
+		}
+	}
 }
 
 func Log(m *discordgo.MessageCreate) {
@@ -68,8 +76,8 @@ func Log(m *discordgo.MessageCreate) {
 		log.Fatal(err)
 	}
 
-	if _, err := f.Write([]byte("[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.ID + ", " + m.Author.Username  + "> " + m.Content + "\n")); err != nil {
-		f.Close() 
+	if _, err := f.Write([]byte("[" + time.Now().Format("02/01/2006 15:04:05") + "] <#" + m.ChannelID + "> " + m.Author.ID + ", " + m.Author.Username + "> " + m.Content + "\n")); err != nil {
+		f.Close()
 		log.Fatal(err)
 	}
 	if err := f.Close(); err != nil {
@@ -89,5 +97,5 @@ func Load_texts() {
 }
 
 func Free_texts() {
- Texts = nil
+	Texts = nil
 }

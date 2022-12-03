@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -10,6 +11,8 @@ import (
 var Last_message string
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+	Admin(s, m)
 
 	Add_exp(s, m, 500)
 
@@ -60,7 +63,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
-		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date+"\n")
+
+		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date+"\n"+
+			fmt.Sprint(Timestamp_temp_typing)+fmt.Sprint(Users_typing))
+
 	}
 
 	Fun_commands(s, m)

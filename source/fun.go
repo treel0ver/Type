@@ -111,9 +111,8 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 		var display_mem = display
 
 		sort.Sort(sort.Reverse(sort.StringSlice(content_arr)))
-		var display2 = fmt.Sprint(display)
 
-		s.ChannelMessageSend(m.ChannelID, "```css\n"+display_mem+"\n"+display2+"```")
+		s.ChannelMessageSend(m.ChannelID, "```css\n"+display_mem+"\n"+fmt.Sprint(content_arr)+"```")
 
 	}
 

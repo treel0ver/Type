@@ -51,6 +51,7 @@ func υ() string {
 }
 
 func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
+	Reset_typing_users()
 	var Now = time.Now().UnixMilli()
 
 	/*
@@ -92,6 +93,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
+	Reset_typing_users()
 	var Now = time.Now().UnixMilli()
 
 	if Now-Requested_when < 3000 {
@@ -117,6 +119,7 @@ func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func TT_dev(s *discordgo.Session, m *discordgo.MessageCreate) {
+	Reset_typing_users()
 	var Now = time.Now().UnixMilli()
 
 	if Now-Requested_when < 3000 {
@@ -309,6 +312,25 @@ func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 				s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Current_text, 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
 			}
 		}
+	}
+
+}
+
+var Users_typing []string
+var How_many_times_added []int
+var Timestamp_temp_typing int
+
+func Reset_typing_users() {
+	Users_typing = nil
+	How_many_times_added = nil
+}
+
+func Typing_start_handler(s *discordgo.Session, t *discordgo.TypingStart) {
+	Timestamp_temp_typing = (t.Timestamp)
+	if !Slice_contains(Users_typing, t.UserID) {
+		Users_typing = append(Users_typing, t.UserID)
+	} else {
+		// add +1 to How_many_times_added in position of Users_typing
 	}
 
 }

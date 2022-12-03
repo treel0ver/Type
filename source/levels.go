@@ -37,31 +37,33 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 
 			Levels[i] = m.Author.ID + " # " + m.Author.Username + " # " + EXP_str
 
-			if !Doing_action {
-				Doing_action = true
-				e := os.Remove("./database/levels.csv")
-				if e != nil {
-					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
-					fmt.Println(e)
-				}
+			for true {
+				if !Doing_action {
+					Doing_action = true
+					e := os.Remove("./database/levels.csv")
+					if e != nil {
+						fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+						fmt.Println(e)
+					}
 
-				// create file
-				f, err := os.Create("./database/levels.csv")
-				if err != nil {
-					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
-					fmt.Println(err)
-				}
-				// remember to close the file
-				defer f.Close()
-
-				for _, line := range Levels {
-					_, err := fmt.Fprintln(f, line)
+					f, err := os.Create("./database/levels.csv")
 					if err != nil {
 						fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
 						fmt.Println(err)
 					}
+
+					defer f.Close()
+
+					for _, line := range Levels {
+						_, err := fmt.Fprintln(f, line)
+						if err != nil {
+							fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+							fmt.Println(err)
+						}
+					}
+					Doing_action = false
+					break
 				}
-				Doing_action = false
 			}
 		}
 	}
