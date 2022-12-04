@@ -14,7 +14,7 @@ import (
 
 var Levels []string
 
-var Doing_action bool
+var changing_levels bool
 
 func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 	Load_levels()
@@ -38,8 +38,8 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 			Levels[i] = m.Author.ID + " # " + m.Author.Username + " # " + EXP_str
 
 			for true {
-				if !Doing_action {
-					Doing_action = true
+				if !changing_levels {
+					changing_levels = true
 					e := os.Remove("./database/levels.csv")
 					if e != nil {
 						fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
@@ -61,27 +61,34 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 							fmt.Println(err)
 						}
 					}
-					Doing_action = false
+					changing_levels = false
 					break
 				}
 			}
 		}
 	}
 	if !exists {
-		f, err := os.OpenFile("./database/levels.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
-			fmt.Println(err)
-		}
+		for true {
+			if !changing_levels {
+				changing_levels = true
+				f, err := os.OpenFile("./database/levels.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+				if err != nil {
+					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+					fmt.Println(err)
+				}
 
-		if _, err := f.Write([]byte(m.Author.ID + " # " + m.Author.Username + " # " + "500\n")); err != nil {
-			f.Close()
-			fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
-			fmt.Println(err)
-		}
-		if err := f.Close(); err != nil {
-			fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
-			fmt.Println(err)
+				if _, err := f.Write([]byte(m.Author.ID + " # " + m.Author.Username + " # " + "500\n")); err != nil {
+					f.Close()
+					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+					fmt.Println(err)
+				}
+				if err := f.Close(); err != nil {
+					fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
+					fmt.Println(err)
+				}
+				changing_levels = false
+				break
+			}
 		}
 	}
 }

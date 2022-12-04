@@ -25,27 +25,34 @@ func Load() {
 	DB = strings.Split(string(fileBytes), "\n")
 }
 
+var changing_saved_results bool = false
+
 func Save_result(m *discordgo.MessageCreate) {
-	f, err := os.OpenFile("./database/saved_results.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	Random_str := strconv.Itoa(Random)
-	if _, err := f.Write([]byte(Random_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + " # " + Text_message_ID + "\n")); err != nil {
-		f.Close()
-		log.Fatal(err)
-	}
-	if err := f.Close(); err != nil {
-		log.Fatal(err)
+	for true {
+		if !changing_saved_results {
+			changing_saved_results = true
+			f, err := os.OpenFile("./database/saved_results.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			if err != nil {
+				log.Fatal(err)
+			}
+			Random_str := strconv.Itoa(Random)
+			if _, err := f.Write([]byte(Random_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + " # " + Text_message_ID + "\n")); err != nil {
+				f.Close()
+				log.Fatal(err)
+			}
+			if err := f.Close(); err != nil {
+				log.Fatal(err)
+			}
+			changing_saved_results = false
+			break
+		}
 	}
 }
 
-var changing bool = false
-
 func Update() {
 	for true {
-		if !changing {
-			changing = true
+		if !changing_saved_results {
+			changing_saved_results = true
 			e := os.Remove("./database/saved_results.csv")
 			if e != nil {
 				log.Fatal(e)
@@ -64,7 +71,7 @@ func Update() {
 					log.Fatal(err)
 				}
 			}
-			changing = false
+			changing_saved_results = false
 			break
 		}
 	}
