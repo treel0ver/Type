@@ -64,10 +64,52 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Content == ".test" {
 		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
 
+		//Currents = append(Currents, Current{"1015972766882738216", 43234.5, 5})
+		//Currents = append(Currents, Current{"654", 23423.5, 8})
+
+		var FF = fmt.Sprint(Currents)
 		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date+"\n"+
-			fmt.Sprint(Timestamp_temp_typing)+fmt.Sprint(Users_typing))
+			fmt.Sprint(Timestamp_temp_typing)+fmt.Sprint(Users_typing)+
+			FF)
 
 	}
 
 	Fun_commands(s, m)
+
+	if m.Content == ".start" {
+		s.AddHandlerOnce(func(s2 *discordgo.Session, m2 *discordgo.MessageCreate) {
+			if m2.Content == ".aa" {
+				s.ChannelMessageSend(m.ChannelID, "``")
+
+			}
+		})
+	}
+
+	/*if m.Content == ".start" {
+		go func() {
+			ch, cls := paginator.NewEventCollector(s, func(s *discordgo.Session, e *discordgo.MessageCreate) bool {
+				return m.Author.ID == e.Author.ID && m.ChannelID == e.ChannelID
+			})
+			defer cls()
+
+			timer := time.NewTimer(time.Second * 5)
+			defer timer.Stop()
+			var messages []string
+		loop:
+			for {
+				select {
+				case <-timer.C:
+					_, _ = s.ChannelMessageSend(m.ChannelID, "timed out")
+					return
+				case e := <-ch:
+					messages = append(messages, e.Content)
+					if len(messages) == 5 {
+						break loop
+					}
+				}
+			}
+			_, _ = s.ChannelMessageSend(m.ChannelID, "messages collected: "+strings.Join(messages, ", "))
+		}()
+	}*/
+
 }

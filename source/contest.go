@@ -11,6 +11,17 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+/* 3.0 Type */
+type Current struct {
+	Channel string
+	Started float64
+	Text_ID int
+}
+
+var Currents []Current
+
+/* 3.0 Type */
+
 var DB []string
 
 var Texts []string
@@ -51,22 +62,13 @@ func υ() string {
 }
 
 func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Reset_typing_users()
-	var Now = time.Now().UnixMilli()
 
-	/*
-		println("-----")
-		println("Now: ")
-		println(Now)
-		println("Started_when: ")
-		println(Started_when)
-		println("diff: ")
-		println(Now - Started_when)
-	*/
+	var Now = time.Now().UnixMilli()
 
 	if Now-Requested_when < 3000 {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
 	} else {
+		Reset_typing_users()
 
 		rand.Seed(time.Now().UnixNano())
 		Random = rand.Intn(How_many_texts())
@@ -89,16 +91,32 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 		var Started_when_time = Text_shown.EditedTimestamp
 		Started_when = Started_when_time.UnixMilli()
 
+		var Started_when_float float64 = float64(Started_when)
+
+		var already_exists bool = false
+		for i, v := range Currents {
+			if v.Channel == m.ChannelID {
+				already_exists = true
+				Currents[i].Channel = m.ChannelID
+				Currents[i].Started = Started_when_float
+				Currents[i].Text_ID = Random
+			}
+		}
+
+		if !already_exists {
+			Currents = append(Currents, Current{m.ChannelID, Started_when_float, Random})
+		}
 	}
 }
 
 func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Reset_typing_users()
 	var Now = time.Now().UnixMilli()
 
 	if Now-Requested_when < 3000 {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
 	} else {
+		Reset_typing_users()
+
 		rand.Seed(time.Now().UnixNano())
 		Random = rand.Intn(458-401) + 401
 		//Random = 76
@@ -115,16 +133,32 @@ func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
 		_ = Text_shown
 		var Started_when_time = Text_shown.EditedTimestamp
 		Started_when = Started_when_time.UnixMilli()
+
+		var Started_when_float float64 = float64(Started_when)
+
+		var already_exists bool = false
+		for i, v := range Currents {
+			if v.Channel == m.ChannelID {
+				already_exists = true
+				Currents[i].Channel = m.ChannelID
+				Currents[i].Started = Started_when_float
+				Currents[i].Text_ID = Random
+			}
+		}
+
+		if !already_exists {
+			Currents = append(Currents, Current{m.ChannelID, Started_when_float, Random})
+		}
 	}
 }
 
 func TT_dev(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Reset_typing_users()
 	var Now = time.Now().UnixMilli()
 
 	if Now-Requested_when < 3000 {
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
 	} else {
+		Reset_typing_users()
 		rand.Seed(time.Now().UnixNano())
 		Random = rand.Intn(468-459) + 459
 		//Random = 459
@@ -141,30 +175,47 @@ func TT_dev(s *discordgo.Session, m *discordgo.MessageCreate) {
 		_ = Text_shown
 		var Started_when_time = Text_shown.EditedTimestamp
 		Started_when = Started_when_time.UnixMilli()
+
+		var Started_when_float float64 = float64(Started_when)
+
+		var already_exists bool = false
+		for i, v := range Currents {
+			if v.Channel == m.ChannelID {
+				already_exists = true
+				Currents[i].Channel = m.ChannelID
+				Currents[i].Started = Started_when_float
+				Currents[i].Text_ID = Random
+			}
+		}
+
+		if !already_exists {
+			Currents = append(Currents, Current{m.ChannelID, Started_when_float, Random})
+		}
 	}
 }
 
-func Judge(m *discordgo.MessageCreate, S string) int8 {
-	if S == Current_text {
+func Judge(m *discordgo.MessageCreate, S string, Text_ID int) int8 {
+	if S == Texts[Text_ID] {
 		return 1
 	}
 
 	var Content_arr = strings.Split(m.Content, " ")
-	var Current_text_arr = strings.Split(Current_text, " ")
+	var Current_text_arr = strings.Split(Texts[Text_ID], " ")
 
 	if Content_arr[0] == Current_text_arr[0] {
-		if len(m.Content) > len(Current_text)-10 {
+		if len(m.Content) > len(Texts[Text_ID])-10 {
 			return 2
 		}
 
-		if len(m.Content) > len(Current_text)-30 {
+		if len(m.Content) > len(Texts[Text_ID])-30 {
 			return 4
 		}
 	}
 	return 3
 }
 
-func Calculate(m *discordgo.MessageCreate) {
+func Calculate(m *discordgo.MessageCreate, Started_when_float float64) {
+
 	var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
 	Date = sent_when.Format("02/01/2006 15:04")
 	var sent_when_unixmilli = sent_when.UnixMilli()
@@ -174,7 +225,7 @@ func Calculate(m *discordgo.MessageCreate) {
 	var length = len([]rune(Current_text))
 	var length_as_a_float float64 = float64(length)
 
-	var Started_when_float float64 = float64(Started_when)
+	//var Started_when_float float64 = float64(Started_when)
 	WPM = length_as_a_float / 5 / ((sent_when_unixmilli_float64 - Started_when_float) - 600) * 60000
 }
 
@@ -255,7 +306,7 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" || m.ChannelID == "1035687048000053288" {
+	if m.ChannelID == "1015104861060210729" || m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" || m.ChannelID == "1035687048000053288" {
 		if strings.ToLower(m.Content) == ".t" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
 			Typing_test(s, m)
 		}
@@ -268,48 +319,54 @@ func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 			TT_dev(s, m)
 		}
 
-		if m.Content == Current_text {
-			Calculate(m)
-			if !Is_already_in_top(m) {
-				Calc_WPM(s, m)
-				Is_already_in_top_LOWER(s, m)
-				Save_result(m)
-				Add_exp(s, m, 10001)
-				Show_result(s, m)
-			} else {
-				Show_result_not_improved(s, m)
-			}
+		for _, v := range Currents {
+			//fmt.Println(m.ChannelID + " == " + v.Channel)
+			if m.ChannelID == v.Channel {
+				//fmt.Println(m.Content + " == " + Texts[v.Text_ID])
+				if m.Content == Texts[v.Text_ID] {
+					Calculate(m, v.Started)
+					if !Is_already_in_top(m, v.Text_ID) {
+						Calc_WPM(s, m)
+						Is_already_in_top_LOWER(s, m, v.Text_ID)
+						Save_result(m, v.Text_ID)
+						Add_exp(s, m, 10001)
+						Show_result(s, m)
+					} else {
+						Show_result_not_improved(s, m)
+					}
 
-			time.Sleep(100 * time.Millisecond)
-			Top(s, m)
+					time.Sleep(100 * time.Millisecond)
+					Top(s, m, v.Text_ID)
 
-		} else if Judge(m, m.Content) == 2 {
-			if !Is_illegal(m.Content) {
-				Calculate(m)
-				Errors_calculate(m.Content, Current_text)
-				Show_result_with_errors(s, m)
+				} else if Judge(m, m.Content, v.Text_ID) == 2 {
+					if !Is_illegal(m.Content) {
+						Calculate(m, v.Started)
+						Errors_calculate(m.Content, Texts[v.Text_ID])
+						Show_result_with_errors(s, m)
 
-				time.Sleep(100 * time.Millisecond)
-				Top(s, m)
-			} else {
-				Calculate(m)
-				Errors_calculate(m.Content, Current_text)
-				//s.ChannelMessageSend(m.ChannelID, "```🤔```")
-				s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Current_text, 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
-			}
-		} else if Judge(m, m.Content) == 4 {
-			if !Is_illegal(m.Content) {
-				/**** s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```") */
-				Calculate(m)
-				Errors_calculate(m.Content, Current_text)
-				//Show_result_with_errors(s, m)
-				time.Sleep(500 * time.Millisecond)
-				/**** Top(s, m) */
-			} else {
-				Calculate(m)
-				Errors_calculate(m.Content, Current_text)
-				//s.ChannelMessageSend(m.ChannelID, "```🤔```")
-				s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Current_text, 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+						time.Sleep(100 * time.Millisecond)
+						Top(s, m, v.Text_ID)
+					} else {
+						Calculate(m, v.Started)
+						Errors_calculate(m.Content, Texts[v.Text_ID])
+						//s.ChannelMessageSend(m.ChannelID, "```🤔```")
+						s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Current_text, 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+					}
+				} else if Judge(m, m.Content, v.Text_ID) == 4 {
+					if !Is_illegal(m.Content) {
+						/**** s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```") */
+						Calculate(m, v.Started)
+						Errors_calculate(m.Content, Texts[v.Text_ID])
+						//Show_result_with_errors(s, m)
+						time.Sleep(500 * time.Millisecond)
+						/**** Top(s, m) */
+					} else {
+						Calculate(m, v.Started)
+						Errors_calculate(m.Content, Texts[v.Text_ID])
+						//s.ChannelMessageSend(m.ChannelID, "```🤔```")
+						s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Current_text, 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+					}
+				}
 			}
 		}
 	}

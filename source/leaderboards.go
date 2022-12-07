@@ -97,8 +97,8 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 }
 
-func Top(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var What = Current_text
+func Top(s *discordgo.Session, m *discordgo.MessageCreate, Text_ID int) {
+	var What = Texts[Text_ID]
 
 	var WHERE int
 	for i := 0; i < len(Texts); i++ {
@@ -238,10 +238,10 @@ func TopsID(s *discordgo.Session, m *discordgo.MessageCreate) {
 var Date_temp string
 var WPM_temp string
 
-func Is_already_in_top(m *discordgo.MessageCreate) bool {
+func Is_already_in_top(m *discordgo.MessageCreate, Text_ID int) bool {
 	Load()
 
-	var Random_str = strconv.Itoa(Random)
+	var Random_str = strconv.Itoa(Text_ID)
 	for i := 0; i < len(DB); i++ {
 		if strings.HasPrefix(DB[i], Random_str) {
 			var CL = strings.Split(DB[i], " # ")
@@ -258,10 +258,10 @@ func Is_already_in_top(m *discordgo.MessageCreate) bool {
 	return false
 }
 
-func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate, Text_ID int) {
 	Load()
 
-	var Random_str = strconv.Itoa(Random)
+	var Random_str = strconv.Itoa(Text_ID)
 	for i := 0; i < len(DB); i++ {
 		if strings.HasPrefix(DB[i], Random_str) {
 			var CL = strings.Split(DB[i], " # ")

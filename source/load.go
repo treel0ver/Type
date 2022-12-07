@@ -27,7 +27,7 @@ func Load() {
 
 var changing_saved_results bool = false
 
-func Save_result(m *discordgo.MessageCreate) {
+func Save_result(m *discordgo.MessageCreate, Text_ID int) {
 	for true {
 		if !changing_saved_results {
 			changing_saved_results = true
@@ -35,7 +35,7 @@ func Save_result(m *discordgo.MessageCreate) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			Random_str := strconv.Itoa(Random)
+			Random_str := strconv.Itoa(Text_ID)
 			if _, err := f.Write([]byte(Random_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + " # " + Text_message_ID + "\n")); err != nil {
 				f.Close()
 				log.Fatal(err)
