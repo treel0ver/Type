@@ -321,7 +321,7 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.ChannelID == "1015104861060210729" || m.ChannelID == "1015972766882738216" || m.ChannelID == "1031313220230709278" || m.ChannelID == "1035687048000053288" {
+	if true {
 		if strings.ToLower(m.Content) == ".t" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
 			Typing_test(s, m)
 		}

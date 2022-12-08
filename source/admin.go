@@ -7,12 +7,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-const (
-	ADMIN_ID string = "910067180706627594"
+var (
+	ADMIN_ID = []string{"910067180706627594"}
 )
 
 func Admin(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.ID == ADMIN_ID {
+	if Slice_contains(ADMIN_ID, m.Author.ID) {
 		var args = strings.Split(m.Content, " ")
 		if strings.HasPrefix(m.Content, "..say ") {
 			var args_str = fmt.Sprint(args[1:])
