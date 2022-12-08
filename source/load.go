@@ -35,8 +35,8 @@ func Save_result(m *discordgo.MessageCreate, Text_ID int) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			Random_str := strconv.Itoa(Text_ID)
-			if _, err := f.Write([]byte(Random_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + " # " + Text_message_ID + "\n")); err != nil {
+			Text_ID_str := strconv.Itoa(Text_ID)
+			if _, err := f.Write([]byte(Text_ID_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + " # " + Text_message_ID + "\n")); err != nil {
 				f.Close()
 				log.Fatal(err)
 			}
