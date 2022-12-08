@@ -60,7 +60,7 @@ func υ(Text string) string {
 	return λ
 }
 
-func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate, Mode string) {
 	var Now = time.Now().UnixMilli()
 	var already_requested bool = true
 
@@ -89,121 +89,64 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate) {
 				rand.Seed(time.Now().UnixNano())
 
 				Currents[i].Channel = m.ChannelID
-				Currents[i].Text_ID = rand.Intn(398-1) + 1
 				Currents[i].Requested = Now
 
-				var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
-				Text_message_ID = Test_message.ID
-				time.Sleep(1 * time.Second)
-				s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 Listos...```")
-				time.Sleep(1 * time.Second)
+				switch Mode {
+				case "Normal":
+					Currents[i].Text_ID = rand.Intn(398-1) + 1
+					var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴 Preparados...```")
+					Text_message_ID = Test_message.ID
+					time.Sleep(1 * time.Second)
+					s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡 Listos...```")
+					time.Sleep(1 * time.Second)
 
-				var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
-				_ = Text_shown
-				var Started_when_time = Text_shown.EditedTimestamp
-				Started_when = Started_when_time.UnixMilli()
+					var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
+					_ = Text_shown
+					var Started_when_time = Text_shown.EditedTimestamp
+					Started_when = Started_when_time.UnixMilli()
 
-				Started_when = Started_when_time.UnixMilli()
+					Started_when = Started_when_time.UnixMilli()
 
-				var Started_when_float float64 = float64(Started_when)
+					var Started_when_float float64 = float64(Started_when)
 
-				Currents[i].Started = Started_when_float
-			}
-		}
-	}
-}
+					Currents[i].Started = Started_when_float
+				case "Short":
+					Currents[i].Text_ID = rand.Intn(458-401) + 401
 
-func TT_short(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var Now = time.Now().UnixMilli()
-	var already_requested bool = true
+					var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴🩳 (Textos cortos) Preparados...```")
+					time.Sleep(1 * time.Second)
+					s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡🤏 (Textos cortos) Listos...```")
+					time.Sleep(1 * time.Second)
 
-	var exists = false
-	for i, v := range Currents {
-		if v.Channel == m.ChannelID {
-			exists = true
-			if Now-v.Requested < 3000 {
-				already_requested = false
-			}
-			Currents[i].Requested = Now
-		}
-	}
+					var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
+					_ = Text_shown
+					var Started_when_time = Text_shown.EditedTimestamp
+					Started_when = Started_when_time.UnixMilli()
 
-	if !exists {
-		Currents = append(Currents, Current{m.ChannelID, 1877777777, Random, Now})
-	}
+					Started_when = Started_when_time.UnixMilli()
 
-	for i, v := range Currents {
-		if v.Channel == m.ChannelID {
-			if !already_requested {
-				s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
-			} else {
-				Reset_typing_users()
+					var Started_when_float float64 = float64(Started_when)
 
-				rand.Seed(time.Now().UnixNano())
+					Currents[i].Started = Started_when_float
+				case "Dev":
+					Currents[i].Text_ID = rand.Intn(468-459) + 459
 
-				Currents[i].Channel = m.ChannelID
-				Currents[i].Text_ID = rand.Intn(458-401) + 401
-				Currents[i].Requested = Now
+					var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴💻 (Programación) Preparados...```")
+					time.Sleep(1 * time.Second)
+					s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡👩🏾‍💻 (Programación) Listos...```")
+					time.Sleep(1 * time.Second)
 
-				var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴🩳 (Textos cortos) Preparados...```")
-				time.Sleep(1 * time.Second)
-				s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡🤏 (Textos cortos) Listos...```")
-				time.Sleep(1 * time.Second)
-				var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
-				var Started_when_time = Text_shown.EditedTimestamp
-				Started_when = Started_when_time.UnixMilli()
+					var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
+					_ = Text_shown
+					var Started_when_time = Text_shown.EditedTimestamp
+					Started_when = Started_when_time.UnixMilli()
 
-				var Started_when_float float64 = float64(Started_when)
+					Started_when = Started_when_time.UnixMilli()
 
-				Currents[i].Started = Started_when_float
-			}
-		}
-	}
-}
+					var Started_when_float float64 = float64(Started_when)
 
-func TT_dev(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var Now = time.Now().UnixMilli()
-	var already_requested bool = true
-
-	var exists = false
-	for i, v := range Currents {
-		if v.Channel == m.ChannelID {
-			exists = true
-			if Now-v.Requested < 3000 {
-				already_requested = false
-			}
-			Currents[i].Requested = Now
-		}
-	}
-
-	if !exists {
-		Currents = append(Currents, Current{m.ChannelID, 1877777777, Random, Now})
-	}
-
-	for i, v := range Currents {
-		if v.Channel == m.ChannelID {
-			if !already_requested {
-				s.ChannelMessageSend(m.ChannelID, "```diff\n- Espera un poco.```")
-			} else {
-				Reset_typing_users()
-
-				rand.Seed(time.Now().UnixNano())
-
-				Currents[i].Channel = m.ChannelID
-				Currents[i].Text_ID = rand.Intn(468-459) + 459
-				Currents[i].Requested = Now
-
-				var Test_message, _ = s.ChannelMessageSend(m.ChannelID, "```🔴💻 (Programación) Preparados...```")
-				time.Sleep(1 * time.Second)
-				s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "```🟡👩🏾‍💻 (Programación) Listos...```")
-				time.Sleep(1 * time.Second)
-				var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
-				_ = Text_shown
-				var Started_when_time = Text_shown.EditedTimestamp
-				Started_when = Started_when_time.UnixMilli()
-				var Started_when_float float64 = float64(Started_when)
-
-				Currents[i].Started = Started_when_float
+					Currents[i].Started = Started_when_float
+				}
 			}
 		}
 	}
@@ -323,15 +266,15 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
 func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if true {
 		if strings.ToLower(m.Content) == ".t" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
-			Typing_test(s, m)
+			Typing_test(s, m, "Normal")
 		}
 
 		if strings.ToLower(m.Content) == ".t short" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
-			TT_short(s, m)
+			Typing_test(s, m, "Short")
 		}
 
 		if strings.ToLower(m.Content) == ".t dev" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
-			TT_dev(s, m)
+			Typing_test(s, m, "Dev")
 		}
 
 		for _, v := range Currents {
@@ -405,5 +348,4 @@ func Typing_start_handler(s *discordgo.Session, t *discordgo.TypingStart) {
 	} else {
 		// add +1 to How_many_times_added in position of Users_typing
 	}
-
 }
