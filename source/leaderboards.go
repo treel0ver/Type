@@ -368,8 +368,8 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 		var Texts_where_user_is_in []string
 
 		var How_many_texts_in int
-		var Not_tops_1 int
 
+		var Tops_1 int
 		Load()
 		for i := 0; i < len(DB); i++ {
 			var CL = strings.Split(DB[i], " # ")
@@ -381,14 +381,21 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 						How_many_texts_in++
 						var what_text = CL[0]
 						var what_WPM, _ = strconv.ParseFloat(CL[3], 64)
+
+						var Not_top bool = false
 						for k := 0; k < len(DB); k++ {
+
 							var CK = strings.Split(DB[k], " # ")
 							if CK[0] == what_text && CK[1] != User_ID_list[u] {
 								CK_float, _ := strconv.ParseFloat(CK[3], 64)
 								if CK_float > what_WPM {
-									Not_tops_1++
+									Not_top = true
 								}
 							}
+
+						}
+						if Not_top == false {
+							Tops_1++
 						}
 					}
 				}
@@ -398,7 +405,7 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 			User_tops = append(User_tops, 0)
 
 		} else {
-			User_tops = append(User_tops, How_many_texts_in-Not_tops_1)
+			User_tops = append(User_tops, Tops_1)
 		}
 	}
 
