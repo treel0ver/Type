@@ -41,7 +41,7 @@ func Save_result(m *discordgo.MessageCreate, Text_ID int, wpm float64) {
 				log.Fatal(err)
 			}
 			Text_ID_str := strconv.Itoa(Text_ID)
-			if _, err := f.Write([]byte(Text_ID_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + wpm_str + " # " + time.Now().Format("02/01/2006 15:04:05") + " # " + wpm_str_save + " # " + m.Message.ID + "\n")); err != nil {
+			if _, err := f.Write([]byte(Text_ID_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + wpm_str + " # " + time.Now().Format("02/01/2006 15:04") + " # " + wpm_str_save + " # " + m.Message.ID + "\n")); err != nil {
 				f.Close()
 				log.Fatal(err)
 			}
