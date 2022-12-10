@@ -40,7 +40,7 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			} else {
 				var CL = strings.Split(DB[i], " # ")
-				WPM_f64, _ := strconv.ParseFloat(CL[3], 8)
+				WPM_f64, _ := strconv.ParseFloat(CL[5], 8)
 
 				slice = Two_Slices{
 					WPM_f64, CL[2], CL[4],
@@ -120,7 +120,7 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate, Text_ID int) {
 
 			} else {
 				var CL = strings.Split(DB[i], " # ")
-				WPM_f64, _ := strconv.ParseFloat(CL[3], 8)
+				WPM_f64, _ := strconv.ParseFloat(CL[5], 8)
 
 				slice = Two_Slices{
 					WPM_f64, CL[2], CL[4],
@@ -178,7 +178,7 @@ func TopsID(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			} else {
 				var CL = strings.Split(DB[i], " # ")
-				WPM_f64, _ := strconv.ParseFloat(CL[3], 8)
+				WPM_f64, _ := strconv.ParseFloat(CL[5], 8)
 
 				slice = Two_Slices{
 					WPM_f64, CL[2], CL[4],
@@ -238,7 +238,7 @@ func TopsID(s *discordgo.Session, m *discordgo.MessageCreate) {
 var Date_temp string
 var WPM_temp string
 
-func Is_already_in_top(m *discordgo.MessageCreate, Text_ID int) bool {
+func Is_already_in_top(m *discordgo.MessageCreate, Text_ID int, wpm float64) bool {
 	Load()
 
 	var Random_str = strconv.Itoa(Text_ID)
@@ -246,8 +246,8 @@ func Is_already_in_top(m *discordgo.MessageCreate, Text_ID int) bool {
 		if strings.HasPrefix(DB[i], Random_str) {
 			var CL = strings.Split(DB[i], " # ")
 			if CL[1] == m.Author.ID {
-				CL_f64, _ := strconv.ParseFloat(CL[3], 8)
-				if CL_f64 > WPM {
+				CL_f64, _ := strconv.ParseFloat(CL[5], 8)
+				if CL_f64 > wpm {
 					Date_temp = CL[4]
 					WPM_temp = CL[3]
 					return true
@@ -258,7 +258,7 @@ func Is_already_in_top(m *discordgo.MessageCreate, Text_ID int) bool {
 	return false
 }
 
-func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate, Text_ID int) {
+func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate, Text_ID int, wpm float64) {
 	Load()
 
 	var Random_str = strconv.Itoa(Text_ID)
@@ -266,8 +266,8 @@ func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate, T
 		if strings.HasPrefix(DB[i], Random_str) {
 			var CL = strings.Split(DB[i], " # ")
 			if CL[1] == m.Author.ID {
-				CL_f64, _ := strconv.ParseFloat(CL[3], 8)
-				if CL_f64 < WPM {
+				CL_f64, _ := strconv.ParseFloat(CL[5], 8)
+				if CL_f64 < wpm {
 					Delete_last_score_because_improved = true
 					Date_temp = CL[4]
 					WPM_temp = CL[3]
@@ -280,8 +280,6 @@ func Is_already_in_top_LOWER(s *discordgo.Session, m *discordgo.MessageCreate, T
 }
 
 func Stat_list(s *discordgo.Session, m *discordgo.MessageCreate) string {
-	//var Tops_1 = 0
-
 	var stats string
 	var C int
 
@@ -319,15 +317,18 @@ func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
 					Texts_where_user_is_in = append(Texts_where_user_is_in, CL[0])
 					How_many_texts_in++
 					var what_text = CL[0]
-					var what_WPM, _ = strconv.ParseFloat(CL[3], 64)
+					var what_WPM, _ = strconv.ParseFloat(CL[5], 64)
 
 					var Not_top bool = false
 					for k := 0; k < len(DB); k++ {
 						var CK = strings.Split(DB[k], " # ")
 						if CK[0] == what_text && CK[1] != m.Author.ID {
-							CK_float, _ := strconv.ParseFloat(CK[3], 64)
-							if CK_float > what_WPM {
-								Not_top = true
+							if len(CK) > 5 {
+								CK_float, _ := strconv.ParseFloat(CK[5], 64)
+
+								if CK_float > what_WPM {
+									Not_top = true
+								}
 							}
 						}
 					}
@@ -377,21 +378,24 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 		Load()
 		for i := 0; i < len(DB); i++ {
 			var CL = strings.Split(DB[i], " # ")
-			if len(CL) > 1 {
+			if len(CL) > 5 {
 				if CL[1] == User_ID_list[u] {
 					if !(Slice_contains(Texts_where_user_is_in, CL[0])) {
 						Texts_where_user_is_in = append(Texts_where_user_is_in, CL[0])
 						How_many_texts_in++
 						var what_text = CL[0]
-						var what_WPM, _ = strconv.ParseFloat(CL[3], 64)
+						var what_WPM, _ = strconv.ParseFloat(CL[5], 64)
 
 						var Not_top bool = false
 						for k := 0; k < len(DB); k++ {
 							var CK = strings.Split(DB[k], " # ")
 							if CK[0] == what_text && CK[1] != User_ID_list[u] {
-								CK_float, _ := strconv.ParseFloat(CK[3], 64)
-								if CK_float > what_WPM {
-									Not_top = true
+								if len(CK) > 5 {
+									CK_float, _ := strconv.ParseFloat(CK[5], 64)
+
+									if CK_float > what_WPM {
+										Not_top = true
+									}
 								}
 							}
 						}

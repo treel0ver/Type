@@ -16,6 +16,7 @@ type Current struct {
 	Started   float64
 	Text_ID   int
 	Requested int64
+	WPM       float64
 }
 
 var Currents []Current
@@ -35,9 +36,9 @@ var Requested_when = time.Now().UnixMilli()
 
 var Text_message_ID string
 
-var WPM float64
-var WPM_str string
-var WPM_str_save string
+// bye, WPM
+// bye, WPM_str
+// bye, WPM_str_save
 
 var Random int
 
@@ -76,7 +77,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate, Mode string) 
 	}
 
 	if !exists {
-		Currents = append(Currents, Current{m.ChannelID, 1877777777, Random, Now})
+		Currents = append(Currents, Current{m.ChannelID, 1877777777, Random, Now, 0})
 	}
 
 	for i, v := range Currents {
@@ -172,8 +173,7 @@ func Judge(m *discordgo.MessageCreate, S string, Text_ID int) int8 {
 	return 3
 }
 
-func Calculate(m *discordgo.MessageCreate, Started_when_float float64, Text string) {
-
+func Calculate(m *discordgo.MessageCreate, Started_when_float float64, Text string) float64 {
 	var sent_when, _ = SnowflakeTimestamp(m.Message.ID)
 	Date = sent_when.Format("02/01/2006 15:04")
 	var sent_when_unixmilli = sent_when.UnixMilli()
@@ -183,8 +183,8 @@ func Calculate(m *discordgo.MessageCreate, Started_when_float float64, Text stri
 	var length = len([]rune(Text))
 	var length_as_a_float float64 = float64(length)
 
-	//var Started_when_float float64 = float64(Started_when)
-	WPM = length_as_a_float / 5 / ((sent_when_unixmilli_float64 - Started_when_float) - 600) * 60000
+	var wpm = length_as_a_float / 5 / ((sent_when_unixmilli_float64 - Started_when_float) - 600) * 60000
+	return wpm
 }
 
 var Error_list string
@@ -228,31 +228,28 @@ func Errors_calculate(sent string, current string) {
 
 var Delete_last_score_because_improved bool = false
 
-func Show_result(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Show_result(s *discordgo.Session, m *discordgo.MessageCreate, wpm float64) {
+	var wpm_rounded = (math.Round(wpm*10) / 10)
+	var wpm_str = fmt.Sprint(wpm_rounded)
+
 	if !Delete_last_score_because_improved {
-		s.ChannelMessageSend(m.ChannelID, "```diff\n+ "+m.Author.Username+", has terminado.\nTu resultado es: "+WPM_str+" WPM```")
+		s.ChannelMessageSend(m.ChannelID, "```diff\n+ "+m.Author.Username+", has terminado.\nTu resultado es: "+wpm_str+" WPM```")
 	} else {
-		s.ChannelMessageSend(m.ChannelID, "```diff\n+ ¡"+m.Author.Username+", has superado tu anterior marca de "+WPM_temp+" WPM de la fecha "+Date_temp+"!\nTu resultado es: "+WPM_str+" WPM```")
+		s.ChannelMessageSend(m.ChannelID, "```diff\n+ ¡"+m.Author.Username+", has superado tu anterior marca de "+WPM_temp+" WPM de la fecha "+Date_temp+"!\nTu resultado es: "+wpm_str+" WPM```")
 		Delete_last_score_because_improved = false
 	}
 }
 
-func Calc_WPM(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var WPM_rounded = (math.Round(WPM*10) / 10)
-	WPM_str = fmt.Sprint(WPM_rounded)
-
-	WPM_str_save = fmt.Sprint(WPM)
-}
-
-func Show_result_not_improved(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var WPM_rounded = (math.Round(WPM*10) / 10)
-	WPM_str = fmt.Sprint(WPM_rounded)
-
+func Show_result_not_improved(s *discordgo.Session, m *discordgo.MessageCreate, wpm float64) {
+	var WPM_rounded = (math.Round(wpm*10) / 10)
+	var WPM_str = fmt.Sprint(WPM_rounded)
 	s.ChannelMessageSend(m.ChannelID, "```diff\n- No has superado tu anterior marca de "+WPM_temp+" WPM de la fecha "+Date_temp+", "+m.Author.Username+".\nTu resultado es: "+WPM_str+" WPM```")
 }
 
-func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var WPM_rounded = (math.Round(WPM*10) / 10)
+func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate, wpm float64) {
+	var WPM_rounded = (math.Round(wpm*10) / 10)
+	var WPM_str = fmt.Sprint(WPM_rounded)
+
 	if Errors < 1 {
 		WPM_str = fmt.Sprint(WPM_rounded)
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- "+m.Author.Username+", no has terminado correctamente.\nPusiste una palabra de más o un doble espacio, así que no se pudieron calcular tus errores.\nTu resultado hubiera sido: "+WPM_str+" WPM```")
@@ -277,21 +274,19 @@ func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Typing_test(s, m, "Dev")
 		}
 
-		for _, v := range Currents {
-			//fmt.Println(m.ChannelID + " == " + v.Channel)
+		for i, v := range Currents {
 			if m.ChannelID == v.Channel {
-				//fmt.Println(m.Content + " == " + Texts[v.Text_ID])
 				if m.Content == Texts[v.Text_ID] {
-					//fmt.Println(v.Started)
-					Calculate(m, v.Started, Texts[v.Text_ID])
-					if !Is_already_in_top(m, v.Text_ID) {
-						Calc_WPM(s, m)
-						Is_already_in_top_LOWER(s, m, v.Text_ID)
-						Save_result(m, v.Text_ID)
+					Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
+					/*var date_temp string
+					var wpm_temp string*/
+					if !Is_already_in_top(m, v.Text_ID, Currents[i].WPM) {
+						Is_already_in_top_LOWER(s, m, v.Text_ID, Currents[i].WPM)
+						Save_result(m, v.Text_ID, Currents[i].WPM)
 						Add_exp(s, m, 10001)
-						Show_result(s, m)
+						Show_result(s, m, Currents[i].WPM)
 					} else {
-						Show_result_not_improved(s, m)
+						Show_result_not_improved(s, m, Currents[i].WPM)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -301,7 +296,7 @@ func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 					if !Is_illegal(m.Content) {
 						Calculate(m, v.Started, Texts[v.Text_ID])
 						Errors_calculate(m.Content, Texts[v.Text_ID])
-						Show_result_with_errors(s, m)
+						Show_result_with_errors(s, m, Currents[i].WPM)
 
 						time.Sleep(100 * time.Millisecond)
 						Top(s, m, v.Text_ID)

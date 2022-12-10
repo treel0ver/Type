@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	//"bufio"
@@ -27,7 +28,11 @@ func Load() {
 
 var changing_saved_results bool = false
 
-func Save_result(m *discordgo.MessageCreate, Text_ID int) {
+func Save_result(m *discordgo.MessageCreate, Text_ID int, wpm float64) {
+	var WPM_rounded = (math.Round(wpm*10) / 10)
+	var wpm_str = fmt.Sprint(WPM_rounded)
+	var wpm_str_save = fmt.Sprint(wpm)
+
 	for true {
 		if !changing_saved_results {
 			changing_saved_results = true
@@ -36,7 +41,7 @@ func Save_result(m *discordgo.MessageCreate, Text_ID int) {
 				log.Fatal(err)
 			}
 			Text_ID_str := strconv.Itoa(Text_ID)
-			if _, err := f.Write([]byte(Text_ID_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + WPM_str + " # " + Date + " # " + WPM_str_save + " # " + m.Message.ID + "\n")); err != nil {
+			if _, err := f.Write([]byte(Text_ID_str + " # " + m.Author.ID + " # " + m.Author.Username + " # " + wpm_str + " # " + time.Now().Format("02/01/2006 15:04:05") + " # " + wpm_str_save + " # " + m.Message.ID + "\n")); err != nil {
 				f.Close()
 				log.Fatal(err)
 			}
@@ -101,8 +106,4 @@ func Load_texts() {
 	}
 
 	Texts = strings.Split(string(fileBytes), "\n")
-}
-
-func Free_texts() {
-	Texts = nil
 }
