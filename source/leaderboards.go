@@ -58,7 +58,7 @@ func Tops(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	var DISPLAY string
 	var C int = 1
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		if i != 0 {
 			if i > len(ts)-1 {
 				var C_str = strconv.Itoa(C)
@@ -307,7 +307,7 @@ func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var Texts_where_user_is_in []string
 
 	var How_many_texts_in int
-	var Not_tops_1 int
+	var Tops_1 int
 
 	Load()
 	for i := 0; i < len(DB); i++ {
@@ -320,28 +320,33 @@ func Stats(s *discordgo.Session, m *discordgo.MessageCreate) {
 					How_many_texts_in++
 					var what_text = CL[0]
 					var what_WPM, _ = strconv.ParseFloat(CL[3], 64)
+
+					var Not_top bool = false
 					for k := 0; k < len(DB); k++ {
 						var CK = strings.Split(DB[k], " # ")
 						if CK[0] == what_text && CK[1] != m.Author.ID {
 							CK_float, _ := strconv.ParseFloat(CK[3], 64)
 							if CK_float > what_WPM {
-								Not_tops_1++
+								Not_top = true
 							}
 						}
+					}
+					if Not_top == false {
+						Tops_1++
 					}
 				}
 			}
 		}
 	}
-	var TOPS = How_many_texts_in - Not_tops_1
-	var TOPS_str = strconv.Itoa(TOPS)
+	var TOPS_str = strconv.Itoa(Tops_1)
 	s.ChannelMessageSend(m.ChannelID, "```css\nHas participado en "+Stat_list(s, m)+" textos\n"+m.Author.Username+", tienes "+TOPS_str+" tops 1.```")
 }
 
 type Two_Slices2 struct {
-	User_list    string
-	User_ID_list string
-	User_tops    int
+	User_list              string
+	User_ID_list           string
+	User_tops              int
+	User_how_many_texts_in int
 }
 
 func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -350,6 +355,7 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var User_list []string
 	var User_ID_list []string
 	var User_tops []int
+	var User_how_many_texts_in []int
 
 	Load()
 
@@ -357,7 +363,6 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 		var CL = strings.Split(DB[i], " # ")
 		if len(CL) > 1 {
 			if !Slice_contains(User_list, CL[2]) && CL[1] != "0" {
-
 				User_list = append(User_list, CL[2])
 				User_ID_list = append(User_ID_list, CL[1])
 			}
@@ -366,14 +371,12 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	for u := 0; u < len(User_list); u++ {
 		var Texts_where_user_is_in []string
-
 		var How_many_texts_in int
-
 		var Tops_1 int
+
 		Load()
 		for i := 0; i < len(DB); i++ {
 			var CL = strings.Split(DB[i], " # ")
-			/* Check if is not empty line */
 			if len(CL) > 1 {
 				if CL[1] == User_ID_list[u] {
 					if !(Slice_contains(Texts_where_user_is_in, CL[0])) {
@@ -384,7 +387,6 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 						var Not_top bool = false
 						for k := 0; k < len(DB); k++ {
-
 							var CK = strings.Split(DB[k], " # ")
 							if CK[0] == what_text && CK[1] != User_ID_list[u] {
 								CK_float, _ := strconv.ParseFloat(CK[3], 64)
@@ -392,7 +394,6 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 									Not_top = true
 								}
 							}
-
 						}
 						if Not_top == false {
 							Tops_1++
@@ -401,11 +402,12 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 				}
 			}
 		}
-		if /*(How_many_texts_in - Not_tops_1) < 1*/ false {
+		if false {
 			User_tops = append(User_tops, 0)
 
 		} else {
 			User_tops = append(User_tops, Tops_1)
+			User_how_many_texts_in = append(User_how_many_texts_in, How_many_texts_in)
 		}
 	}
 
@@ -419,7 +421,7 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 	*/
 	for i := range User_list {
 		slice2 = Two_Slices2{
-			User_list[i], User_ID_list[i], User_tops[i],
+			User_list[i], User_ID_list[i], User_tops[i], User_how_many_texts_in[i],
 		}
 		ts2 = append(ts2, slice2)
 	}
@@ -434,9 +436,13 @@ func Leaderboards(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var c int
 	for i := range ts2 {
 		c++
+		if c > 10 {
+			break
+		}
 		var c_str = strconv.Itoa(c)
 		var ts2i_User_tops_str = strconv.Itoa(ts2[i].User_tops)
-		result = result + "\n" + c_str + ". " + fmt.Sprint(ts2[i].User_list+" con "+ts2i_User_tops_str+" tops 1.")
+		var ts2i_User_how_many_texts_in_str = strconv.Itoa(ts2[i].User_how_many_texts_in)
+		result = result + "\n" + c_str + ". " + fmt.Sprint(ts2[i].User_list+" con "+ts2i_User_tops_str+" tops 1 en "+ts2i_User_how_many_texts_in_str+" textos.")
 	}
 
 	s.ChannelMessageSend(m.ChannelID, "```css\n📈 Leaderboards\n"+result+"```")
