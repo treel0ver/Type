@@ -260,6 +260,8 @@ func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate, w
 	}
 }
 
+var check bool = false
+
 func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if true {
 		if strings.ToLower(m.Content) == ".t" && !strings.HasPrefix(strings.ToLower(m.Content), ".tops") && !strings.HasPrefix(strings.ToLower(m.Content), ".textstats") {
@@ -274,53 +276,60 @@ func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Typing_test(s, m, "Dev")
 		}
 
-		for i, v := range Currents {
-			if m.ChannelID == v.Channel {
-				if m.Content == Texts[v.Text_ID] {
-					Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
-					/*var date_temp string
-					var wpm_temp string*/
-					if !Is_already_in_top(m, v.Text_ID, Currents[i].WPM) {
-						Is_already_in_top_LOWER(s, m, v.Text_ID, Currents[i].WPM)
-						Save_result(m, v.Text_ID, Currents[i].WPM)
-						Add_exp(s, m, 10001)
-						Show_result(s, m, Currents[i].WPM)
-					} else {
-						Show_result_not_improved(s, m, Currents[i].WPM)
-					}
+		for true {
+			if !check {
+				check = true
+				for i, v := range Currents {
+					if m.ChannelID == v.Channel {
+						if m.Content == Texts[v.Text_ID] {
+							Currents[i].WPM = Calculate(m, Currents[i].Started, Texts[v.Text_ID])
+							/*var date_temp string
+							var wpm_temp string*/
+							if !Is_already_in_top(m, v.Text_ID, Currents[i].WPM) {
+								Is_already_in_top_LOWER(s, m, v.Text_ID, Currents[i].WPM)
+								Save_result(m, v.Text_ID, Currents[i].WPM)
+								Add_exp(s, m, 10001)
+								Show_result(s, m, Currents[i].WPM)
+							} else {
+								Show_result_not_improved(s, m, Currents[i].WPM)
+							}
 
-					time.Sleep(100 * time.Millisecond)
-					Top(s, m, v.Text_ID)
+							time.Sleep(100 * time.Millisecond)
+							Top(s, m, v.Text_ID)
 
-				} else if Judge(m, m.Content, v.Text_ID) == 2 {
-					if !Is_illegal(m.Content) {
-						Calculate(m, v.Started, Texts[v.Text_ID])
-						Errors_calculate(m.Content, Texts[v.Text_ID])
-						Show_result_with_errors(s, m, Currents[i].WPM)
+						} else if Judge(m, m.Content, v.Text_ID) == 2 {
+							if !Is_illegal(m.Content) {
+								Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
+								Errors_calculate(m.Content, Texts[v.Text_ID])
+								Show_result_with_errors(s, m, Currents[i].WPM)
 
-						time.Sleep(100 * time.Millisecond)
-						Top(s, m, v.Text_ID)
-					} else {
-						Calculate(m, v.Started, Texts[v.Text_ID])
-						Errors_calculate(m.Content, Texts[v.Text_ID])
-						//s.ChannelMessageSend(m.ChannelID, "```🤔```")
-						s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
-					}
-				} else if Judge(m, m.Content, v.Text_ID) == 4 {
-					if !Is_illegal(m.Content) {
-						/**** s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```") */
-						Calculate(m, v.Started, Texts[v.Text_ID])
-						Errors_calculate(m.Content, Texts[v.Text_ID])
-						//Show_result_with_errors(s, m)
-						time.Sleep(500 * time.Millisecond)
-						/**** Top(s, m) */
-					} else {
-						Calculate(m, v.Started, Texts[v.Text_ID])
-						Errors_calculate(m.Content, Texts[v.Text_ID])
-						//s.ChannelMessageSend(m.ChannelID, "```🤔```")
-						s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+								time.Sleep(100 * time.Millisecond)
+								Top(s, m, v.Text_ID)
+							} else {
+								Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
+								Errors_calculate(m.Content, Texts[v.Text_ID])
+								//s.ChannelMessageSend(m.ChannelID, "```🤔```")
+								s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+							}
+						} else if Judge(m, m.Content, v.Text_ID) == 4 {
+							if !Is_illegal(m.Content) {
+								/**** s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```") */
+								Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
+								Errors_calculate(m.Content, Texts[v.Text_ID])
+								//Show_result_with_errors(s, m)
+								time.Sleep(500 * time.Millisecond)
+								/**** Top(s, m) */
+							} else {
+								Calculate(m, v.Started, Texts[v.Text_ID])
+								Errors_calculate(m.Content, Texts[v.Text_ID])
+								//s.ChannelMessageSend(m.ChannelID, "```🤔```")
+								s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+							}
+						}
 					}
 				}
+				check = false
+				break
 			}
 		}
 	}
