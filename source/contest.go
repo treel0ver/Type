@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
-	"strconv"
 	"strings"
 	"time"
 
@@ -12,11 +11,13 @@ import (
 )
 
 type Current struct {
-	Channel   string
-	Started   float64
-	Text_ID   int
-	Requested int64
-	WPM       float64
+	Channel    string
+	Started    float64
+	Text_ID    int
+	Requested  int64
+	WPM        float64
+	Errors     int
+	Error_list string
 }
 
 var Currents []Current
@@ -27,18 +28,7 @@ var Texts []string
 
 var Date string
 
-// bye, Current_text
-
-var Is_started bool
-
-var Started_when = time.Now().UnixMilli()
-var Requested_when = time.Now().UnixMilli()
-
 var Text_message_ID string
-
-// bye, WPM
-// bye, WPM_str
-// bye, WPM_str_save
 
 var Random int
 
@@ -77,7 +67,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate, Mode string) 
 	}
 
 	if !exists {
-		Currents = append(Currents, Current{m.ChannelID, 1877777777, Random, Now, 0})
+		Currents = append(Currents, Current{m.ChannelID, 1877777777, Random, Now, 0, 0, ""})
 	}
 
 	for i, v := range Currents {
@@ -104,7 +94,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate, Mode string) 
 					var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
 					_ = Text_shown
 					var Started_when_time = Text_shown.EditedTimestamp
-					Started_when = Started_when_time.UnixMilli()
+					var Started_when = Started_when_time.UnixMilli()
 
 					Started_when = Started_when_time.UnixMilli()
 
@@ -122,7 +112,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate, Mode string) 
 					var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
 					_ = Text_shown
 					var Started_when_time = Text_shown.EditedTimestamp
-					Started_when = Started_when_time.UnixMilli()
+					var Started_when = Started_when_time.UnixMilli()
 
 					Started_when = Started_when_time.UnixMilli()
 
@@ -140,7 +130,7 @@ func Typing_test(s *discordgo.Session, m *discordgo.MessageCreate, Mode string) 
 					var Text_shown, _ = s.ChannelMessageEdit(m.ChannelID, Test_message.ID, "**"+υ(Texts[Currents[i].Text_ID])+"**")
 					_ = Text_shown
 					var Started_when_time = Text_shown.EditedTimestamp
-					Started_when = Started_when_time.UnixMilli()
+					var Started_when = Started_when_time.UnixMilli()
 
 					Started_when = Started_when_time.UnixMilli()
 
@@ -187,15 +177,16 @@ func Calculate(m *discordgo.MessageCreate, Started_when_float float64, Text stri
 	return wpm
 }
 
+/*
 var Error_list string
 var Errors int
 var Errors_str string
-
-func Errors_calculate(sent string, current string) {
+*/
+func Errors_calculate(sent string, current string) (int, string) {
 
 	/* reseting */
-	Errors = 0
-	Error_list = ""
+	var Errors = 0
+	var Error_list = ""
 
 	A := sent
 	sent_arrayed := strings.Split(A, " ")
@@ -223,7 +214,9 @@ func Errors_calculate(sent string, current string) {
 		}
 	*/
 
-	Errors_str = strconv.FormatInt(int64(Errors), 10)
+	//Errors_str = strconv.FormatInt(int64(Errors), 10)
+
+	return Errors, Error_list
 }
 
 var Delete_last_score_because_improved bool = false
@@ -246,17 +239,17 @@ func Show_result_not_improved(s *discordgo.Session, m *discordgo.MessageCreate, 
 	s.ChannelMessageSend(m.ChannelID, "```diff\n- No has superado tu anterior marca de "+WPM_temp+" WPM de la fecha "+Date_temp+", "+m.Author.Username+".\nTu resultado es: "+WPM_str+" WPM```")
 }
 
-func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate, wpm float64) {
+func Show_result_with_errors(s *discordgo.Session, m *discordgo.MessageCreate, wpm float64, errors int, error_list string) {
 	var WPM_rounded = (math.Round(wpm*10) / 10)
 	var WPM_str = fmt.Sprint(WPM_rounded)
 
-	if Errors < 1 {
+	if errors < 1 {
 		WPM_str = fmt.Sprint(WPM_rounded)
 		s.ChannelMessageSend(m.ChannelID, "```diff\n- "+m.Author.Username+", no has terminado correctamente.\nPusiste una palabra de más o un doble espacio, así que no se pudieron calcular tus errores.\nTu resultado hubiera sido: "+WPM_str+" WPM```")
 
 	} else {
 		WPM_str = fmt.Sprint(WPM_rounded)
-		s.ChannelMessageSend(m.ChannelID, "```diff\n- "+m.Author.Username+", no has terminado correctamente.\nHas cometido "+Errors_str+" errores: "+Error_list+"\nTu resultado hubiera sido: "+WPM_str+" WPM```")
+		s.ChannelMessageSend(m.ChannelID, "```diff\n- "+m.Author.Username+", no has terminado correctamente.\nHas cometido "+fmt.Sprint(errors)+" errores: "+error_list+"\nTu resultado hubiera sido: "+WPM_str+" WPM```")
 	}
 }
 
@@ -300,30 +293,30 @@ func Contest(s *discordgo.Session, m *discordgo.MessageCreate) {
 						} else if Judge(m, m.Content, v.Text_ID) == 2 {
 							if !Is_illegal(m.Content) {
 								Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
-								Errors_calculate(m.Content, Texts[v.Text_ID])
-								Show_result_with_errors(s, m, Currents[i].WPM)
+								Currents[i].Errors, Currents[i].Error_list = Errors_calculate(m.Content, Texts[v.Text_ID])
+								Show_result_with_errors(s, m, Currents[i].WPM, Currents[i].Errors, Currents[i].Error_list)
 
 								time.Sleep(100 * time.Millisecond)
 								Top(s, m, v.Text_ID)
 							} else {
 								Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
-								Errors_calculate(m.Content, Texts[v.Text_ID])
+								Currents[i].Errors, Currents[i].Error_list = Errors_calculate(m.Content, Texts[v.Text_ID])
 								//s.ChannelMessageSend(m.ChannelID, "```🤔```")
-								s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+								s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Currents[i].Error_list+"`` <@910067180706627594>")
 							}
 						} else if Judge(m, m.Content, v.Text_ID) == 4 {
 							if !Is_illegal(m.Content) {
 								/**** s.ChannelMessageSend(m.ChannelID, "```diff\n- Te dejaste muchísimas palabras... 😬```") */
 								Currents[i].WPM = Calculate(m, v.Started, Texts[v.Text_ID])
-								Errors_calculate(m.Content, Texts[v.Text_ID])
+								Currents[i].Errors, Currents[i].Error_list = Errors_calculate(m.Content, Texts[v.Text_ID])
 								//Show_result_with_errors(s, m)
 								time.Sleep(500 * time.Millisecond)
 								/**** Top(s, m) */
 							} else {
 								Calculate(m, v.Started, Texts[v.Text_ID])
-								Errors_calculate(m.Content, Texts[v.Text_ID])
+								Currents[i].Errors, Currents[i].Error_list = Errors_calculate(m.Content, Texts[v.Text_ID])
 								//s.ChannelMessageSend(m.ChannelID, "```🤔```")
-								s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Error_list+"`` <@910067180706627594>")
+								s.ChannelMessageSend("1034791654202294342", "["+time.Now().Format("02/01/2006 15:04:05")+"] <#"+m.ChannelID+"> "+m.Author.Username+" ha hecho trampas en el texto: \""+First_n(Texts[v.Text_ID], 60)+"[…]\"\n"+Currents[i].Error_list+"`` <@910067180706627594>")
 							}
 						}
 					}

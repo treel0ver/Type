@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -62,13 +61,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if m.Content == ".test" {
-		var Started_when_stringed = strconv.FormatInt(Started_when, 10)
-
-		//Currents = append(Currents, Current{"1015972766882738216", 43234.5, 5})
-		//Currents = append(Currents, Current{"654", 23423.5, 8})
-
 		var FF = fmt.Sprint(Currents)
-		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+Started_when_stringed+"```"+Date+"\n"+
+		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+"```"+Date+"\n"+
 			fmt.Sprint(Timestamp_temp_typing)+fmt.Sprint(Users_typing)+
 			FF)
 
