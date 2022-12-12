@@ -120,7 +120,14 @@ func Top(s *discordgo.Session, m *discordgo.MessageCreate, Text_ID int) {
 
 			} else {
 				var CL = strings.Split(DB[i], " # ")
-				WPM_f64, _ := strconv.ParseFloat(CL[5], 8)
+
+				var WPM_f64 float64
+
+				if len(CL) > 5 {
+					WPM_f64, _ = strconv.ParseFloat(CL[5], 8)
+				} else {
+					WPM_f64, _ = strconv.ParseFloat(CL[3], 8)
+				}
 
 				slice = Two_Slices{
 					WPM_f64, CL[2], CL[4],
@@ -177,8 +184,14 @@ func TopsID(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if i == 0 {
 
 			} else {
+				var WPM_f64 float64
+
 				var CL = strings.Split(DB[i], " # ")
-				WPM_f64, _ := strconv.ParseFloat(CL[5], 8)
+				if len(CL) > 5 {
+					WPM_f64, _ = strconv.ParseFloat(CL[5], 8)
+				} else {
+					WPM_f64, _ = strconv.ParseFloat(CL[3], 8)
+				}
 
 				slice = Two_Slices{
 					WPM_f64, CL[2], CL[4],

@@ -40,11 +40,6 @@ func Add_exp(s *discordgo.Session, m *discordgo.MessageCreate, n float64) {
 			for true {
 				if !changing_levels {
 					changing_levels = true
-					e := os.Remove("./database/levels.csv")
-					if e != nil {
-						fmt.Println("[" + time.Now().Format("02/01/2006 15:04:05") + "]")
-						fmt.Println(e)
-					}
 
 					f, err := os.Create("./database/levels.csv")
 					if err != nil {

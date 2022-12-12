@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -60,50 +61,40 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		Text_stats(s, m)
 	}
 
+	Fun_commands(s, m)
+
+	//
+
 	if m.Content == ".test" {
 		var FF = fmt.Sprint(Currents)
 		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+"```"+Date+"\n"+
 			fmt.Sprint(Timestamp_temp_typing)+fmt.Sprint(Users_typing)+
 			FF)
 
-	}
+		//
 
-	Fun_commands(s, m)
-
-	if m.Content == ".start" {
-		s.AddHandlerOnce(func(s2 *discordgo.Session, m2 *discordgo.MessageCreate) {
-			if m2.Content == ".aa" {
-				s.ChannelMessageSend(m.ChannelID, "``")
-
-			}
-		})
-	}
-
-	/*if m.Content == ".start" {
+		c1 := make(chan string, 1)
 		go func() {
-			ch, cls := paginator.NewEventCollector(s, func(s *discordgo.Session, e *discordgo.MessageCreate) bool {
-				return m.Author.ID == e.Author.ID && m.ChannelID == e.ChannelID
-			})
-			defer cls()
-
-			timer := time.NewTimer(time.Second * 5)
-			defer timer.Stop()
-			var messages []string
-		loop:
-			for {
-				select {
-				case <-timer.C:
-					_, _ = s.ChannelMessageSend(m.ChannelID, "timed out")
-					return
-				case e := <-ch:
-					messages = append(messages, e.Content)
-					if len(messages) == 5 {
-						break loop
-					}
-				}
+			if my_test {
+				c1 <- "success!"
 			}
-			_, _ = s.ChannelMessageSend(m.ChannelID, "messages collected: "+strings.Join(messages, ", "))
 		}()
-	}*/
 
+		select {
+		case res := <-c1:
+			s.ChannelMessageSend(m.ChannelID, res)
+		case <-time.After(5 * time.Second):
+			s.ChannelMessageSend(m.ChannelID, "timeout")
+		}
+
+	}
+
+	if m.Content == ".true" {
+		my_test = true
+	}
+	if m.Content == ".false" {
+		my_test = false
+	}
 }
+
+var my_test = false

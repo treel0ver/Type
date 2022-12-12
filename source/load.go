@@ -58,10 +58,6 @@ func Update() {
 	for true {
 		if !changing_saved_results {
 			changing_saved_results = true
-			e := os.Remove("./database/saved_results.csv")
-			if e != nil {
-				log.Fatal(e)
-			}
 
 			f, err := os.Create("./database/saved_results.csv")
 			if err != nil {
