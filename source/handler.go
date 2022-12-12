@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os/exec"
+	"strconv"
 	"strings"
-	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -65,36 +66,31 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	//
 
-	if m.Content == ".test" {
-		var FF = fmt.Sprint(Currents)
-		s.ChannelMessageSend(m.ChannelID, "```cs\nStarted_when: "+"```"+Date+"\n"+
-			fmt.Sprint(Timestamp_temp_typing)+fmt.Sprint(Users_typing)+
-			FF)
+	if strings.HasPrefix(m.Content, ".calc") {
+		if len(m.Attachments) > 0 {
+			var curl_output, _ = exec.Command("/usr/bin/curl", m.Attachments[0].URL).Output()
+			var content = string(curl_output[:])
 
-		//
+			var content_s = strings.Split(content, "\n")
 
-		c1 := make(chan string, 1)
-		go func() {
-			if my_test {
-				c1 <- "success!"
+			var average_wpm float64
+			var average_puls float64
+
+			for i := range content_s {
+				var split = strings.Split(content_s[i], "\t")
+				var wpm = split[1]
+				var puls = split[3]
+				var wpm_f, _ = strconv.ParseFloat(wpm, 64)
+				var puls_f, _ = strconv.ParseFloat(puls, 64)
+				average_wpm += wpm_f
+				average_puls += puls_f
 			}
-		}()
 
-		select {
-		case res := <-c1:
-			s.ChannelMessageSend(m.ChannelID, res)
-		case <-time.After(5 * time.Second):
-			s.ChannelMessageSend(m.ChannelID, "timeout")
+			var result_wpm = average_wpm / float64(len(content_s))
+			var result_puls = average_puls / float64(len(content_s))
+
+			s.ChannelMessageSend(m.ChannelID, "```css\navg wpm: "+fmt.Sprint(result_wpm)+"\navg puls: "+fmt.Sprint(result_puls)+"```")
+
 		}
-
-	}
-
-	if m.Content == ".true" {
-		my_test = true
-	}
-	if m.Content == ".false" {
-		my_test = false
 	}
 }
-
-var my_test = false

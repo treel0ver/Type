@@ -22,6 +22,36 @@ const (
 )
 
 func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if strings.HasPrefix(m.Content, ".calc") {
+		if len(m.Attachments) > 0 {
+			var curl_output, _ = exec.Command("/usr/bin/curl", m.Attachments[0].URL).Output()
+			var content = string(curl_output[:])
+
+			var content_s = strings.Split(content, "\n")
+
+			var average_wpm float64
+			var average_puls float64
+
+			for i := range content_s {
+				var split = strings.Split(content_s[i], "\t")
+				var wpm = split[1]
+				var puls = split[3]
+				var wpm_f, _ = strconv.ParseFloat(wpm, 64)
+				var puls_f, _ = strconv.ParseFloat(puls, 64)
+				average_wpm += wpm_f
+				average_puls += puls_f
+			}
+
+			var result_wpm = average_wpm / float64(len(content_s))
+			var result_puls = average_puls / float64(len(content_s))
+
+			s.ChannelMessageSend(m.ChannelID, "```css\navg wpm: "+fmt.Sprint(result_wpm)+"\navg puls: "+fmt.Sprint(result_puls)+"```")
+
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "```diff\n- Adjunta un archivo de tus últimas carreras.```")
+		}
+	}
+
 	if strings.ToLower(m.Content) == ".mapache" {
 		rand.Seed(time.Now().UnixNano())
 		var Fun_random = rand.Intn(3)
