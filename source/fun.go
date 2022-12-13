@@ -18,13 +18,14 @@ import (
 
 const (
 	PYTHON_PATH      = "/usr/bin/python3"
+	CURL_PATH        = "/usr/bin/curl"
 	TEXT_TO_IMG_PATH = "/home/ggg/Type/source/text_to_img/text_to_img.py"
 )
 
 func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.HasPrefix(m.Content, ".calc") {
 		if len(m.Attachments) > 0 {
-			var curl_output, _ = exec.Command("/usr/bin/curl", m.Attachments[0].URL).Output()
+			var curl_output, _ = exec.Command(CURL_PATH, m.Attachments[0].URL).Output()
 			var content = string(curl_output[:])
 
 			var content_s = strings.Split(content, "\n")
@@ -34,6 +35,11 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			for i := range content_s {
 				var split = strings.Split(content_s[i], "\t")
+
+				if len(split) <= 1 {
+					break
+				}
+
 				var wpm = split[1]
 				var puls = split[3]
 				var wpm_f, _ = strconv.ParseFloat(wpm, 64)
@@ -149,17 +155,11 @@ func Fun_commands(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.HasPrefix(m.Content, ".img") {
 		var args = strings.Split(m.Content, " ")
 
-		e := os.Remove("source/text_to_img/content")
-		if e != nil {
-			log.Fatal(e)
-		}
-
-		// create file
 		f, err := os.Create("source/text_to_img/content")
 		if err != nil {
 			log.Fatal(err)
 		}
-		// remember to close the file
+
 		defer f.Close()
 
 		for _, line := range args {
