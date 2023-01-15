@@ -1,5 +1,5 @@
 # Type Bot
-Discord bot to measure your typing speed. Type is not a huge project, just as I'm not a huge programmer (yet).
+Discord bot to measure your typing speed. Type is not a huge project, just as I'm not a huge programmer.
 
 ## Example
 ![alt text](Example.gif)
@@ -7,7 +7,7 @@ Discord bot to measure your typing speed. Type is not a huge project, just as I'
 ## Build
 1. Clone repository.
 
-`git clone https://github.com/YogurtQQ/Type`
+`git clone https://github.com/dark7void/Type`
 
 2. Change directory into directory.
 
