@@ -7,7 +7,7 @@ Discord bot to measure your typing speed. Type is not a huge project, just as I'
 ## Build
 1. Clone repository.
 
-`git clone https://github.com/dark7void/Type`
+`git clone https://github.com/treel0ver/Type`
 
 2. Change directory into directory.
 
